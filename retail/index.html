@@ -2,268 +2,172 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Criterio · Retail & E-Commerce</title>
-<meta name="description" content="Retail & E-Commerce research signals on Criterio. 6 validated, 4 open for validation.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #1a1a24;
-  --border: rgba(255,255,255,0.08);
-  --text: #e8e6df;
-  --text-dim: #9a9690;
-  --text-muted: #5a5850;
-  --re: #2D6BE4;
-  --retail: #C4317A;
-  --brand: #E8602C;
-  --lv0: #8A8578;
-  --lv1: #2D6BE4;
-  --lv2: #2E9B6F;
-  --lv3: #C9A84C;
-}
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
-a { color: inherit; text-decoration: none; }
-.font-serif { font-family: 'DM Serif Display', serif; }
-.font-lora { font-family: 'Lora', serif; }
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Nav */
-.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
-.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
-.nav-brand span { color: var(--text-dim); font-style: italic; }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--text); }
-.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
-.nav-validate:hover { background: var(--text-dim) !important; }
-
-/* Level badge */
-.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
-.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
-.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
-.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
-.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
-
-/* SCI score */
-.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
-
-/* Article card */
-.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
-.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
-.article-card.locked { opacity: 0.65; }
-.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
-.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
-.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.card-validator { font-size: 12px; color: var(--text-muted); }
-.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
-
-/* Divider stripe */
-.vertical-stripe { height: 3px; border-radius: 1px; }
-
-/* Grid */
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
-
-/* Container */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-@media (max-width: 640px) { .container { padding: 0 20px; } }
-
-/* Section */
-.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
-.section:last-child { border-bottom: none; }
-.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
-.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
-
-/* Tag */
-.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
-
-/* Footer */
-footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
-
-.vertical-hero { padding:60px 0 48px;border-bottom:1px solid var(--border); }
-.vertical-hero-stripe { width:48px;height:4px;border-radius:2px;margin-bottom:20px; }
-.vertical-hero-label { font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px; }
-.vertical-hero-title { font-family:'DM Serif Display',serif;font-size:clamp(36px,5vw,56px);margin-bottom:12px; }
-.vertical-hero-stats { display:flex;gap:32px;flex-wrap:wrap;margin-top:20px; }
-.stat { display:flex;flex-direction:column; }
-.stat-num { font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600; }
-.stat-label { font-size:12px;color:var(--text-muted); }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retail Signals | Criterio</title>
+<meta name="description" content="10 Retail market signals indexed by Criterio. 6 validated, 4 awaiting validation.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#080808;color:#fff;font-family:"Inter",sans-serif;}</style>
 </head>
 <body>
-<nav class="nav">
-  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
-  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+<nav style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="/" style="color:#fff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.05em;">CRITERIO</a>
+  <div style="display:flex;gap:24px;align-items:center;">
+    <a href="/real-estate/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">REAL ESTATE</a>
+    <a href="/retail/" style="color:#fff;text-decoration:none;font-size:13px;letter-spacing:0.08em;">RETAIL</a>
+    <a href="/brand/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">BRAND</a>
+    <a href="/about/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">ABOUT</a>
+    <a href="/register/" style="color:#C4317A;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:0.08em;border:1px solid #C4317A;padding:5px 12px;">VALIDATE</a>
+  </div>
 </nav>
-<div class="container">
-  <div class="vertical-hero">
-    <div class="vertical-hero-stripe" style="background:#C4317A;"></div>
-    <div class="vertical-hero-label">VERTICAL</div>
-    <h1 class="vertical-hero-title">Retail & E-Commerce</h1>
-    <div class="vertical-hero-stats">
-      <div class="stat"><span class="stat-num" style="color:#C4317A">6</span><span class="stat-label">Validated Signals</span></div>
-      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Open for Validation</span></div>
-      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Total Signals</span></div>
-    </div>
+
+<header style="padding:48px 24px 40px;max-width:1200px;margin:0 auto;border-bottom:1px solid #111;">
+  <a href="/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.1em;">← ALL SIGNALS</a>
+  <h1 style="font-size:clamp(24px,3vw,40px);font-weight:700;margin:16px 0 12px;letter-spacing:-0.02em;">Retail <span style="color:#C4317A;">Signals</span></h1>
+  <div style="display:flex;gap:24px;margin-top:20px;">
+    <div><span style="font-size:22px;font-weight:700;">10</span><span style="font-size:11px;color:#555;display:block;letter-spacing:0.08em;">TOTAL</span></div>
+    <div><span style="font-size:22px;font-weight:700;color:#4a9;">6</span><span style="font-size:11px;color:#555;display:block;letter-spacing:0.08em;">VALIDATED</span></div>
+    <div><span style="font-size:22px;font-weight:700;color:#888;">4</span><span style="font-size:11px;color:#555;display:block;letter-spacing:0.08em;">PENDING</span></div>
   </div>
-  <div class="section">
-    <div class="section-label">All Signals — Retail & E-Commerce</div>
-    <div class="grid-2"><a href="/retail/retail-media-60b-vendor-margin-risk/" class="article-card">
+</header>
+
+<main style="max-width:1200px;margin:0 auto;padding:40px 24px 80px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+    <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-001</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.91</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/retail-media-60b-vendor-margin-risk/" style="color:#fff;text-decoration:none;">Retail Media Is a $60 Billion Channel and It's Compressing Vendor Margins: A Sig</a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Retail media spending is projected to exceed $60 billion in the US. For CPG vendors, this represents a new mandatory cost layer on top of ex...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/retail-media-60b-vendor-margin-risk/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+  </div>
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-001</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 93</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-002</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.90</span>
   </div>
-  <div class="card-title">Retail Media $60B Vendor Margin Risk</div>
-  <div class="card-subtitle">The hidden cost of retail media networks on CPG vendor P&Ls — a structural margin compression signal</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="color:#fff;text-decoration:none;">OTIF Compliance Is the Hidden P&L Line That Determines Vendor Survival: A Supply</a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Major retailers set on-time in-full targets at 97-98%. The gap between 96% and 98% is not two percentage points — it is the difference betwe...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
   </div>
-</a>
-<a href="/retail/otif-compliance-hidden-cost-vendor-economics/" class="article-card">
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-002</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 88</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-003</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.89</span>
   </div>
-  <div class="card-title">OTIF Compliance: Hidden Cost Vendor Economics</div>
-  <div class="card-subtitle">On-time in-full penalty structures are quietly reshaping vendor economics across top-10 retailers</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/category-management-drives-shelf-space/" style="color:#fff;text-decoration:none;">Category Management Is the Language Retailers Speak: How Shelf Space Is Won and </a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Every linear inch of shelf in a major retailer has a revenue target. Category management is the discipline of proving that your product meet...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/category-management-drives-shelf-space/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
   </div>
-</a>
-<a href="/retail/category-management-drives-shelf-space/" class="article-card">
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-003</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 84</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-004</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.87</span>
   </div>
-  <div class="card-title">Category Management Drives Shelf Space</div>
-  <div class="card-subtitle">Category captain dynamics and the algorithmic shelf space allocation shift accelerating in 2026</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/shopper-marketing-physical-digital-gap/" style="color:#fff;text-decoration:none;">The Physical-Digital Attribution Gap in Shopper Marketing: Why the Most Effectiv</a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">In-store demonstrations convert at rates 5-10x higher than digital advertising. Endcap displays increase category sales by 30-50% during pro...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/shopper-marketing-physical-digital-gap/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
   </div>
-</a>
-<a href="/retail/shopper-marketing-physical-digital-gap/" class="article-card">
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-004</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 82</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-005</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.88</span>
   </div>
-  <div class="card-title">Shopper Marketing: Physical-Digital Gap</div>
-  <div class="card-subtitle">Investment imbalance between in-store and digital shopper touchpoints is creating measurable conversion losses</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/private-label-growth-brand-margin-pressure/" style="color:#fff;text-decoration:none;">Private Label Growth Is Structural, Not Cyclical: How Store Brands Are Permanent</a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Private label now commands 20-25% dollar share across US grocery categories, with unit share significantly higher. The growth is not a reces...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/private-label-growth-brand-margin-pressure/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
   </div>
-</a>
-<a href="/retail/private-label-growth-brand-margin-pressure/" class="article-card">
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-005</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 90</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-006</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.86</span>
   </div>
-  <div class="card-title">Private Label Growth: Brand Margin Pressure</div>
-  <div class="card-subtitle">Retailer own-brand acceleration is compressing national brand margins in 7 of 10 major grocery categories</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/ecommerce-fulfillment-economics-profitability/" style="color:#fff;text-decoration:none;">E-Commerce Fulfillment Economics Are Breaking the Grocery Model: A Profitability</a></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Grocery e-commerce has reached 10-15% of total US grocery sales. The fulfillment costs — picking, packing, last-mile delivery, cold chain ma...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <a href="/retail/ecommerce-fulfillment-economics-profitability/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
   </div>
-</a>
-<a href="/retail/ecommerce-fulfillment-economics-profitability/" class="article-card">
   
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-006</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 87</span>
+</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-007</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.90</span>
   </div>
-  <div class="card-title">Ecommerce Fulfillment Economics & Profitability</div>
-  <div class="card-subtitle">Last-mile cost structures are eroding ecommerce margins — the profitable operators share 3 structural differences</div>
-  <div class="card-footer">
-    <span class="card-validator">Validated by Jenny</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><span style="color:#555;">Post-Inflation Grocery Shopping: How Three Years of Price Increases Permanently </span></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Grocery prices rose approximately 25% between 2020 and 2024. Even as inflation has moderated, consumer behavior has not reverted. Shoppers w...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-</a>
-<a href="/retail/grocery-inflation-consumer-behavior-shift/" class="article-card locked">
-  <span class="locked-badge">OPEN FOR VALIDATION</span>
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-007</span>
-    <span class="level-badge lv0">LV0 UNVALIDATED</span>
-    <span class="sci">SCI 72</span>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-008</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.87</span>
   </div>
-  <div class="card-title">Grocery Inflation: Consumer Behavior Shift</div>
-  <div class="card-subtitle">Post-inflation normalization is not restoring pre-2022 shopping patterns — permanent trade-down in 4 categories</div>
-  <div class="card-footer">
-    <span class="card-validator">Unclaimed — Open for Validation</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><span style="color:#555;">US Retail Is Closing 7,000+ Stores Per Year and Opening 5,000+: Why the Net Numb</span></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">The headline says retail is dying. The data says retail is relocating, resizing, and restructuring. Store closures are concentrated in legac...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-</a>
-<a href="/retail/retail-store-closures-square-footage-rationalization/" class="article-card locked">
-  <span class="locked-badge">OPEN FOR VALIDATION</span>
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-008</span>
-    <span class="level-badge lv0">LV0 UNVALIDATED</span>
-    <span class="sci">SCI 68</span>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-009</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.92</span>
   </div>
-  <div class="card-title">Retail Store Closures: Square Footage Rationalization</div>
-  <div class="card-subtitle">Net square footage contraction accelerating across specialty retail — who exits, who densifies</div>
-  <div class="card-footer">
-    <span class="card-validator">Unclaimed — Open for Validation</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><span style="color:#555;">The Walmart Vendor Ecosystem: An Economic Analysis of the World's Largest Buyer-</span></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Walmart's US revenue exceeds $440 billion. The vendor ecosystem that supplies it — from P&G to single-product startups — represents one of t...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-</a>
-<a href="/retail/walmart-vendor-ecosystem-economic-analysis/" class="article-card locked">
-  <span class="locked-badge">OPEN FOR VALIDATION</span>
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-009</span>
-    <span class="level-badge lv0">LV0 UNVALIDATED</span>
-    <span class="sci">SCI 75</span>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-010</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.86</span>
   </div>
-  <div class="card-title">Walmart Vendor Ecosystem Economic Analysis</div>
-  <div class="card-subtitle">The true cost of Walmart volume: how supplier economics stack when fees, compliance, and media are netted</div>
-  <div class="card-footer">
-    <span class="card-validator">Unclaimed — Open for Validation</span>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><span style="color:#555;">Quick Commerce and the 15-Minute Delivery Promise: An Economic Viability Analysi</span></h3>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Quick commerce — the promise of grocery and convenience delivery in 15-30 minutes — attracted billions in venture capital and has now entere...</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-01</span>
+    <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-</a>
-<a href="/retail/quick-commerce-instant-delivery-economics/" class="article-card locked">
-  <span class="locked-badge">OPEN FOR VALIDATION</span>
-  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
-  <div class="card-meta">
-    <span class="card-id">EC-010</span>
-    <span class="level-badge lv0">LV0 UNVALIDATED</span>
-    <span class="sci">SCI 66</span>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+</article>
   </div>
-  <div class="card-title">Quick Commerce: Instant Delivery Economics</div>
-  <div class="card-subtitle">10-minute delivery unit economics remain structurally negative — the operators closest to breakeven and why</div>
-  <div class="card-footer">
-    <span class="card-validator">Unclaimed — Open for Validation</span>
-  </div>
-</a>
-</div>
-  </div>
-  <div style="padding:40px 0;">
-    <a href="/register/" style="display:inline-block;padding:12px 24px;border:1px solid #C4317A;color:#C4317A;border-radius:3px;font-size:14px;font-weight:600;">Validate a Signal in Retail & E-Commerce →</a>
-  </div>
-</div>
-<footer>
-  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a> · <a href="/" style="color:var(--text-dim);">All Verticals</a></p>
+</main>
+
+<footer style="border-top:1px solid #111;padding:32px 24px;text-align:center;">
+  <p style="font-size:12px;color:#444;letter-spacing:0.06em;">CRITERIO SIGNAL INTELLIGENCE · <a href="/about/" style="color:#555;text-decoration:none;">ABOUT</a> · <a href="/register/" style="color:#555;text-decoration:none;">VALIDATE</a></p>
 </footer>
 </body>
 </html>

@@ -2,135 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Criterio · NWA Commercial Vacancy: National Divergence</title>
-<meta name="description" content="Local vacancy rates diverge from national benchmarks — a structural signal or cyclical noise?">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #1a1a24;
-  --border: rgba(255,255,255,0.08);
-  --text: #e8e6df;
-  --text-dim: #9a9690;
-  --text-muted: #5a5850;
-  --re: #2D6BE4;
-  --retail: #C4317A;
-  --brand: #E8602C;
-  --lv0: #8A8578;
-  --lv1: #2D6BE4;
-  --lv2: #2E9B6F;
-  --lv3: #C9A84C;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NWA Commercial Vacancy at 6.3% While National Office Rates Hit 20%: What's Driving the Divergence | Criterio</title>
+<meta name="description" content="National office vacancy rates closed 2025 between 18.2% and 20.5%. NWA's overall commercial vacancy is 6.3%. The gap is not luck — it is a structural feature of an economy anchored by corporate headquarters that require physical presence.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "NWA Commercial Vacancy at 6.3% While National Office Rates Hit 20%: What's Driving the Divergence",
+  "author": { "@type": "Organization", "name": "IN·KluSo Signal Intelligence" },
+  "publisher": { "@type": "Organization", "name": "INKLUSO, Inc." },
+  "datePublished": "March 27, 2026",
+  "description": "National office vacancy rates closed 2025 between 18.2% and 20.5%. NWA's overall commercial vacancy is 6.3%. The gap is not luck — it is a structural feature of an economy anchored by corporate headquarters that require physical presence."
 }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
-a { color: inherit; text-decoration: none; }
-.font-serif { font-family: 'DM Serif Display', serif; }
-.font-lora { font-family: 'Lora', serif; }
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Nav */
-.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
-.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
-.nav-brand span { color: var(--text-dim); font-style: italic; }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--text); }
-.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
-.nav-validate:hover { background: var(--text-dim) !important; }
-
-/* Level badge */
-.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
-.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
-.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
-.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
-.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
-
-/* SCI score */
-.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
-
-/* Article card */
-.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
-.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
-.article-card.locked { opacity: 0.65; }
-.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
-.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
-.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.card-validator { font-size: 12px; color: var(--text-muted); }
-.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
-
-/* Divider stripe */
-.vertical-stripe { height: 3px; border-radius: 1px; }
-
-/* Grid */
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
-
-/* Container */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-@media (max-width: 640px) { .container { padding: 0 20px; } }
-
-/* Section */
-.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
-.section:last-child { border-bottom: none; }
-.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
-.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
-
-/* Tag */
-.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
-
-/* Footer */
-footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
-
-.article-container { max-width:760px;margin:0 auto;padding:48px 40px; }
-@media(max-width:640px) { .article-container { padding:32px 20px; } }
-.article-body { font-family:'Lora',serif;font-size:17px;line-height:1.8;color:var(--text-dim); }
-.article-body p { margin-bottom:20px; }
-.article-body h2 { font-family:'DM Serif Display',serif;font-size:24px;color:var(--text);margin:32px 0 12px; }
+</script>
+<style>
+:root {
+  --cream: #FAF6EE;
+  --orange: #E8602C;
+  --black: #111111;
+  --blue: #2D6BE4;
+  --magenta: #C4317A;
+  --green: #2E9B6F;
+  --gold: #C9A84C;
+  --warm-gray: #8A8578;
+  --light-gray: #E8E4DC;
+  --division-color: #2D6BE4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lora', Georgia, serif; background: var(--cream); color: var(--black); line-height: 1.8; -webkit-font-smoothing: antialiased; }
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--light-gray); }
+.nav-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--black); text-decoration: none; }
+.nav-logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 24px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; }
+.nav-links a { color: var(--warm-gray); text-decoration: none; }
+.nav-links a:hover { color: var(--black); }
+.division-stripe { background: var(--division-color); padding: 10px 40px; display: flex; align-items: center; gap: 12px; }
+.division-stripe span { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 500; }
+.division-stripe .dot { opacity: 0.5; }
+.article-header { max-width: 780px; margin: 0 auto; padding: 60px 40px 40px; }
+.article-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--warm-gray); letter-spacing: 1px; margin-bottom: 24px; }
+.article-meta .sci-badge { display: inline-block; background: var(--division-color); color: #fff; padding: 3px 10px; font-size: 11px; letter-spacing: 1px; margin-left: 8px; }
+.article-header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 5vw, 48px); line-height: 1.15; margin-bottom: 20px; }
+.article-header .subtitle { font-size: 20px; color: #555; font-style: italic; margin-bottom: 24px; line-height: 1.6; }
+.article-info { display: flex; align-items: center; gap: 16px; padding-top: 20px; border-top: 1px solid var(--light-gray); font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); }
+.author-avatar { width: 40px; height: 40px; background: var(--division-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff; font-weight: 500; }
+.author-name { color: var(--black); font-weight: 600; }
+.article-body { max-width: 720px; margin: 0 auto; padding: 0 40px 60px; }
+.article-body p { font-size: 18px; margin-bottom: 24px; line-height: 1.85; }
+.article-body h2 { font-family: 'DM Serif Display', serif; font-size: 28px; margin: 48px 0 20px; }
+.article-body h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; margin: 36px 0 16px; }
+.evidence-block { background: var(--black); color: var(--cream); padding: 28px 32px; margin: 32px 0; border-left: 4px solid var(--division-color); }
+.evidence-block .eb-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--division-color); margin-bottom: 12px; font-weight: 500; }
+.evidence-block p { font-family: 'Inter', sans-serif; font-size: 15px; color: rgba(250,246,238,0.9); margin-bottom: 8px; line-height: 1.7; }
+.evidence-block p:last-child { margin-bottom: 0; }
+.pull-stat { text-align: center; padding: 48px 20px; margin: 40px 0; }
+.pull-stat .stat-number { font-family: 'DM Serif Display', serif; font-size: 56px; color: var(--division-color); line-height: 1.1; }
+.pull-stat .stat-context { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--warm-gray); margin-top: 8px; }
+.section-break { text-align: center; padding: 32px 0; color: var(--light-gray); font-size: 18px; letter-spacing: 12px; }
+.callout { border-left: 4px solid var(--division-color); padding: 20px 24px; margin: 32px 0; background: rgba(0,0,0,0.02); }
+.callout p { font-style: italic; font-size: 17px; color: #444; }
+.validator-badge { max-width: 720px; margin: 40px auto; padding: 0 40px; }
+.validator-badge-inner { background: #fff; border: 2px solid var(--light-gray); padding: 28px 32px; }
+.vb-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.vb-icon { width: 44px; height: 44px; background: var(--black); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--cream); letter-spacing: 1px; }
+.vb-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); font-weight: 500; }
+.vb-name { font-family: 'DM Serif Display', serif; font-size: 18px; }
+.vb-body { font-family: 'Inter', sans-serif; font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+.vb-scope { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--cream); padding: 10px 14px; border-left: 3px solid var(--division-color); color: var(--black); }
+.disclosure { max-width: 720px; margin: 20px auto 60px; padding: 0 40px; }
+.disclosure-inner { background: rgba(0,0,0,0.03); padding: 24px 28px; border: 1px solid var(--light-gray); }
+.disclosure-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 10px; font-weight: 500; }
+.disclosure-inner p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); line-height: 1.7; }
+.cta-section { background: var(--black); padding: 60px 40px; text-align: center; color: var(--cream); }
+.cta-section h2 { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 12px; }
+.cta-section p { font-family: 'Inter', sans-serif; font-size: 15px; color: rgba(250,246,238,0.7); max-width: 500px; margin: 0 auto 28px; }
+.cta-btn { display: inline-block; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; background: var(--orange); color: var(--cream); padding: 14px 36px; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; }
+.cta-btn:hover { background: #d4551f; }
+.tags { max-width: 720px; margin: 0 auto; padding: 20px 40px 40px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 6px 14px; border: 1px solid var(--light-gray); color: var(--warm-gray); }
+footer { background: var(--black); color: var(--cream); padding: 40px; text-align: center; }
+footer .f-brand { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 8px; }
+footer p { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--warm-gray); }
+@media (max-width: 768px) {
+  .nav { padding: 16px 20px; } .division-stripe { padding: 10px 20px; }
+  .article-header { padding: 40px 20px 30px; } .article-body { padding: 0 20px 40px; }
+  .validator-badge { padding: 0 20px; } .disclosure { padding: 0 20px; }
+  .tags { padding: 20px 20px 30px; } .evidence-block { padding: 24px 20px; margin-left: -20px; margin-right: -20px; }
+  .pull-stat .stat-number { font-size: 40px; }
+}
 </style>
 </head>
 <body>
-<nav class="nav">
-  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
-  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+<nav style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;">
+  <a href="/" style="color:#fff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.05em;">CRITERIO</a>
+  <div style="display:flex;gap:24px;align-items:center;">
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/about/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">ABOUT</a>
+    <a href="/register/" style="color:#2D6BE4;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:0.08em;border:1px solid #2D6BE4;padding:5px 12px;">VALIDATE</a>
+  </div>
 </nav>
-<div class="article-container">
-  <div style="height:4px;background:#2D6BE4;border-radius:2px;margin-bottom:32px;"></div>
-  
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);font-weight:600;">RE-002</span>
-    <span class="level-badge lv1">LV1 VALIDATED</span>
-    <span class="sci">SCI 87</span>
-  </div>
-  
-  <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,40px);line-height:1.2;margin-bottom:16px;">NWA Commercial Vacancy: National Divergence</h1>
-  <p style="font-size:17px;color:var(--text-dim);line-height:1.6;margin-bottom:32px;">Local vacancy rates diverge from national benchmarks — a structural signal or cyclical noise?</p>
-  
-  <div style="margin:24px 0;padding:20px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;">VALIDATED BY</div>
-  <div style="font-size:15px;font-weight:500;">Juan Echeverri</div>
-  <div style="font-size:13px;color:var(--text-muted);">Founder Validation · IN·KluSo</div>
+<div class="division-stripe">
+  <span>INDUSTRY SIGNAL</span><span class="dot">·</span><span>Real Estate Intelligence</span>
 </div>
-  
-  <div class="article-body">
-    <p style="color:var(--text-muted);font-style:italic;font-size:15px;padding:24px;border:1px dashed var(--border);border-radius:4px;text-align:center;">Full article content will be loaded from production HTML files. This is a structural placeholder.</p>
+<header class="article-header">
+  <div class="article-meta">RE-002 <span class="sci-badge">SCI 0.91</span> · 11 min read</div>
+  <h1>NWA Commercial Vacancy at 6.3% While National Office Rates Hit 20%: What's Driving the Divergence</h1>
+  <p class="subtitle">National office vacancy rates closed 2025 between 18.2% and 20.5%. NWA's overall commercial vacancy is 6.3%. The gap is not luck — it is a structural feature of an economy anchored by corporate headquarters that require physical presence.</p>
+  <div class="article-info">
+    <div class="author-avatar">IN</div>
+    <div>
+      <span class="author-name">IN·KluSo AI Research</span> · Signal Intelligence · SCI 0.91
+      <br>March 27, 2026 · Generated by AI · Validated by Juan Jaecheverri
+    </div>
   </div>
-  
-  
-  
-  <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
-    <a href="/real-estate/" style="font-size:14px;color:var(--text-muted);">← All Real Estate Signals</a>
-    <a href="/" style="font-size:14px;color:var(--text-muted);">Criterio Home</a>
-  </div>
+</header>
+<article class="article-body">
+<div class="evidence-block" style="border-left-color: var(--orange); margin-top: 0;">
+  <div class="eb-label" style="color: var(--orange);">SIGNAL INTELLIGENCE · AI-GENERATED RESEARCH</div>
+  <p>This is an IN·KluSo signal — structured intelligence produced by AI and validated by a credentialed industry professional. SCI score: <strong>0.91</strong>. Every claim is traceable to verified data. Validated by Juan Jaecheverri.</p>
 </div>
-<footer>
-  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a></p>
-</footer>
-</body>
-</html>
+
+<p>The national office market ended 2025 with vacancy rates between 18.2% and 20.5%, depending on which brokerage's data you reference. Colliers and Cushman & Wakefield both confirmed the range. One in five office square feet in America is empty. In Northwest Arkansas, the overall commercial vacancy rate — spanning office, retail, and warehouse — is 6.3%. The NWA office submarket specifically is at 7.5%. These numbers exist on different planets.</p>
+
+<div class="evidence-block">
+  <div class="eb-label">The National-Local Divergence</div>
+  <p>▸ National office vacancy: 18.2-20.5% (Colliers, Cushman & Wakefield, year-end 2025)</p>
+  <p>▸ NWA overall commercial vacancy: 6.3% (Arvest Skyline Report, H2 2025)</p>
+  <p>▸ NWA office vacancy: 7.5% — less than half the national rate</p>
+  <p>▸ NWA retail vacancy: 6.0%, down from 7.9% in H2 2023</p>
+  <p>▸ NWA warehouse vacancy: 6.1%, down from 10.4% in H1 2025</p>
+</div>
+
+<p>The divergence is not a statistical anomaly. It is a structural feature of NWA's economy. Three Fortune 500 companies are headquartered in the region: Walmart (Bentonville), Tyson Foods (Springdale), and J.B. Hunt Transport (Lowell). The vendor ecosystem — hundreds of consumer packaged goods companies that maintain NWA offices to service the Walmart relationship — adds a layer of office demand that is functionally non-discretionary. If your largest customer is headquartered in Bentonville, your team is in Bentonville. Remote work does not change that calculus when the buyer meeting happens in person.</p>
+
+<div class="pull-stat">
+  <div class="stat-number">7.5% vs. 20%</div>
+  <div class="stat-context">NWA office vacancy vs. national average — a structural divergence driven by headquarters economics</div>
+</div>
+
+<p class="section-break">• • •</p>
+
+<h2>Submarket Performance</h2>
+
+<p>The warehouse submarket showed the most dramatic movement. Vacancy fell from 10.4% in H1 2025 to 6.1% in H2 2025 — nearly cut in half — driven by net positive absorption of 597,962 square feet against only 49,200 square feet of new warehouse space entering the market. Demand outpaced supply by a factor of twelve. For logistics and distribution operators, the signal is clear: available warehouse space in NWA is contracting rapidly.</p>
+
+<p>Retail vacancy dropped from 6.6% to 6.0% despite 173,430 square feet of new retail space entering the market. Net positive absorption of 69,761 square feet indicates that demand is absorbing new supply and then some. The two-year trend is pronounced: retail vacancy has fallen from 7.9% in H2 2023 to 6.0% today, a decline of nearly two full percentage points while new space continued to enter the market.</p>
+
+<div class="evidence-block">
+  <div class="eb-label">Submarket Detail — H2 2025</div>
+  <p>▸ Warehouse: 6.1% vacancy, net absorption of 597,962 sq ft, only 49,200 sq ft new supply</p>
+  <p>▸ Retail: 6.0% vacancy, net absorption of 69,761 sq ft, 173,430 sq ft new supply</p>
+  <p>▸ Office: 7.5% vacancy, 123,565 sq ft added (64,897 new construction + 58,668 previously owner-occupied)</p>
+  <p>▸ The three submarkets represent 72.5% of all commercial space in NWA</p>
+</div>
+
+<p>The office submarket is the only area showing softness, with vacancy rising from 6.8% to 7.5%. The increase was driven primarily by 58,668 square feet of previously owner-occupied space entering the leasing market — a signal that some companies are consolidating or downsizing their physical footprint. Even at 7.5%, NWA's office vacancy is less than half the national rate, suggesting that the headquarters economy provides a floor that most markets lack.</p>
+
+<p class="section-break">• • •</p>
+
+<h2>Risk Factors</h2>
+
+<p>The concentration that drives NWA's commercial market strength is also its primary risk. The region's economic fortunes are disproportionately tied to the performance and strategic decisions of a small number of large employers. A significant corporate restructuring, a shift in vendor-relationship models, or an acceleration of remote work policies at any of the three headquarters companies would ripple through the commercial market in ways that more diversified metros would absorb more easily.</p>
+
+<p>The building permit decline to $140.4 million — the lowest since 2017 — also warrants monitoring. While the decline reflects labor constraints rather than demand weakness, a prolonged construction lull could create a supply gap that drives vacancy rates even lower and pushes rents higher, potentially challenging affordability for smaller tenants and startups that contribute to economic diversification.</p>
+
+<div class="callout">
+  <p>NWA's commercial market is among the healthiest in the country by vacancy metrics. The structural drivers — corporate headquarters, vendor ecosystems, population growth — are durable. The risks — employer concentration, infrastructure constraints, construction capacity — are equally structural. The market rewards those who understand both sides of the equation.</p>
+</div>
+
+</article>
+<div class="validator-badge"><div class="validator-badge-inner">
+  <div class="vb-header"><div class="vb-icon">IN·K</div><div><div class="vb-label">Verified Contributor</div><div class="vb-name">Juan Jaecheverri, Licensed Real Estate Broker, PAK Home Realty (AR)</div></div></div>
+  <div class="vb-body">Reviewed for accuracy of NWA commercial vacancy data, national comparison methodology, employer concentration analysis, and submarket performance claims.</div>
+  <div class="vb-scope">Scope: Real Estate Intelligence · RE-002 · March 27, 2026</div>
+</div></div>
+<div class="disclosure"><div class="disclosure-inner">
+  <div class="disclosure-label">How This Article Was Made</div>
+  <p>This article was generated by IN·KluSo's AI research system and validated by a named industry professional. Every fact, figure, and citation is sourced from verified reporting, public records, and industry data. AI generates the intelligence. Humans certify it. <a href="/about/contributors/" style="color:var(--orange);">Learn more about our contributor program →</a></p>
+</div></div>
+<div class="tags"><span class="tag">Commercial Real Estate</span>
+<span class="tag">NWA</span>
+<span class="tag">Office Vacancy</span>
+<span class="tag">National Comparison</span>
+<span class="tag">Corporate Headquarters</span>
+<span class="tag">Market Divergence</span></div>
+<div class="cta-section">
+  <h2>Are you an industry professional?</h2>
+  <p>IN·KluSo produces AI research at scale. Industry professionals validate it. Get badged as a Verified Contributor in your field.</p>
+  <a href="/validate/" class="cta-btn">Apply to Validate →</a>
+</div>
+<footer><div class="f-brand">IN·KluSo</div><p>Signal Intelligence Magazine · INKLUSO, Inc.</p><p>© 2026 INKLUSO, Inc. All rights reserved.</p></footer>
+</body></html>

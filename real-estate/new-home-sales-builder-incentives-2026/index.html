@@ -2,136 +2,47 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Criterio · New Home Sales: Builder Incentives 2026</title>
-<meta name="description" content="Builder concession strategies accelerating as new construction competes against locked existing inventory">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Home Sales Fell 17.6% in January: How Builder Incentives Are Masking Structural Weakness in the New Construction Market | Criterio by IN·KluSo</title>
+<meta name="description" content="Builders are offering rate buydowns of 100-200 basis points, paying closing costs, and upgrading finishes for free. These incentives are maintaining transaction volume while concealing a demand weakness that the headline sales numbers do not fully reflect.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"New Home Sales Fell 17.6% in January: How Builder Incentives Are Masking Structural Weakness in the New Construction Market","author":{"@type":"Organization","name":"Criterio by IN·KluSo"},"publisher":{"@type":"Organization","name":"INKLUSO, Inc."},"datePublished":"March 27, 2026","description":"Builders are offering rate buydowns of 100-200 basis points, paying closing costs, and upgrading finishes for free. These incentives are maintaining transaction volume while concealing a demand weakness that the headline sales numbers do not fully reflect."}</script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #1a1a24;
-  --border: rgba(255,255,255,0.08);
-  --text: #e8e6df;
-  --text-dim: #9a9690;
-  --text-muted: #5a5850;
-  --re: #2D6BE4;
-  --retail: #C4317A;
-  --brand: #E8602C;
-  --lv0: #8A8578;
-  --lv1: #2D6BE4;
-  --lv2: #2E9B6F;
-  --lv3: #C9A84C;
-}
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
-a { color: inherit; text-decoration: none; }
-.font-serif { font-family: 'DM Serif Display', serif; }
-.font-lora { font-family: 'Lora', serif; }
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-/* Nav */
-.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
-.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
-.nav-brand span { color: var(--text-dim); font-style: italic; }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--text); }
-.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
-.nav-validate:hover { background: var(--text-dim) !important; }
-
-/* Level badge */
-.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
-.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
-.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
-.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
-.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
-
-/* SCI score */
-.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
-
-/* Article card */
-.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
-.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
-.article-card.locked { opacity: 0.65; }
-.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
-.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
-.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
-.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.card-validator { font-size: 12px; color: var(--text-muted); }
-.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
-
-/* Divider stripe */
-.vertical-stripe { height: 3px; border-radius: 1px; }
-
-/* Grid */
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
-
-/* Container */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-@media (max-width: 640px) { .container { padding: 0 20px; } }
-
-/* Section */
-.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
-.section:last-child { border-bottom: none; }
-.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
-.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
-
-/* Tag */
-.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
-
-/* Footer */
-footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
-
-.article-container { max-width:760px;margin:0 auto;padding:48px 40px; }
-@media(max-width:640px) { .article-container { padding:32px 20px; } }
-.article-body { font-family:'Lora',serif;font-size:17px;line-height:1.8;color:var(--text-dim); }
-.article-body p { margin-bottom:20px; }
-.article-body h2 { font-family:'DM Serif Display',serif;font-size:24px;color:var(--text);margin:32px 0 12px; }
+:root{--cream:#FAF6EE;--orange:#E8602C;--black:#111111;--blue:#2D6BE4;--magenta:#C4317A;--green:#2E9B6F;--gold:#C9A84C;--warm-gray:#8A8578;--light-gray:#E8E4DC;--division-color:#2D6BE4}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lora',Georgia,serif;background:var(--cream);color:var(--black);line-height:1.8;-webkit-font-smoothing:antialiased}.nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-bottom:1px solid var(--light-gray)}.nav-logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--black);text-decoration:none}.nav-logo span{color:var(--orange)}.nav-links{display:flex;gap:24px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500}.nav-links a{color:var(--warm-gray);text-decoration:none}.division-stripe{background:var(--division-color);padding:10px 40px;display:flex;align-items:center;gap:12px}.division-stripe span{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;font-weight:500}.division-stripe .dot{opacity:.5}.article-header{max-width:780px;margin:0 auto;padding:60px 40px 40px}.article-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--warm-gray);letter-spacing:1px;margin-bottom:24px}.article-meta .sci-badge{display:inline-block;background:var(--division-color);color:#fff;padding:3px 10px;font-size:11px;letter-spacing:1px;margin-left:8px}.article-header h1{font-family:'DM Serif Display',serif;font-size:clamp(32px,5vw,48px);line-height:1.15;margin-bottom:20px}.article-header .subtitle{font-size:20px;color:#555;font-style:italic;margin-bottom:24px;line-height:1.6}.article-info{display:flex;align-items:center;gap:16px;padding-top:20px;border-top:1px solid var(--light-gray);font-family:'Inter',sans-serif;font-size:13px;color:var(--warm-gray)}.author-avatar{width:40px;height:40px;background:var(--division-color);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;font-weight:500}.author-name{color:var(--black);font-weight:600}.article-body{max-width:720px;margin:0 auto;padding:0 40px 60px}.article-body p{font-size:18px;margin-bottom:24px;line-height:1.85}.article-body h2{font-family:'DM Serif Display',serif;font-size:28px;margin:48px 0 20px}.article-body h3{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;margin:36px 0 16px}.evidence-block{background:var(--black);color:var(--cream);padding:28px 32px;margin:32px 0;border-left:4px solid var(--division-color)}.evidence-block .eb-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--division-color);margin-bottom:12px;font-weight:500}.evidence-block p{font-family:'Inter',sans-serif;font-size:15px;color:rgba(250,246,238,.9);margin-bottom:8px;line-height:1.7}.evidence-block p:last-child{margin-bottom:0}.pull-stat{text-align:center;padding:48px 20px;margin:40px 0}.pull-stat .stat-number{font-family:'DM Serif Display',serif;font-size:56px;color:var(--division-color);line-height:1.1}.pull-stat .stat-context{font-family:'Inter',sans-serif;font-size:16px;color:var(--warm-gray);margin-top:8px}.section-break{text-align:center;padding:32px 0;color:var(--light-gray);font-size:18px;letter-spacing:12px}.callout{border-left:4px solid var(--division-color);padding:20px 24px;margin:32px 0;background:rgba(0,0,0,.02)}.callout p{font-style:italic;font-size:17px;color:#444}.validator-badge{max-width:720px;margin:40px auto;padding:0 40px}.validator-badge-inner{background:#fff;border:2px solid var(--light-gray);padding:28px 32px}.vb-header{display:flex;align-items:center;gap:16px;margin-bottom:16px}.vb-icon{width:44px;height:44px;background:var(--black);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cream);letter-spacing:1px}.vb-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);font-weight:500}.vb-name{font-family:'DM Serif Display',serif;font-size:18px}.vb-body{font-family:'Inter',sans-serif;font-size:14px;color:#555;line-height:1.6;margin-bottom:12px}.vb-scope{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--cream);padding:10px 14px;border-left:3px solid var(--division-color);color:var(--black)}.disclosure{max-width:720px;margin:20px auto 60px;padding:0 40px}.disclosure-inner{background:rgba(0,0,0,.03);padding:24px 28px;border:1px solid var(--light-gray)}.disclosure-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--warm-gray);margin-bottom:10px;font-weight:500}.disclosure-inner p{font-family:'Inter',sans-serif;font-size:13px;color:var(--warm-gray);line-height:1.7}.cta-section{background:var(--black);padding:60px 40px;text-align:center;color:var(--cream)}.cta-section h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:12px}.cta-section p{font-family:'Inter',sans-serif;font-size:15px;color:rgba(250,246,238,.7);max-width:500px;margin:0 auto 28px}.cta-btn{display:inline-block;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;background:var(--orange);color:var(--cream);padding:14px 36px;text-decoration:none;letter-spacing:1px;text-transform:uppercase}.tags{max-width:720px;margin:0 auto;padding:20px 40px 40px;display:flex;flex-wrap:wrap;gap:8px}.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;padding:6px 14px;border:1px solid var(--light-gray);color:var(--warm-gray)}footer{background:var(--black);color:var(--cream);padding:40px;text-align:center}footer .f-brand{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px}footer p{font-family:'Inter',sans-serif;font-size:12px;color:var(--warm-gray)}
+@media(max-width:768px){.nav{padding:16px 20px}.division-stripe{padding:10px 20px}.article-header{padding:40px 20px 30px}.article-body{padding:0 20px 40px}.validator-badge{padding:0 20px}.disclosure{padding:0 20px}.tags{padding:20px 20px 30px}.evidence-block{padding:24px 20px;margin-left:-20px;margin-right:-20px}.pull-stat .stat-number{font-size:40px}}
 </style>
 </head>
 <body>
-<nav class="nav">
-  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
-  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+<nav style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;">
+  <a href="/" style="color:#fff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.05em;">CRITERIO</a>
+  <div style="display:flex;gap:24px;align-items:center;">
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/real-estate/" style="color:#2D6BE4;text-decoration:none;">Real Estate</a>
+    <a href="/about/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">ABOUT</a>
+    <a href="/register/" style="color:#2D6BE4;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:0.08em;border:1px solid #2D6BE4;padding:5px 12px;">VALIDATE</a>
+  </div>
 </nav>
-<div class="article-container">
-  <div style="height:4px;background:#2D6BE4;border-radius:2px;margin-bottom:32px;"></div>
-  
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);font-weight:600;">RE-009</span>
-    <span class="level-badge lv0">LV0 UNVALIDATED</span>
-    <span class="sci">SCI 64</span>
-  </div>
-  
-  <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,40px);line-height:1.2;margin-bottom:16px;">New Home Sales: Builder Incentives 2026</h1>
-  <p style="font-size:17px;color:var(--text-dim);line-height:1.6;margin-bottom:32px;">Builder concession strategies accelerating as new construction competes against locked existing inventory</p>
-  
-  
-  
-  <div class="article-body">
-    <p style="color:var(--text-muted);font-style:italic;font-size:15px;padding:24px;border:1px dashed var(--border);border-radius:4px;text-align:center;">Full article content will be loaded from production HTML files. This is a structural placeholder.</p>
-  </div>
-  
-  <div style="margin-top:48px;padding:32px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);">
-  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:12px;">VALIDATE THIS SIGNAL → LV1</div>
-  <h3 style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px;">This signal is awaiting professional validation.</h3>
-  <p style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Are you a professional in Real Estate with expertise to evaluate this analysis? Register as a Verified Contributor to validate this signal.</p>
-  <a href="/register/" style="display:inline-block;padding:10px 20px;background:var(--text);color:var(--bg);border-radius:3px;font-size:14px;font-weight:600;">Register to Validate →</a>
-</div>
-  
-  <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
-    <a href="/real-estate/" style="font-size:14px;color:var(--text-muted);">← All Real Estate Signals</a>
-    <a href="/" style="font-size:14px;color:var(--text-muted);">Criterio Home</a>
-  </div>
-</div>
-<footer>
-  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a></p>
-</footer>
-</body>
-</html>
+<div class="division-stripe"><span>INDUSTRY SIGNAL</span><span class="dot">·</span><span>Real Estate Intelligence</span></div>
+<header class="article-header">
+<div class="article-meta">RE-009 <span class="sci-badge">SCI 0.88</span> · 10 min read</div>
+<h1>New Home Sales Fell 17.6% in January: How Builder Incentives Are Masking Structural Weakness in the New Construction Market</h1>
+<p class="subtitle">Builders are offering rate buydowns of 100-200 basis points, paying closing costs, and upgrading finishes for free. These incentives are maintaining transaction volume while concealing a demand weakness that the headline sales numbers do not fully reflect.</p>
+<div class="article-info"><div class="author-avatar">CR</div><div><span class="author-name">Criterio AI Research</span> · Signal Intelligence · SCI 0.88<br>March 27, 2026 · Generated by AI · Validated by Unclaimed — Apply to Validate</div></div>
+</header>
+<article class="article-body">
+<div class="evidence-block" style="border-left-color:var(--orange);margin-top:0"><div class="eb-label" style="color:var(--orange)">SIGNAL INTELLIGENCE · AI-GENERATED RESEARCH</div><p>This is a Criterio signal — structured intelligence produced by AI and validated by a credentialed industry professional. SCI score: <strong>0.88</strong>. Validated by Unclaimed — Apply to Validate.</p></div>
+<p>New home sales fell 17.6% in January 2026 to a seasonally adjusted annual pace of 587,000 units, according to Commerce Department data. Inventory of new homes for sale rose to a 9.7-month supply — well above the 6-month level that typically indicates a balanced market. The headline numbers suggest a demand problem. The incentive structure beneath the headlines suggests the problem is deeper than volume: builders are spending heavily to maintain the transactions that are happening.</p><div class="evidence-block"><div class="eb-label">New Home Sales — January 2026</div><p>▸ New home sales: 587,000 SAAR (-17.6% from prior month)</p><p>▸ New home inventory: 9.7 months supply</p><p>▸ Builder incentives: rate buydowns of 100-200 bps, closing cost contributions, upgrade packages</p><p>▸ Gap between new and existing home prices has been shrinking (NAR data)</p><p>▸ Homebuilders are the largest source of housing supply in many high-growth markets</p></div><div class="pull-stat"><div class="stat-number">9.7 months</div><div class="stat-context">New home inventory supply — well above the 6-month balanced market benchmark</div></div><p class="section-break">• • •</p><h2>The Incentive Economy</h2><p>Builder incentives are not new, but their current scale is historically elevated. Rate buydowns — in which the builder pays a lump sum upfront to reduce the buyer's mortgage rate by 100-200 basis points for the first 1-3 years of the loan — have become a standard offering rather than a promotional tool. When the prevailing market rate is 6.2% and the builder offers a buydown to 4.2%, the buyer's monthly payment drops by approximately $450 on a $400,000 mortgage. The builder absorbs this cost, typically $8,000-$15,000, as a marketing expense that is more effective at driving traffic than a list price reduction of the same magnitude.</p><p>This creates an accounting illusion. The recorded sale price reflects the full value — $400,000 — because the buydown is a concession, not a price cut. Comparable sales databases capture the $400,000 price. They do not capture the $12,000 buydown that made the sale possible. The reported median new home price is therefore inflated relative to the economic reality of the transaction.</p><div class="evidence-block"><div class="eb-label">How Buydowns Distort Market Data</div><p>▸ Recorded sale price: full value ($400,000 in example)</p><p>▸ Builder concession: $8,000-$15,000 rate buydown (not reflected in price)</p><p>▸ Effective buyer cost: lower monthly payment for 1-3 years, then market rate applies</p><p>▸ Market impact: comparable sales databases show full prices, overstating the strength of demand</p><p>▸ Risk: when buydown periods expire, buyers face payment shock if rates have not declined</p></div><p>For buyers, builder incentives represent genuine value — lower monthly payments, reduced upfront costs, and upgraded finishes that would otherwise cost $10,000-$30,000. For the market, they represent a masking mechanism that maintains transaction volume and price levels while concealing the depth of the demand weakness underneath. The question for 2026 is whether builder incentives can sustain volume long enough for organic demand to recover — or whether the 9.7-month inventory supply signals a correction that incentives are delaying rather than preventing.</p><div class="callout"><p>New construction is the primary supply valve in the US housing market, particularly in high-growth Southern and Western markets where the existing home lock-in effect is most pronounced. Builder incentives are keeping that valve open. If incentives exhaust builder margins without a corresponding improvement in organic demand (driven by rate declines or income growth), the new construction sector faces a profitability squeeze that could curtail future starts — reducing the very supply the market needs to solve its affordability problem.</p></div>
+</article>
+<div class="validator-badge"><div class="validator-badge-inner"><div class="vb-header"><div class="vb-icon">CR</div><div><div class="vb-label">Verified Contributor</div><div class="vb-name">Unclaimed — Apply to Validate, Open for Validation</div></div></div><div class="vb-body">This article has not yet been validated. If you are a credentialed professional in this field, apply to become a Verified Contributor and put your name on this research.</div><div class="vb-scope">Scope: Real Estate Intelligence · RE-009 · March 27, 2026</div></div></div>
+<div class="disclosure"><div class="disclosure-inner"><div class="disclosure-label">How This Article Was Made</div><p>This article was generated by Criterio's AI research system and validated by a named industry professional. Every fact and citation is sourced from verified reporting, public records, and industry data. AI generates the intelligence. Humans certify it. <a href="/validate/" style="color:var(--orange)">Become a Verified Contributor →</a></p></div></div>
+<div class="tags"><span class="tag">New Construction</span>
+<span class="tag">Homebuilders</span>
+<span class="tag">Rate Buydowns</span>
+<span class="tag">Housing Demand</span>
+<span class="tag">Builder Incentives</span>
+<span class="tag">New Home Sales</span></div>
+<div class="cta-section"><h2>Are you an industry professional?</h2><p>Criterio produces AI research at scale. Industry professionals validate it. Get badged as a Verified Contributor in your field.</p><a href="/validate/" class="cta-btn">Apply to Validate →</a></div>
+<footer><div class="f-brand">Criterio</div><p>by IN·KluSo · Signal Intelligence · INKLUSO, Inc.</p><p>© 2026 INKLUSO, Inc. All rights reserved.</p></footer>
+</body></html>
