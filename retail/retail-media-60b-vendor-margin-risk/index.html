@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Criterio · Retail Media $60B Vendor Margin Risk</title>
+<meta name="description" content="The hidden cost of retail media networks on CPG vendor P&Ls — a structural margin compression signal">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8e6df;
+  --text-dim: #9a9690;
+  --text-muted: #5a5850;
+  --re: #2D6BE4;
+  --retail: #C4317A;
+  --brand: #E8602C;
+  --lv0: #8A8578;
+  --lv1: #2D6BE4;
+  --lv2: #2E9B6F;
+  --lv3: #C9A84C;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+.font-serif { font-family: 'DM Serif Display', serif; }
+.font-lora { font-family: 'Lora', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Nav */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
+.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
+.nav-brand span { color: var(--text-dim); font-style: italic; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
+.nav-validate:hover { background: var(--text-dim) !important; }
+
+/* Level badge */
+.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
+.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
+.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
+.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
+.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
+
+/* SCI score */
+.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
+
+/* Article card */
+.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
+.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
+.article-card.locked { opacity: 0.65; }
+.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
+.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-validator { font-size: 12px; color: var(--text-muted); }
+.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
+
+/* Divider stripe */
+.vertical-stripe { height: 3px; border-radius: 1px; }
+
+/* Grid */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
+
+/* Container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 640px) { .container { padding: 0 20px; } }
+
+/* Section */
+.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
+.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
+
+/* Tag */
+.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
+
+/* Footer */
+footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
+
+.article-container { max-width:760px;margin:0 auto;padding:48px 40px; }
+@media(max-width:640px) { .article-container { padding:32px 20px; } }
+.article-body { font-family:'Lora',serif;font-size:17px;line-height:1.8;color:var(--text-dim); }
+.article-body p { margin-bottom:20px; }
+.article-body h2 { font-family:'DM Serif Display',serif;font-size:24px;color:var(--text);margin:32px 0 12px; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
+  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+</nav>
+<div class="article-container">
+  <div style="height:4px;background:#C4317A;border-radius:2px;margin-bottom:32px;"></div>
+  
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);font-weight:600;">EC-001</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 93</span>
+  </div>
+  
+  <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,40px);line-height:1.2;margin-bottom:16px;">Retail Media $60B Vendor Margin Risk</h1>
+  <p style="font-size:17px;color:var(--text-dim);line-height:1.6;margin-bottom:32px;">The hidden cost of retail media networks on CPG vendor P&Ls — a structural margin compression signal</p>
+  
+  <div style="margin:24px 0;padding:20px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;">VALIDATED BY</div>
+  <div style="font-size:15px;font-weight:500;">Jenny</div>
+  <div style="font-size:13px;color:var(--text-muted);">Founder Validation · IN·KluSo</div>
+</div>
+  
+  <div class="article-body">
+    <p style="color:var(--text-muted);font-style:italic;font-size:15px;padding:24px;border:1px dashed var(--border);border-radius:4px;text-align:center;">Full article content will be loaded from production HTML files. This is a structural placeholder.</p>
+  </div>
+  
+  
+  
+  <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <a href="/retail/" style="font-size:14px;color:var(--text-muted);">← All Retail & E-Commerce Signals</a>
+    <a href="/" style="font-size:14px;color:var(--text-muted);">Criterio Home</a>
+  </div>
+</div>
+<footer>
+  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a></p>
+</footer>
+</body>
+</html>

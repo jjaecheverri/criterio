@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Criterio — AI-Generated Industry Research, Human-Validated Intelligence</title>
+<meta name="description" content="30 industry research signals across Real Estate, Retail, and Brand. AI-generated, validated by professionals. Criterio by IN·KluSo.">
+<meta property="og:title" content="Criterio by IN·KluSo">
+<meta property="og:description" content="AI-generated industry research. Human-validated intelligence. 30 signals across Real Estate, Retail &amp; Brand.">
+<meta property="og:url" content="https://criterio.in-kluso.com">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8e6df;
+  --text-dim: #9a9690;
+  --text-muted: #5a5850;
+  --re: #2D6BE4;
+  --retail: #C4317A;
+  --brand: #E8602C;
+  --lv0: #8A8578;
+  --lv1: #2D6BE4;
+  --lv2: #2E9B6F;
+  --lv3: #C9A84C;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+.font-serif { font-family: 'DM Serif Display', serif; }
+.font-lora { font-family: 'Lora', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Nav */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
+.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
+.nav-brand span { color: var(--text-dim); font-style: italic; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
+.nav-validate:hover { background: var(--text-dim) !important; }
+
+/* Level badge */
+.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
+.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
+.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
+.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
+.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
+
+/* SCI score */
+.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
+
+/* Article card */
+.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
+.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
+.article-card.locked { opacity: 0.65; }
+.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
+.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-validator { font-size: 12px; color: var(--text-muted); }
+.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
+
+/* Divider stripe */
+.vertical-stripe { height: 3px; border-radius: 1px; }
+
+/* Grid */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
+
+/* Container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 640px) { .container { padding: 0 20px; } }
+
+/* Section */
+.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
+.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
+
+/* Tag */
+.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
+
+/* Footer */
+footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
+
+.hero { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
+.hero-eyebrow { font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:16px; }
+.hero-title { font-family:'DM Serif Display',serif;font-size:clamp(42px,6vw,72px);line-height:1.1;margin-bottom:20px; }
+.hero-sub { font-size:17px;color:var(--text-dim);max-width:520px;line-height:1.6;margin-bottom:32px; }
+.hero-stats { display:flex;gap:40px;flex-wrap:wrap; }
+.hero-stat-num { font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;color:var(--text); }
+.hero-stat-label { font-size:12px;color:var(--text-muted);margin-top:2px; }
+.validate-cta { margin-top:60px;padding:32px;border:1px solid var(--border);border-radius:4px;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px; }
+.validate-cta-text h3 { font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px; }
+.validate-cta-text p { font-size:14px;color:var(--text-dim); }
+.btn { display:inline-block;padding:12px 24px;border-radius:3px;font-size:14px;font-weight:600;letter-spacing:0.04em;transition:opacity 0.2s; }
+.btn-primary { background:var(--text);color:var(--bg); }
+.btn-primary:hover { opacity:0.85; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
+  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+</nav>
+<div class="container">
+  <div class="hero">
+    <div class="hero-eyebrow">CRITERIO BY IN·KLUSO</div>
+    <h1 class="hero-title">AI-generated research.<br>Human-validated intelligence.</h1>
+    <p class="hero-sub">30 industry signals across Real Estate, Retail &amp; E-Commerce, and Brand &amp; Travel. Each article starts AI-generated at LV0 and levels up through professional validation.</p>
+    <div class="hero-stats">
+      <div><div class="hero-stat-num">30</div><div class="hero-stat-label">Research Signals</div></div>
+      <div><div class="hero-stat-num">18</div><div class="hero-stat-label">Validated</div></div>
+      <div><div class="hero-stat-num">12</div><div class="hero-stat-label">Open for Validation</div></div>
+      <div><div class="hero-stat-num">3</div><div class="hero-stat-label">Industry Verticals</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Verticals</div>
+    <div class="grid-3"><a href="/real-estate/" style="display:block;padding:28px;border:1px solid #2D6BE433;border-radius:4px;background:#0f1b2d;transition:border-color 0.2s;">
+  <div style="height:3px;background:#2D6BE4;border-radius:1px;margin-bottom:20px;"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#2D6BE4;font-weight:600;letter-spacing:0.08em;margin-bottom:8px;">VERTICAL</div>
+  <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px;">Real Estate</div>
+  <div style="font-size:13px;color:#9a9690;">6/10 validated · 4 open for validation</div>
+</a><a href="/retail/" style="display:block;padding:28px;border:1px solid #C4317A33;border-radius:4px;background:#1f0d17;transition:border-color 0.2s;">
+  <div style="height:3px;background:#C4317A;border-radius:1px;margin-bottom:20px;"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#C4317A;font-weight:600;letter-spacing:0.08em;margin-bottom:8px;">VERTICAL</div>
+  <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px;">Retail & E-Commerce</div>
+  <div style="font-size:13px;color:#9a9690;">6/10 validated · 4 open for validation</div>
+</a><a href="/brand/" style="display:block;padding:28px;border:1px solid #E8602C33;border-radius:4px;background:#1f120a;transition:border-color 0.2s;">
+  <div style="height:3px;background:#E8602C;border-radius:1px;margin-bottom:20px;"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#E8602C;font-weight:600;letter-spacing:0.08em;margin-bottom:8px;">VERTICAL</div>
+  <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px;">Brand & Travel</div>
+  <div style="font-size:13px;color:#9a9690;">6/10 validated · 4 open for validation</div>
+</a></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">All 30 Signals</div>
+    <div class="section-sub">Browse the full research library. Founder-validated signals are ready to read. Open signals await professional validation.</div>
+    <div class="grid-3"><a href="/real-estate/nwa-infrastructure-caps-development-2026/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-001</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 91</span>
+  </div>
+  <div class="card-title">NWA Infrastructure Caps Development 2026</div>
+  <div class="card-subtitle">How infrastructure constraints are shaping commercial real estate ceilings in Northwest Arkansas</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-commercial-vacancy-national-divergence/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-002</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 87</span>
+  </div>
+  <div class="card-title">NWA Commercial Vacancy: National Divergence</div>
+  <div class="card-subtitle">Local vacancy rates diverge from national benchmarks — a structural signal or cyclical noise?</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-multifamily-vacancy-supply-correction/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-003</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 85</span>
+  </div>
+  <div class="card-title">NWA Multifamily Vacancy Supply Correction</div>
+  <div class="card-subtitle">Supply-side correction underway as multifamily absorption stalls in key NWA submarkets</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-residential-pricing-precision-market/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-004</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 89</span>
+  </div>
+  <div class="card-title">NWA Residential Pricing: Precision Market</div>
+  <div class="card-subtitle">Micro-market pricing divergence signals a precision buyer environment across Benton and Washington counties</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-employer-concentration-real-estate-risk/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-005</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 83</span>
+  </div>
+  <div class="card-title">NWA Employer Concentration Real Estate Risk</div>
+  <div class="card-subtitle">Single-employer dependency creating latent risk in NWA residential and commercial demand curves</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-home-price-divergence-county-analysis/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-006</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 86</span>
+  </div>
+  <div class="card-title">NWA Home Price Divergence County Analysis</div>
+  <div class="card-subtitle">County-level price spread widening — Benton vs. Washington trajectories diverging at 18-month horizon</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/mortgage-lock-in-effect-market-analysis/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-007</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 67</span>
+  </div>
+  <div class="card-title">Mortgage Lock-In Effect Market Analysis</div>
+  <div class="card-subtitle">How rate differentials between existing and new mortgages are freezing inventory nationwide</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/housing-affordability-index-historical-context/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-008</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 71</span>
+  </div>
+  <div class="card-title">Housing Affordability Index: Historical Context</div>
+  <div class="card-subtitle">Affordability at 40-year lows — structural causes and the markets most likely to correct first</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/new-home-sales-builder-incentives-2026/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-009</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 64</span>
+  </div>
+  <div class="card-title">New Home Sales: Builder Incentives 2026</div>
+  <div class="card-subtitle">Builder concession strategies accelerating as new construction competes against locked existing inventory</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/northeast-midwest-housing-market-shift/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-010</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 69</span>
+  </div>
+  <div class="card-title">Northeast-Midwest Housing Market Shift</div>
+  <div class="card-subtitle">Capital migration from coastal to interior markets reshaping demand dynamics in secondary metros</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/retail/retail-media-60b-vendor-margin-risk/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-001</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 93</span>
+  </div>
+  <div class="card-title">Retail Media $60B Vendor Margin Risk</div>
+  <div class="card-subtitle">The hidden cost of retail media networks on CPG vendor P&Ls — a structural margin compression signal</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/otif-compliance-hidden-cost-vendor-economics/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-002</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 88</span>
+  </div>
+  <div class="card-title">OTIF Compliance: Hidden Cost Vendor Economics</div>
+  <div class="card-subtitle">On-time in-full penalty structures are quietly reshaping vendor economics across top-10 retailers</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/category-management-drives-shelf-space/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-003</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 84</span>
+  </div>
+  <div class="card-title">Category Management Drives Shelf Space</div>
+  <div class="card-subtitle">Category captain dynamics and the algorithmic shelf space allocation shift accelerating in 2026</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/shopper-marketing-physical-digital-gap/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-004</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 82</span>
+  </div>
+  <div class="card-title">Shopper Marketing: Physical-Digital Gap</div>
+  <div class="card-subtitle">Investment imbalance between in-store and digital shopper touchpoints is creating measurable conversion losses</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/private-label-growth-brand-margin-pressure/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-005</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 90</span>
+  </div>
+  <div class="card-title">Private Label Growth: Brand Margin Pressure</div>
+  <div class="card-subtitle">Retailer own-brand acceleration is compressing national brand margins in 7 of 10 major grocery categories</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/ecommerce-fulfillment-economics-profitability/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-006</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 87</span>
+  </div>
+  <div class="card-title">Ecommerce Fulfillment Economics & Profitability</div>
+  <div class="card-subtitle">Last-mile cost structures are eroding ecommerce margins — the profitable operators share 3 structural differences</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Jenny</span>
+  </div>
+</a>
+<a href="/retail/grocery-inflation-consumer-behavior-shift/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-007</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 72</span>
+  </div>
+  <div class="card-title">Grocery Inflation: Consumer Behavior Shift</div>
+  <div class="card-subtitle">Post-inflation normalization is not restoring pre-2022 shopping patterns — permanent trade-down in 4 categories</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/retail/retail-store-closures-square-footage-rationalization/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-008</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 68</span>
+  </div>
+  <div class="card-title">Retail Store Closures: Square Footage Rationalization</div>
+  <div class="card-subtitle">Net square footage contraction accelerating across specialty retail — who exits, who densifies</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/retail/walmart-vendor-ecosystem-economic-analysis/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-009</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 75</span>
+  </div>
+  <div class="card-title">Walmart Vendor Ecosystem Economic Analysis</div>
+  <div class="card-subtitle">The true cost of Walmart volume: how supplier economics stack when fees, compliance, and media are netted</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/retail/quick-commerce-instant-delivery-economics/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#C4317A;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">EC-010</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 66</span>
+  </div>
+  <div class="card-title">Quick Commerce: Instant Delivery Economics</div>
+  <div class="card-subtitle">10-minute delivery unit economics remain structurally negative — the operators closest to breakeven and why</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/brand/brand-distinctiveness-erosion-market-analysis/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-001</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 92</span>
+  </div>
+  <div class="card-title">Brand Distinctiveness Erosion Market Analysis</div>
+  <div class="card-subtitle">Category genericization is accelerating — the brands losing distinctiveness and the structural causes</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/destination-branding-search-disintermediation/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-002</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 86</span>
+  </div>
+  <div class="card-title">Destination Branding: Search Disintermediation</div>
+  <div class="card-subtitle">AI search is rewriting destination discovery — what it means for DMO brand investment ROI</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/brand-identity-systems-scaling-consistency/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-003</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 83</span>
+  </div>
+  <div class="card-title">Brand Identity Systems: Scaling Consistency</div>
+  <div class="card-subtitle">How enterprise brand systems break at scale and the structural fixes that actually hold</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/travel-industry-trust-gap-reviews-authenticity/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-004</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 88</span>
+  </div>
+  <div class="card-title">Travel Industry Trust Gap: Reviews & Authenticity</div>
+  <div class="card-subtitle">Traveler trust in platform reviews has declined 22% since 2022 — the behavioral shift and beneficiaries</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/brand-voice-as-competitive-asset/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-005</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 84</span>
+  </div>
+  <div class="card-title">Brand Voice as Competitive Asset</div>
+  <div class="card-subtitle">Measurable correlation between tonal consistency and market share retention across 40 brand cases</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/creative-brief-quality-campaign-performance/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-006</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 81</span>
+  </div>
+  <div class="card-title">Creative Brief Quality & Campaign Performance</div>
+  <div class="card-subtitle">Brief quality is the strongest predictor of campaign effectiveness — the 7 structural brief failures</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Pollo</span>
+  </div>
+</a>
+<a href="/brand/travel-advisor-resurgence-complexity-premium/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-007</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 73</span>
+  </div>
+  <div class="card-title">Travel Advisor Resurgence: Complexity Premium</div>
+  <div class="card-subtitle">Human advisor bookings growing 34% YoY — the complexity-premium markets driving the resurgence</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/brand/employer-brand-talent-acquisition-cost/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-008</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 70</span>
+  </div>
+  <div class="card-title">Employer Brand & Talent Acquisition Cost</div>
+  <div class="card-subtitle">Quantifying the employer brand premium: cost-per-hire differential between strong and weak brand employers</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/brand/experiential-hospitality-hotel-differentiation/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-009</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 65</span>
+  </div>
+  <div class="card-title">Experiential Hospitality: Hotel Differentiation</div>
+  <div class="card-subtitle">Experience-led hotel concepts commanding 40%+ RevPAR premium — the design and programming signals</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/brand/rebranding-failure-rate-research-analysis/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#E8602C;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">BD-010</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 74</span>
+  </div>
+  <div class="card-title">Rebranding Failure Rate Research Analysis</div>
+  <div class="card-subtitle">67% of major rebrands fail to improve brand equity — the common structural failure patterns</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+</div>
+  </div>
+
+  <div class="validate-cta">
+    <div class="validate-cta-text">
+      <h3>Become a Verified Contributor</h3>
+      <p>Are you a professional with expertise in real estate, retail, or brand strategy? Validate signals in your domain and earn Verified Contributor status.</p>
+    </div>
+    <a href="/register/" class="btn btn-primary">Register to Validate →</a>
+  </div>
+</div>
+<footer>
+  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a> · INKLUSO, Inc. · XTATIK LLC</p>
+  <p style="margin-top:6px;">AI-generated industry research. Human-validated intelligence.</p>
+</footer>
+</body>
+</html>

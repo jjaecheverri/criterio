@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Criterio · Real Estate</title>
+<meta name="description" content="Real Estate research signals on Criterio. 6 validated, 4 open for validation.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8e6df;
+  --text-dim: #9a9690;
+  --text-muted: #5a5850;
+  --re: #2D6BE4;
+  --retail: #C4317A;
+  --brand: #E8602C;
+  --lv0: #8A8578;
+  --lv1: #2D6BE4;
+  --lv2: #2E9B6F;
+  --lv3: #C9A84C;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+.font-serif { font-family: 'DM Serif Display', serif; }
+.font-lora { font-family: 'Lora', serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Nav */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
+.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
+.nav-brand span { color: var(--text-dim); font-style: italic; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
+.nav-validate:hover { background: var(--text-dim) !important; }
+
+/* Level badge */
+.level-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; border: 1px solid; }
+.lv0 { color: var(--lv0); border-color: var(--lv0); background: rgba(138,133,120,0.08); }
+.lv1 { color: var(--lv1); border-color: var(--lv1); background: rgba(45,107,228,0.08); }
+.lv2 { color: var(--lv2); border-color: var(--lv2); background: rgba(46,155,111,0.08); }
+.lv3 { color: var(--lv3); border-color: var(--lv3); background: rgba(201,168,76,0.08); }
+
+/* SCI score */
+.sci { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: var(--text-dim); }
+
+/* Article card */
+.article-card { display: block; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg2); transition: border-color 0.2s, background 0.2s; position: relative; }
+.article-card:hover { border-color: rgba(255,255,255,0.18); background: var(--bg3); }
+.article-card.locked { opacity: 0.65; }
+.card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.card-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.3; margin-bottom: 8px; color: var(--text); }
+.card-subtitle { font-size: 14px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-validator { font-size: 12px; color: var(--text-muted); }
+.locked-badge { position: absolute; top: 16px; right: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.08em; border: 1px solid var(--border); padding: 3px 8px; border-radius: 2px; }
+
+/* Divider stripe */
+.vertical-stripe { height: 3px; border-radius: 1px; }
+
+/* Grid */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
+
+/* Container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 640px) { .container { padding: 0 20px; } }
+
+/* Section */
+.section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
+.section-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 32px; }
+
+/* Tag */
+.tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
+
+/* Footer */
+footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; }
+
+.vertical-hero { padding:60px 0 48px;border-bottom:1px solid var(--border); }
+.vertical-hero-stripe { width:48px;height:4px;border-radius:2px;margin-bottom:20px; }
+.vertical-hero-label { font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px; }
+.vertical-hero-title { font-family:'DM Serif Display',serif;font-size:clamp(36px,5vw,56px);margin-bottom:12px; }
+.vertical-hero-stats { display:flex;gap:32px;flex-wrap:wrap;margin-top:20px; }
+.stat { display:flex;flex-direction:column; }
+.stat-num { font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600; }
+.stat-label { font-size:12px;color:var(--text-muted); }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-brand">Criterio <span>by IN·KluSo</span></a>
+  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+</nav>
+<div class="container">
+  <div class="vertical-hero">
+    <div class="vertical-hero-stripe" style="background:#2D6BE4;"></div>
+    <div class="vertical-hero-label">VERTICAL</div>
+    <h1 class="vertical-hero-title">Real Estate</h1>
+    <div class="vertical-hero-stats">
+      <div class="stat"><span class="stat-num" style="color:#2D6BE4">6</span><span class="stat-label">Validated Signals</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Open for Validation</span></div>
+      <div class="stat"><span class="stat-num">10</span><span class="stat-label">Total Signals</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">All Signals — Real Estate</div>
+    <div class="grid-2"><a href="/real-estate/nwa-infrastructure-caps-development-2026/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-001</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 91</span>
+  </div>
+  <div class="card-title">NWA Infrastructure Caps Development 2026</div>
+  <div class="card-subtitle">How infrastructure constraints are shaping commercial real estate ceilings in Northwest Arkansas</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-commercial-vacancy-national-divergence/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-002</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 87</span>
+  </div>
+  <div class="card-title">NWA Commercial Vacancy: National Divergence</div>
+  <div class="card-subtitle">Local vacancy rates diverge from national benchmarks — a structural signal or cyclical noise?</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-multifamily-vacancy-supply-correction/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-003</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 85</span>
+  </div>
+  <div class="card-title">NWA Multifamily Vacancy Supply Correction</div>
+  <div class="card-subtitle">Supply-side correction underway as multifamily absorption stalls in key NWA submarkets</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-residential-pricing-precision-market/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-004</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 89</span>
+  </div>
+  <div class="card-title">NWA Residential Pricing: Precision Market</div>
+  <div class="card-subtitle">Micro-market pricing divergence signals a precision buyer environment across Benton and Washington counties</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-employer-concentration-real-estate-risk/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-005</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 83</span>
+  </div>
+  <div class="card-title">NWA Employer Concentration Real Estate Risk</div>
+  <div class="card-subtitle">Single-employer dependency creating latent risk in NWA residential and commercial demand curves</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/nwa-home-price-divergence-county-analysis/" class="article-card">
+  
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-006</span>
+    <span class="level-badge lv1">LV1 VALIDATED</span>
+    <span class="sci">SCI 86</span>
+  </div>
+  <div class="card-title">NWA Home Price Divergence County Analysis</div>
+  <div class="card-subtitle">County-level price spread widening — Benton vs. Washington trajectories diverging at 18-month horizon</div>
+  <div class="card-footer">
+    <span class="card-validator">Validated by Juan Echeverri</span>
+  </div>
+</a>
+<a href="/real-estate/mortgage-lock-in-effect-market-analysis/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-007</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 67</span>
+  </div>
+  <div class="card-title">Mortgage Lock-In Effect Market Analysis</div>
+  <div class="card-subtitle">How rate differentials between existing and new mortgages are freezing inventory nationwide</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/housing-affordability-index-historical-context/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-008</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 71</span>
+  </div>
+  <div class="card-title">Housing Affordability Index: Historical Context</div>
+  <div class="card-subtitle">Affordability at 40-year lows — structural causes and the markets most likely to correct first</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/new-home-sales-builder-incentives-2026/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-009</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 64</span>
+  </div>
+  <div class="card-title">New Home Sales: Builder Incentives 2026</div>
+  <div class="card-subtitle">Builder concession strategies accelerating as new construction competes against locked existing inventory</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+<a href="/real-estate/northeast-midwest-housing-market-shift/" class="article-card locked">
+  <span class="locked-badge">OPEN FOR VALIDATION</span>
+  <div class="vertical-stripe" style="background:#2D6BE4;margin-bottom:16px;"></div>
+  <div class="card-meta">
+    <span class="card-id">RE-010</span>
+    <span class="level-badge lv0">LV0 UNVALIDATED</span>
+    <span class="sci">SCI 69</span>
+  </div>
+  <div class="card-title">Northeast-Midwest Housing Market Shift</div>
+  <div class="card-subtitle">Capital migration from coastal to interior markets reshaping demand dynamics in secondary metros</div>
+  <div class="card-footer">
+    <span class="card-validator">Unclaimed — Open for Validation</span>
+  </div>
+</a>
+</div>
+  </div>
+  <div style="padding:40px 0;">
+    <a href="/register/" style="display:inline-block;padding:12px 24px;border:1px solid #2D6BE4;color:#2D6BE4;border-radius:3px;font-size:14px;font-weight:600;">Validate a Signal in Real Estate →</a>
+  </div>
+</div>
+<footer>
+  <p>Criterio by <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a> · <a href="/" style="color:var(--text-dim);">All Verticals</a></p>
+</footer>
+</body>
+</html>
