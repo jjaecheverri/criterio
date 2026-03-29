@@ -94,15 +94,15 @@ footer p { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--warm-
 }
 </style>
 </head>
-<body>
+<body data-article-id="retail-media-60b-vendor-margin-risk">
 <nav style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;">
   <a href="/" style="color:#fff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.05em;">CRITERIO</a>
   <div style="display:flex;gap:24px;align-items:center;">
-    <a href="/retail/" style="color:#C4317A;text-decoration:none;">Retail</a>
-    <a href="/retail/" style="color:#C4317A;text-decoration:none;">Retail</a>
-    <a href="/retail/" style="color:#C4317A;text-decoration:none;">Retail</a>
+    <a href="/real-estate/" style="color:#888;text-decoration:none;">Real Estate</a>
+    <a href="/retail/" style="color:#fff;text-decoration:none;">Retail</a>
+    <a href="/brand/" style="color:#888;text-decoration:none;">Brand</a>
     <a href="/about/" style="color:#888;text-decoration:none;font-size:13px;letter-spacing:0.08em;">ABOUT</a>
-    <a href="/register/" style="color:#C4317A;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:0.08em;border:1px solid #C4317A;padding:5px 12px;">VALIDATE</a>
+    <a href="/register/" style="color:#2D6BE4;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:0.08em;border:1px solid #2D6BE4;padding:5px 12px;">VALIDATE</a>
   </div>
 </nav>
 <div class="division-stripe">
@@ -183,10 +183,147 @@ footer p { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--warm-
 <span class="tag">CPG</span>
 <span class="tag">Walmart Connect</span>
 <span class="tag">Retail Advertising</span></div>
-<div class="cta-section">
-  <h2>Are you an industry professional?</h2>
-  <p>IN·KluSo produces AI research at scale. Industry professionals validate it. Get badged as a Verified Contributor in your field.</p>
-  <a href="/validate/" class="cta-btn">Apply to Validate →</a>
-</div>
+
 <footer><div class="f-brand">IN·KluSo</div><p>Signal Intelligence Magazine · INKLUSO, Inc.</p><p>© 2026 INKLUSO, Inc. All rights reserved.</p></footer>
+<!-- VALIDATION STACK SECTION -->
+<section class="validation-stack" id="validations-section" style="max-width:720px;margin:0 auto;padding:40px 40px 80px;">
+  <div style="border-top:2px solid var(--division-color);padding-top:40px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--division-color);margin-bottom:8px;font-weight:500;">CRITERIO STACK</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;">Practitioner Validations</h2>
+    <p style="font-family:'Inter',sans-serif;font-size:14px;color:var(--warm-gray);margin-bottom:32px;">Industry professionals with direct experience validate, correct, and expand this analysis.</p>
+
+    <!-- Existing validations load here -->
+    <div id="validations-list" style="margin-bottom:40px;"></div>
+
+    <!-- Validation form -->
+    <div style="background:#fff;border:1px solid var(--light-gray);padding:32px;border-radius:4px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--warm-gray);margin-bottom:16px;font-weight:500;">ADD YOUR VALIDATION</div>
+      <form id="validation-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div>
+            <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:6px;">Your Name *</label>
+            <input type="text" id="v-name" required style="width:100%;padding:10px 12px;border:1px solid var(--light-gray);font-family:'Inter',sans-serif;font-size:14px;background:var(--cream);border-radius:2px;outline:none;">
+          </div>
+          <div>
+            <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:6px;">Title / Role *</label>
+            <input type="text" id="v-title" required style="width:100%;padding:10px 12px;border:1px solid var(--light-gray);font-family:'Inter',sans-serif;font-size:14px;background:var(--cream);border-radius:2px;outline:none;">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div>
+            <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:6px;">Organization</label>
+            <input type="text" id="v-org" style="width:100%;padding:10px 12px;border:1px solid var(--light-gray);font-family:'Inter',sans-serif;font-size:14px;background:var(--cream);border-radius:2px;outline:none;">
+          </div>
+          <div>
+            <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:6px;">Years of Experience *</label>
+            <input type="number" id="v-years" min="1" max="60" required style="width:100%;padding:10px 12px;border:1px solid var(--light-gray);font-family:'Inter',sans-serif;font-size:14px;background:var(--cream);border-radius:2px;outline:none;">
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <label style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:6px;">Your Criterio — validation commentary *</label>
+          <p style="font-family:'Inter',sans-serif;font-size:12px;color:var(--warm-gray);margin-bottom:8px;">Share what you confirm, correct, or can add from your direct experience. Be specific with data, timelines, or context.</p>
+          <textarea id="v-criterio" required rows="6" style="width:100%;padding:12px;border:1px solid var(--light-gray);font-family:'Lora',serif;font-size:15px;background:var(--cream);border-radius:2px;outline:none;resize:vertical;line-height:1.7;"></textarea>
+        </div>
+        <button type="submit" id="v-submit" style="background:var(--division-color);color:#fff;border:none;padding:14px 32px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px;cursor:pointer;border-radius:2px;width:100%;">Submit Validation →</button>
+        <div id="v-status" style="margin-top:16px;font-family:'Inter',sans-serif;font-size:14px;display:none;"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  // Get articleId from page
+  const articleId = document.body.dataset.articleId || document.querySelector('[data-article-id]')?.dataset.articleId || window.location.pathname.replace(/\//g,'_').replace(/^_|_$/g,'');
+
+  // Format timestamp
+  function formatDate(iso) {
+    try { return new Date(iso).toLocaleDateString('en-US', {year:'numeric',month:'short',day:'numeric'}); } catch(e) { return ''; }
+  }
+
+  // Render a single validation card
+  function renderCard(v) {
+    return `<div style="border:1px solid var(--light-gray);padding:24px;margin-bottom:16px;border-left:4px solid var(--division-color);">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--black);">${v.validatorName}</div>
+          <div style="font-family:'Inter',sans-serif;font-size:13px;color:var(--warm-gray);">${v.validatorTitle}${v.validatorOrg ? ' · ' + v.validatorOrg : ''}${v.validatorYears ? ' · ' + v.validatorYears + ' yrs' : ''}</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--warm-gray);letter-spacing:1px;">${formatDate(v.timestamp)}</div>
+      </div>
+      ${v.aiCommentary ? `<p style="font-family:'Lora',serif;font-size:16px;line-height:1.8;color:var(--black);margin-bottom:12px;">${v.aiCommentary}</p>` : ''}
+      <details style="cursor:pointer;">
+        <summary style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--warm-gray);text-transform:uppercase;">View original criterio</summary>
+        <p style="font-family:'Lora',serif;font-size:14px;color:#555;margin-top:12px;line-height:1.7;font-style:italic;">"${v.criterio}"</p>
+      </details>
+    </div>`;
+  }
+
+  // Load existing validations
+  const list = document.getElementById('validations-list');
+  fetch(`/api/validations?articleId=${encodeURIComponent(articleId)}`)
+    .then(r => r.json())
+    .then(data => {
+      const vals = data.validations || [];
+      if (vals.length === 0) {
+        list.innerHTML = '<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first practitioner to validate this analysis.</p>';
+      } else {
+        list.innerHTML = vals.map(renderCard).join('');
+      }
+    })
+    .catch(() => { list.innerHTML = ''; });
+
+  // Submit validation
+  document.getElementById('validation-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('v-submit');
+    const status = document.getElementById('v-status');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    status.style.display = 'none';
+
+    // Get article body text
+    const articleBody = document.querySelector('.article-body')?.innerText || document.querySelector('article')?.innerText || '';
+    const articleTitle = document.querySelector('h1')?.innerText || '';
+
+    try {
+      const res = await fetch('/api/validate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          articleId,
+          articleTitle,
+          articleBody: articleBody.substring(0, 3000),
+          currentLevel: document.body.dataset.level || '1',
+          validatorName: document.getElementById('v-name').value,
+          validatorTitle: document.getElementById('v-title').value,
+          validatorOrg: document.getElementById('v-org').value,
+          validatorYears: document.getElementById('v-years').value,
+          criterio: document.getElementById('v-criterio').value
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.validation) {
+        // Prepend new card
+        list.innerHTML = renderCard(data.validation) + list.innerHTML.replace('<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first practitioner to validate this analysis.</p>', '');
+        document.getElementById('validation-form').reset();
+        status.style.display = 'block';
+        status.style.color = '#2E9B6F';
+        status.textContent = '✓ Your validation has been added. Thank you.';
+        btn.textContent = 'Submit Validation →';
+        btn.disabled = false;
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch(err) {
+      status.style.display = 'block';
+      status.style.color = '#E8602C';
+      status.textContent = 'Error submitting: ' + err.message;
+      btn.textContent = 'Submit Validation →';
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+
 </body></html>
