@@ -113,7 +113,18 @@ textarea { resize:vertical;min-height:120px; }
     <h1 style="font-family:'DM Serif Display',serif;font-size:clamp(32px,4vw,48px);margin-bottom:12px;">Become a Verified Contributor</h1>
     <p style="font-size:16px;color:var(--text-dim);margin-bottom:40px;">Register to validate Criterio signals in your professional domain. Validators are credited on every article they level up.</p>
 
-    <form action="https://formspree.io/f/mnjoplqg" method="POST">
+    <div id="thanks-msg" style="display:none; background:#2E9B6F; color:#fff; padding:20px 30px; margin-bottom:30px; font-family:'Inter',sans-serif; font-size:14px;">
+  ✓ Registration received. We'll review your application and be in touch.
+</div>
+<script>
+  if(window.location.search.includes('thanks=1')) {
+    document.getElementById('thanks-msg').style.display='block';
+    document.querySelector('form') && (document.querySelector('form').style.display='none');
+  }
+</script>
+<form action="https://formspree.io/f/mnjoplqg" method="POST">
+      <input type="hidden" name="_next" value="https://criterio.in-kluso.com/register/?thanks=1">
+      <input type="hidden" name="_subject" value="New Criterio Contributor Registration">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div class="form-group">
           <label>First Name *</label>
