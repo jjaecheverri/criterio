@@ -43,6 +43,7 @@ export async function onRequestPost({ request, env }) {
     const commentary = body.commentary || body.criterio || body.comment || '';
     const paragraphNotes = body.paragraphNotes || body.notes || [];
     const scores = body.scores || body.dimensions || {};
+    const annotationType = body.annotationType || body.annotation_type || null;
 
     if (!articleSlug || !commentary) {
       return new Response(JSON.stringify({ error: 'Missing required fields: articleSlug and commentary' }), { status: 400, headers });
@@ -185,6 +186,7 @@ RESPONSE FORMAT (JSON only, no other text):
       timestamp: new Date().toISOString(),
       scores,
       commentary,
+      annotationType,
       paragraphNotes,
       ai_commentary: aiCommentary
     };
@@ -332,7 +334,7 @@ Update the synthesis in 2-3 sentences to reflect what ${count} professional asse
     // ── Save to KV ────────────────────────────────────────────────────────
     await env.VALIDATIONS.put(kvKey, JSON.stringify(kvData));
 
-    // ── Update user record ────────────────────────────────────────────────
+    // ── Update user record + activity feed ───────────────────────────────
     if (userId) {
       try {
         const userKey = `contrib:${userId}`;
@@ -357,6 +359,21 @@ Update the synthesis in 2-3 sentences to reflect what ${count} professional asse
 
           await env.VALIDATIONS.put(userKey, JSON.stringify(user));
         }
+
+        // ── Write to activity:{email} for My Validations tab ─────────────
+        const activityKey = `activity:${userId}`;
+        const existingActivity = await env.VALIDATIONS.get(activityKey, { type: 'json' }) || [];
+        existingActivity.unshift({
+          slug: articleSlug,
+          timestamp: validation.timestamp,
+          commentary: commentary.substring(0, 300),
+          annotationType,
+          scores,
+          assessmentState: kvData.assessmentState,
+          computedSCI: kvData.computedSCI
+        });
+        // Keep last 50 validations
+        await env.VALIDATIONS.put(activityKey, JSON.stringify(existingActivity.slice(0, 50)));
       } catch(e) {}
     }
 
