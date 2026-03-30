@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GROUND · Contributor Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255,255,255,0.08);
+  --text: #e8e6df;
+  --text-dim: #9a9690;
+  --text-muted: #5a5850;
+  --re: #2D6BE4;
+  --green: #2E9B6F;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
+a { color: inherit; text-decoration: none; }
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
+.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
+.nav-brand span { color: var(--text-dim); font-style: italic; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
+.container { max-width: 800px; margin: 0 auto; padding: 60px 40px; }
+@media (max-width: 640px) { .container { padding: 40px 20px; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
+.page-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 44px); margin-bottom: 8px; }
+.profile-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; margin-bottom: 40px; }
+.profile-name { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 6px; }
+.profile-meta { color: var(--text-dim); font-size: 14px; line-height: 1.7; }
+.profile-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(45,107,228,0.12); border: 1px solid rgba(45,107,228,0.3); border-radius: 4px; padding: 4px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #7aaaf0; letter-spacing: 0.05em; margin-top: 12px; }
+.section-heading { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.activity-list { list-style: none; }
+.activity-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 16px; }
+.activity-item:last-child { border-bottom: none; }
+.activity-slug { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--re); }
+.activity-slug a { color: var(--re); text-decoration: none; }
+.activity-slug a:hover { text-decoration: underline; }
+.activity-time { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.empty-state { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
+.btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 4px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.btn-logout:hover { border-color: rgba(220,50,50,0.4); color: #f08080; }
+.verified-banner { background: rgba(46,155,111,0.1); border: 1px solid rgba(46,155,111,0.3); border-radius: 6px; padding: 14px 20px; margin-bottom: 32px; color: #6fcfa0; font-size: 14px; display: none; }
+.loading { color: var(--text-muted); font-size: 14px; text-align: center; padding: 60px; }
+footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 60px; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-brand">GROUND <span>by IN·KluSo</span></a>
+  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+</nav>
+
+<div class="container" id="mainContent">
+  <div class="loading">Loading…</div>
+</div>
+
+<footer>
+  <p>GROUND by IN·KluSo &middot; <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a> · <a href="/" style="color:var(--text-dim);">Home</a></p>
+</footer>
+
+<script>
+(async function() {
+  const container = document.getElementById('mainContent');
+
+  // Check auth
+  let user = null;
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) {
+      window.location.href = '/login/?redirect=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+    const data = await res.json();
+    if (!data.authenticated) {
+      window.location.href = '/login/';
+      return;
+    }
+    user = data.user;
+  } catch (e) {
+    window.location.href = '/login/';
+    return;
+  }
+
+  // Format date
+  const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown';
+  const params = new URLSearchParams(window.location.search);
+
+  // Fetch activity
+  let activity = [];
+  try {
+    const actRes = await fetch('/api/auth/activity');
+    if (actRes.ok) {
+      const actData = await actRes.json();
+      activity = actData.activity || [];
+    }
+  } catch (e) {}
+
+  // Build activity list
+  let activityHTML = '';
+  if (activity.length === 0) {
+    activityHTML = '<div class="empty-state">No validations submitted yet.<br><a href="/real-estate/" style="color:var(--re);">Browse articles to validate →</a></div>';
+  } else {
+    const items = activity.slice(0, 10).map(item => {
+      const date = new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const slug = item.slug || '';
+      const title = item.title || slug;
+      return `<li class="activity-item">
+        <span class="activity-slug"><a href="/${slug}/">${title}</a></span>
+        <span class="activity-time">${date}</span>
+      </li>`;
+    }).join('');
+    activityHTML = `<ul class="activity-list">${items}</ul>`;
+  }
+
+  // Render dashboard
+  container.innerHTML = `
+    ${params.get('verified') === '1' ? '<div class="verified-banner" style="display:block">✓ Email verified! Welcome to GROUND. Your contributor account is now active.</div>' : ''}
+    <div class="page-label">Contributor Dashboard</div>
+    <h1 class="page-title">Welcome back, ${user.name.split(' ')[0]}.</h1>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:16px;flex-wrap:wrap;">
+      <div></div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-name">${user.name}</div>
+      <div class="profile-meta">
+        ${user.title} · ${user.org}<br>
+        ${user.yearsExp} years of experience<br>
+        Member since ${memberSince}
+      </div>
+      <div class="profile-badge">✓ VERIFIED CONTRIBUTOR</div>
+    </div>
+
+    <div class="section-heading">Recent Validations</div>
+    ${activityHTML}
+  `;
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/';
+  });
+})();
+</script>
+</body>
+</html>

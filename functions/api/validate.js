@@ -1,5 +1,8 @@
 // Cloudflare Pages Function: /api/validate
 // Generates AI validation commentary via Anthropic and saves to KV
+// Requires authentication
+
+import { getSession } from './auth/_helpers.js';
 
 export async function onRequestPost({ request, env }) {
   const corsHeaders = {
@@ -10,12 +13,24 @@ export async function onRequestPost({ request, env }) {
   };
 
   try {
+    // Auth check
+    const user = await getSession(request, env);
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Authentication required.' }), { status: 401, headers: corsHeaders });
+    }
+
     const body = await request.json();
-    const { articleBody, articleTitle, currentLevel, articleId, validatorName, validatorTitle, validatorYears, validatorOrg, criterio } = body;
+    const { articleBody, articleTitle, currentLevel, articleId, criterio } = body;
 
     if (!articleBody || !criterio || !articleId) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers: corsHeaders });
     }
+
+    // Use authenticated user's profile data (server-side, cannot be spoofed)
+    const validatorName = user.name;
+    const validatorTitle = user.title;
+    const validatorOrg = user.org;
+    const validatorYears = user.yearsExp;
 
     // Call Anthropic to generate structured validation commentary
     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
@@ -63,10 +78,10 @@ Generate the validation commentary now.`
     const validation = {
       id: `val_${Date.now()}`,
       articleId,
-      validatorName: validatorName || 'Anonymous',
-      validatorTitle: validatorTitle || '',
-      validatorOrg: validatorOrg || '',
-      validatorYears: validatorYears || '',
+      validatorName,
+      validatorTitle,
+      validatorOrg,
+      validatorYears,
       criterio,
       aiCommentary,
       timestamp: new Date().toISOString(),
@@ -75,10 +90,18 @@ Generate the validation commentary now.`
 
     // Save to KV — key: `validations:{articleId}`
     if (env.VALIDATIONS) {
-      const existing = await env.VALIDATIONS.get(`validations:${articleId}`);
+      const slug = articleId;
+      const existing = await env.VALIDATIONS.get(`validations:${slug}`);
       const list = existing ? JSON.parse(existing) : [];
       list.push(validation);
-      await env.VALIDATIONS.put(`validations:${articleId}`, JSON.stringify(list));
+      await env.VALIDATIONS.put(`validations:${slug}`, JSON.stringify(list));
+
+      // Update activity log for this contributor
+      const activityKey = `activity:${user.email}`;
+      let activity = await env.VALIDATIONS.get(activityKey, { type: 'json' }) || [];
+      activity.unshift({ slug, title: articleTitle || slug, timestamp: new Date().toISOString() });
+      if (activity.length > 50) activity = activity.slice(0, 50);
+      await env.VALIDATIONS.put(activityKey, JSON.stringify(activity));
     }
 
     return new Response(JSON.stringify({ success: true, validation }), { headers: corsHeaders });
