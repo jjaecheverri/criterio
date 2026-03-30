@@ -61,7 +61,7 @@
 <section class="validation-stack" id="validations-section" style="max-width:720px;margin:0 auto;padding:40px 40px 80px;">
   <div style="border-top:2px solid var(--division-color);padding-top:40px;">
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--division-color);margin-bottom:8px;font-weight:500;">GROUND SIGNAL</div>
-    <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;">Practitioner Validations</h2>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;">Professional Validations</h2>
     <p style="font-family:'Inter',sans-serif;font-size:14px;color:var(--warm-gray);margin-bottom:32px;">Industry professionals with direct experience validate, correct, and expand this analysis.</p>
 
     <!-- Existing validations load here -->
@@ -138,7 +138,7 @@
     .then(data => {
       const vals = data.validations || [];
       if (vals.length === 0) {
-        list.innerHTML = '<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first practitioner to validate this analysis.</p>';
+        list.innerHTML = '<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first professional to validate this analysis.</p>';
       } else {
         list.innerHTML = vals.map(renderCard).join('');
       }
@@ -177,7 +177,7 @@
       const data = await res.json();
       if (data.success && data.validation) {
         // Prepend new card
-        list.innerHTML = renderCard(data.validation) + list.innerHTML.replace('<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first practitioner to validate this analysis.</p>', '');
+        list.innerHTML = renderCard(data.validation) + list.innerHTML.replace('<p style="font-family:\'Inter\',sans-serif;font-size:14px;color:var(--warm-gray);font-style:italic;">No validations yet. Be the first professional to validate this analysis.</p>', '');
         document.getElementById('validation-form').reset();
         status.style.display = 'block';
         status.style.color = '#2E9B6F';
