@@ -3,6 +3,10 @@
  * Structured five-dimension assessment + typed paragraph annotations
  */
 (function() {
+  // Hide legacy V4 inline validation form (superseded by V5 Review Mode panel)
+  var hideOldForm = document.createElement('style');
+  hideOldForm.textContent = '#validations-section, .validation-stack { display: none !important; }';
+  document.head.appendChild(hideOldForm);
   'use strict';
 
   // ─── Config ──────────────────────────────────────────────────────────────
