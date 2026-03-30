@@ -7,6 +7,9 @@
   var hideOldForm = document.createElement('style');
   hideOldForm.textContent = '#validations-section, .validation-stack, .vb-body:not([id]), .vb-scope:not([id]) { display: none !important; }';
   document.head.appendChild(hideOldForm);
+  // Also hide orphaned V4 elements directly (belt-and-suspenders for deferred execution)
+  var orphanedEls = document.querySelectorAll('.vb-body:not([id]), .vb-scope:not([id])');
+  for (var _i = 0; _i < orphanedEls.length; _i++) { orphanedEls[_i].style.display = 'none'; }
   'use strict';
 
   // ─── Config ──────────────────────────────────────────────────────────────
