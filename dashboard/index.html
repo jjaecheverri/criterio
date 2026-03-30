@@ -110,6 +110,17 @@ a { color: inherit; text-decoration: none; }
 
 .verified-banner { background: rgba(46,155,111,0.1); border: 1px solid rgba(46,155,111,0.3); border-radius: 6px; padding: 14px 20px; margin-bottom: 32px; color: #6fcfa0; font-size: 14px; display: none; }
 .loading { color: var(--text-muted); font-size: 14px; text-align: center; padding: 60px; }
+
+/* Levels system */
+.level-block { margin-top: 20px; }
+.level-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.level-badge { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; }
+.level-badge .level-num { background: var(--re); color: white; border-radius: 3px; padding: 2px 8px; font-size: 11px; }
+.level-badge .level-name { color: var(--text); }
+.level-next { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.04em; }
+.level-bar-track { background: rgba(255,255,255,0.06); border-radius: 3px; height: 5px; overflow: hidden; }
+.level-bar-fill { height: 100%; background: var(--re); border-radius: 3px; transition: width 0.6s ease; }
+.level-desc { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -163,6 +174,37 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
     if (actRes.ok) { const d = await actRes.json(); activity = d.activity || []; }
   } catch(e) {}
 
+  // ── Levels System ──────────────────────────────────────────────────────────
+  const LEVELS = [
+    { num: 1, name: 'Signal Watcher', min: 0,  max: 1,  desc: 'Your first validation unlocks Field Analyst.' },
+    { num: 2, name: 'Field Analyst',  min: 1,  max: 5,  desc: '5 total validations to reach Senior Analyst.' },
+    { num: 3, name: 'Senior Analyst', min: 5,  max: 15, desc: '15 total validations to reach Principal.' },
+    { num: 4, name: 'Principal',      min: 15, max: 30, desc: '30 total validations to reach GROUND Expert.' },
+    { num: 5, name: 'GROUND Expert',  min: 30, max: 30, desc: 'Top-tier intelligence contributor on GROUND.' },
+  ];
+  const valCount     = activity.length;
+  const curLevel     = LEVELS.find(l => valCount < l.max) || LEVELS[4];
+  const isMaxLevel   = curLevel.num === 5;
+  const lvlProgress  = isMaxLevel ? 100 : Math.round(((valCount - curLevel.min) / (curLevel.max - curLevel.min)) * 100);
+  const lvlRemaining = isMaxLevel ? 0 : curLevel.max - valCount;
+
+  function buildLevelHTML() {
+    const nextName = isMaxLevel ? '' : LEVELS[curLevel.num].name;
+    return '<div class="level-block">'
+      + '<div class="level-header">'
+      +   '<div class="level-badge">'
+      +     '<span class="level-num">LVL ' + curLevel.num + '</span>'
+      +     '<span class="level-name">' + curLevel.name + '</span>'
+      +   '</div>'
+      +   (isMaxLevel
+          ? '<span class="level-next" style="color:var(--gold)">✦ Max Level</span>'
+          : '<span class="level-next">' + lvlRemaining + ' validation' + (lvlRemaining !== 1 ? 's' : '') + ' to ' + nextName + '</span>')
+      + '</div>'
+      + '<div class="level-bar-track"><div class="level-bar-fill" style="width:' + lvlProgress + '%"></div></div>'
+      + '<div class="level-desc">' + curLevel.desc + '</div>'
+      + '</div>';
+  }
+
   // Build activity HTML
   function buildActivityHTML() {
     if (activity.length === 0) {
@@ -170,12 +212,13 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
     }
     return `<ul class="activity-list">${activity.slice(0,20).map(item => {
       const date = new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const url = `https://ground.in-kluso.com/${item.slug}/`;
-      const linkedinText = encodeURIComponent(`I just validated "${item.title || item.slug}" on GROUND by IN·KluSo — practitioner intelligence for professionals. ${url}`);
+      const slugUrl = item.slug.replace(/--/g, '/');
+      const url = `https://ground.in-kluso.com/${slugUrl}/`;
+      const linkedinText = encodeURIComponent(`I just validated "${item.title || item.slug}" on GROUND by IN·KluSo — professional intelligence for professionals. ${url}`);
       const twitterText = encodeURIComponent(`Just validated an article on @INKluSo GROUND — professional intelligence platform. ${url}`);
       return `<li class="activity-item">
         <div class="activity-header">
-          <div class="activity-title"><a href="/${item.slug}/">${item.title || item.slug}</a></div>
+          <div class="activity-title"><a href="/${slugUrl}/">${item.title || item.slug}</a></div>
           <div class="activity-time">${date}</div>
         </div>
         ${item.commentary ? `<div class="activity-commentary">"${item.commentary.slice(0,160)}${item.commentary.length > 160 ? '...' : ''}"</div>` : ''}
@@ -200,6 +243,7 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           ${user.yearsExp} years of experience${memberSince ? ` · Member since ${memberSince}` : ''}
         </div>
         <span class="profile-badge">✓ VERIFIED PROFESSIONAL</span>
+        ${buildLevelHTML()}
       </div>
       <button class="btn-logout" id="logoutBtn">Logout</button>
     </div>
@@ -391,7 +435,10 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
         clearBtn.click();
         btn.textContent = 'Submit Another →';
       } else {
-        errorEl.textContent = data.error || 'Submission failed. Please try again.';
+        const errMsg = data.error === 'quality_gate'
+          ? (data.message || 'Your validation needs a specific local insight.') + ' ' + (data.hint || '')
+          : (data.error || 'Submission failed. Please try again.');
+        errorEl.textContent = errMsg;
         errorEl.style.display = 'block';
         btn.textContent = 'Submit Validation →';
       }

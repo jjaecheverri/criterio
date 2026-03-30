@@ -1,5 +1,5 @@
 // Cloudflare Pages Function: /api/validations
-// Returns all validations for a given article ID
+// Returns all validations + synthesis for a given article.
 
 export async function onRequestGet({ request, env }) {
   const corsHeaders = {
@@ -11,20 +11,26 @@ export async function onRequestGet({ request, env }) {
 
   try {
     const url = new URL(request.url);
-    const articleId = url.searchParams.get('articleId');
+    // Accept both ?slug= (from review-mode.js) and ?articleId= (legacy)
+    const articleId = url.searchParams.get('slug') || url.searchParams.get('articleId');
 
     if (!articleId) {
-      return new Response(JSON.stringify({ error: 'Missing articleId' }), { status: 400, headers: corsHeaders });
+      return new Response(JSON.stringify({ error: 'Missing slug or articleId' }), { status: 400, headers: corsHeaders });
     }
 
     if (!env.VALIDATIONS) {
-      return new Response(JSON.stringify({ validations: [] }), { headers: corsHeaders });
+      return new Response(JSON.stringify({ validations: [], synthesis: null }), { headers: corsHeaders });
     }
 
-    const data = await env.VALIDATIONS.get(`validations:${articleId}`);
-    const validations = data ? JSON.parse(data) : [];
+    const [validationsData, synthesisData] = await Promise.all([
+      env.VALIDATIONS.get(`validations:${articleId}`),
+      env.VALIDATIONS.get(`synthesis:${articleId}`)
+    ]);
 
-    return new Response(JSON.stringify({ validations }), { headers: corsHeaders });
+    const validations = validationsData ? JSON.parse(validationsData) : [];
+    const synthesis   = synthesisData  ? JSON.parse(synthesisData)   : null;
+
+    return new Response(JSON.stringify({ validations, synthesis }), { headers: corsHeaders });
 
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
