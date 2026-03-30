@@ -37,7 +37,9 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json();
 
     // Accept multiple field name formats for compatibility
-    const articleSlug = body.articleSlug || body.articleId || body.article || '';
+    // Normalize slug: always use -- separator (review-mode.js uses --, dashboard may use /)
+    const rawSlug = body.articleSlug || body.articleId || body.article || '';
+    const articleSlug = rawSlug.replace(/\//g, '--');
     const commentary = body.commentary || body.criterio || body.comment || '';
     const paragraphNotes = body.paragraphNotes || body.notes || [];
     const scores = body.scores || {};

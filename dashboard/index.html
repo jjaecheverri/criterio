@@ -453,9 +453,29 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
     searchInput.focus();
   });
 
+  // ── Quick Validate: dimension score state ────────────────────────────────
+  let quickScores = { factual: 0, source: 0, rigor: 0, relevance: 0, utility: 0 };
+
+  // Wire dimension sliders once they're in the DOM (they're template-rendered)
+  // Use event delegation since sliders are injected via innerHTML
+  document.addEventListener('input', e => {
+    if (e.target.classList.contains('quick-dim-slider')) {
+      const dim = e.target.dataset.dim;
+      const val = parseInt(e.target.value, 10);
+      if (dim && quickScores.hasOwnProperty(dim)) {
+        quickScores[dim] = val;
+        // Update displayed score label
+        const label = document.getElementById('qdv-' + dim);
+        if (label) label.textContent = val === 0 ? '—' : val;
+      }
+    }
+  });
+
   // Quick validate submit
   document.getElementById('quickSubmitBtn').addEventListener('click', async () => {
-    const slug = selectedSlug.value;
+    const rawSlug = selectedSlug.value;
+    // Normalize slug: always use -- separator so it matches review-mode.js KV keys
+    const slug = rawSlug.replace(/\//g, '--');
     const commentary = document.getElementById('quickCommentary').value.trim();
     const successEl = document.getElementById('validateSuccess');
     const errorEl = document.getElementById('validateError');
@@ -483,21 +503,29 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
       });
       const data = await res.json();
       if (res.ok) {
-        successEl.innerHTML = `✓ Validation submitted! <a href="/${slug}/" style="color:var(--green);text-decoration:underline;">View it live →</a>`;
+        // Use raw slug for display URL (with slashes)
+        const displaySlug = rawSlug;
+        successEl.innerHTML = `✓ Validation submitted! <a href="/${displaySlug}/" style="color:var(--green);text-decoration:underline;">View it live →</a>`;
         successEl.style.display = 'block';
         document.getElementById('quickCommentary').value = '';
         clearBtn.click();
+        // Reset dimension scores
+        quickScores = { factual: 0, source: 0, rigor: 0, relevance: 0, utility: 0 };
+        document.querySelectorAll('.quick-dim-slider').forEach(s => { s.value = 0; });
+        document.querySelectorAll('.quick-dim-val').forEach(v => { v.textContent = '0'; });
+        btn.disabled = false;
         btn.textContent = 'Submit Another →';
       } else {
         const errMsg = data.error === 'quality_gate'
-          ? (data.message || 'Your validation needs a specific local insight.') + ' ' + (data.hint || '')
+          ? (data.feedback || data.message || 'Your validation needs a specific local insight. Include a data point, named market example, or direct professional experience reference.')
           : (data.error || 'Submission failed. Please try again.');
         errorEl.textContent = errMsg;
         errorEl.style.display = 'block';
+        btn.disabled = false;
         btn.textContent = 'Submit Validation →';
       }
     } catch(e) {
-      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.textContent = 'Network error: ' + (e.message || 'Please try again.');
       errorEl.style.display = 'block';
       btn.textContent = 'Submit Validation →';
     }
