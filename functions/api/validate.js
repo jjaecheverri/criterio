@@ -125,9 +125,30 @@ RESPONSE FORMAT (JSON only, no other text):
             aiCommentary = parsed.aiCommentary || '';
           }
         }
+        if (!anthropicRes.ok) {
+          // Claude unavailable (billing, rate limit, etc.) — run rule-based fallback
+          throw new Error(`Anthropic API error: ${anthropicRes.status}`);
+        }
       } catch(e) {
-        // If Claude fails, allow submission through
-        qualityPassed = true;
+        // ── Rule-based fallback gate (used when Claude is unavailable) ──────
+        // 1. Minimum 25 words of commentary
+        const wordCount = commentary.trim().split(/\s+/).filter(Boolean).length;
+        // 2. Must not be pure generic praise (flag short + no specifics)
+        const genericPhrases = /^(good|great|agree|interesting|nice|solid|well written|i think|makes sense|very|totally)/i;
+        const hasSpecificContent = wordCount >= 25 ||
+          paragraphNotes.length >= 1 ||
+          /\d/.test(commentary) ||           // contains a number/stat
+          /[A-Z][a-z]+ (Inc|Corp|LLC|Ltd|Group|Co\b|University|Institute|Market|Report|Survey|Study)/.test(commentary); // named entity
+
+        if (wordCount < 15) {
+          qualityPassed = false;
+          qualityFeedback = 'Your commentary is too brief. Please add at least 25 words explaining your assessment, ideally with a specific data point, named example, or professional observation.';
+        } else if (!hasSpecificContent && genericPhrases.test(commentary.trim())) {
+          qualityPassed = false;
+          qualityFeedback = 'Your submission needs at least one specific insight — a data point, named company or market, metric, or direct professional experience. Generic observations alone do not meet the GROUND standard.';
+        } else {
+          qualityPassed = true;
+        }
         aiCommentary = '';
       }
     }
