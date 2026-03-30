@@ -98,6 +98,16 @@ a { color: inherit; text-decoration: none; }
 .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); font-size: 14px; }
 .empty-state a { color: var(--re); }
 
+/* Peer Review Tab */
+.pr-filter, .pr-vfilter {padding:5px 12px;border:1px solid #ddd;background:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;cursor:pointer;text-transform:uppercase;transition:all 0.15s;}
+.pr-filter.active,.pr-vfilter.active{background:#111;color:#FAF6EE;border-color:#111;}
+.pr-article-row{background:#fff;border:1px solid #E8E4DC;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.pr-article-row:hover{border-color:#2E9B6F;}
+.pr-article-title{font-size:13px;font-weight:600;color:#111;flex:1;}
+.pr-article-meta{font-size:11px;color:#8A8578;margin-top:2px;}
+.pr-state-badge{font-size:10px;font-weight:700;letter-spacing:0.06em;padding:3px 8px;text-transform:uppercase;white-space:nowrap;border:1px solid;}
+.pr-review-link{font-size:12px;font-weight:700;color:#2E9B6F;text-decoration:none;white-space:nowrap;padding:6px 12px;border:1px solid #2E9B6F;}
+.pr-review-link:hover{background:#2E9B6F;color:#fff;}
 /* Recommend */
 .recommend-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; }
 .recommend-desc { color: var(--text-dim); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
@@ -252,6 +262,7 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
       <button class="tab-btn active" data-tab="validate">Quick Validate</button>
       <button class="tab-btn" data-tab="activity">My Validations (${activity.length})</button>
       <button class="tab-btn" data-tab="recommend">Recommend a Pro</button>
+      <button class="tab-btn" data-tab="peer-review">Peer Review</button>
     </div>
 
     <!-- QUICK VALIDATE TAB -->
@@ -276,6 +287,17 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
             <button class="clear-selection" id="clearSelection">×</button>
           </div>
           <input type="hidden" id="selectedArticleSlug">
+        </div>
+        <div class="form-group" style="margin-bottom:4px;">
+          <label class="form-label" style="margin-bottom:12px;display:block;">Dimension Assessment (1–5) <span style="font-size:10px;color:#aaa;font-weight:400;">optional but improves SCI score</span></label>
+          <div style="display:grid;gap:10px;">
+            ${[['factual','Factual Accuracy'],['source','Source Quality'],['rigor','Analytical Rigor'],['relevance','Industry Relevance'],['utility','Practitioner Utility']].map(([k,l]) => `
+            <div style="display:grid;grid-template-columns:130px 1fr 30px;gap:8px;align-items:center;">
+              <label style="font-size:11px;font-weight:600;color:#666;">${l}</label>
+              <input type="range" class="quick-dim-slider" data-dim="${k}" min="0" max="5" step="1" value="0" style="width:100%;accent-color:#2E9B6F;">
+              <span class="quick-dim-val" id="qdv-${k}" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#999;text-align:right;">—</span>
+            </div>`).join('')}
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Your Professional Commentary</label>
@@ -321,6 +343,32 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           <button type="submit" class="btn-primary">Send Invite →</button>
           <div class="recommend-success" id="recommendSuccess">✓ Invite sent! We'll reach out to them soon.</div>
         </form>
+      </div>
+    </div>
+
+    <!-- PEER REVIEW TAB -->
+    <div id="tab-peer-review" class="tab-panel">
+      <div style="padding:0 0 24px;">
+        <div class="section-heading">Peer Review Browser</div>
+        <p style="font-size:13px;color:#8A8578;margin-bottom:20px;line-height:1.6;">Browse articles by assessment state. Filter by vertical to find signals that need your expert review.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;" id="pr-filters">
+          <button class="pr-filter active" data-filter="all">All</button>
+          <button class="pr-filter" data-filter="UNREVIEWED" style="color:#8A8578;border-color:#8A857833;">Awaiting Validation</button>
+          <button class="pr-filter" data-filter="VALIDATED" style="color:#2D6BE4;border-color:#2D6BE433;">Validated</button>
+          <button class="pr-filter" data-filter="PEER_REVIEWED" style="color:#2E9B6F;border-color:#2E9B6F33;">Peer Reviewed</button>
+          <button class="pr-filter" data-filter="CONTESTED" style="color:#E8602C;border-color:#E8602C33;">Under Review</button>
+          <button class="pr-filter" data-filter="GOLD_STANDARD" style="color:#C9A84C;border-color:#C9A84C33;">Gold Standard</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;" id="pr-vertical-filters">
+          <button class="pr-vfilter active" data-vertical="all">All Verticals</button>
+          <button class="pr-vfilter" data-vertical="real-estate" style="color:#2D6BE4;">Real Estate</button>
+          <button class="pr-vfilter" data-vertical="brand" style="color:#E8602C;">Brand</button>
+          <button class="pr-vfilter" data-vertical="retail" style="color:#C4317A;">Retail</button>
+          <button class="pr-vfilter" data-vertical="food-agriculture" style="color:#2E9B6F;">Food & Ag</button>
+          <button class="pr-vfilter" data-vertical="family-education" style="color:#C9A84C;">Family & Ed</button>
+        </div>
+        <div id="pr-article-list" style="display:grid;gap:8px;"></div>
+        <div id="pr-loading" style="text-align:center;padding:40px;color:#8A8578;font-size:13px;">Loading articles…</div>
       </div>
     </div>
   `;
@@ -424,6 +472,7 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           org: user.org,
           yearsExp: user.yearsExp,
           commentary,
+          scores: quickScores,
           fromDashboard: true
         })
       });
@@ -480,6 +529,160 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
     } catch(e) {}
     btn.disabled = false;
     btn.textContent = 'Send Invite →';
+  });
+
+  // ── Peer Review Tab ──────────────────────────────────────────────────
+  const PR_ARTICLES = [
+    // Real Estate (19)
+    {slug:'real-estate--airbnb-effect-housing-rental-markets',title:'The Airbnb Effect on Housing & Rental Markets',vertical:'real-estate'},
+    {slug:'real-estate--climate-migration-housing-demand-shift',title:'Climate Migration & Housing Demand Shifts',vertical:'real-estate'},
+    {slug:'real-estate--housing-affordability-index-historical-context',title:'Housing Affordability Index: Historical Context',vertical:'real-estate'},
+    {slug:'real-estate--housing-underbuilding-deficit-4-million-units',title:'The 4 Million Unit Housing Underbuilding Deficit',vertical:'real-estate'},
+    {slug:'real-estate--institutional-single-family-rental-market-impact',title:'Institutional Single-Family Rental Market Impact',vertical:'real-estate'},
+    {slug:'real-estate--insurance-cost-escalation-sunbelt-real-estate',title:'Insurance Cost Escalation in Sunbelt Real Estate',vertical:'real-estate'},
+    {slug:'real-estate--mortgage-lock-in-effect-market-analysis',title:'The Mortgage Lock-In Effect: Market Analysis',vertical:'real-estate'},
+    {slug:'real-estate--new-home-sales-builder-incentives-2026',title:'New Home Sales & Builder Incentives 2026',vertical:'real-estate'},
+    {slug:'real-estate--northeast-midwest-housing-market-shift',title:'Northeast/Midwest Housing Market Shift',vertical:'real-estate'},
+    {slug:'real-estate--nwa-commercial-vacancy-national-divergence',title:'NWA Commercial Vacancy vs National Divergence',vertical:'real-estate'},
+    {slug:'real-estate--nwa-employer-concentration-real-estate-risk',title:'NWA Employer Concentration Real Estate Risk',vertical:'real-estate'},
+    {slug:'real-estate--nwa-home-price-divergence-county-analysis',title:'NWA Home Price Divergence: County Analysis',vertical:'real-estate'},
+    {slug:'real-estate--nwa-infrastructure-caps-development-2026',title:'NWA Infrastructure Caps Development 2026',vertical:'real-estate'},
+    {slug:'real-estate--nwa-multifamily-vacancy-supply-correction',title:'NWA Multifamily Vacancy & Supply Correction',vertical:'real-estate'},
+    {slug:'real-estate--nwa-residential-pricing-precision-market',title:'NWA Residential Pricing Precision Market',vertical:'real-estate'},
+    {slug:'real-estate--proptech-valuation-correction-market-reality',title:'Proptech Valuation Correction: Market Reality',vertical:'real-estate'},
+    {slug:'real-estate--real-estate-agent-commission-settlement-impact',title:'Agent Commission Settlement Impact',vertical:'real-estate'},
+    {slug:'real-estate--remote-work-office-conversion-feasibility',title:'Remote Work & Office Conversion Feasibility',vertical:'real-estate'},
+    {slug:'real-estate--zoning-reform-housing-supply-impact',title:'Zoning Reform & Housing Supply Impact',vertical:'real-estate'},
+    // Brand (20)
+    {slug:'brand--ai-generated-content-brand-trust-erosion',title:'AI-Generated Content & Brand Trust Erosion',vertical:'brand'},
+    {slug:'brand--brand-distinctiveness-erosion-market-analysis',title:'Brand Distinctiveness Erosion: Market Analysis',vertical:'brand'},
+    {slug:'brand--brand-identity-systems-scaling-consistency',title:'Brand Identity Systems: Scaling Consistency',vertical:'brand'},
+    {slug:'brand--brand-voice-as-competitive-asset',title:'Brand Voice as a Competitive Asset',vertical:'brand'},
+    {slug:'brand--creative-brief-quality-campaign-performance',title:'Creative Brief Quality & Campaign Performance',vertical:'brand'},
+    {slug:'brand--creator-economy-middle-class-myth',title:'The Creator Economy Middle Class Myth',vertical:'brand'},
+    {slug:'brand--destination-branding-search-disintermediation',title:'Destination Branding & Search Disintermediation',vertical:'brand'},
+    {slug:'brand--employer-brand-talent-acquisition-cost',title:'Employer Brand & Talent Acquisition Cost',vertical:'brand'},
+    {slug:'brand--experiential-hospitality-hotel-differentiation',title:'Experiential Hospitality & Hotel Differentiation',vertical:'brand'},
+    {slug:'brand--hotel-resort-fee-transparency-consumer-backlash',title:'Resort Fee Transparency & Consumer Backlash',vertical:'brand'},
+    {slug:'brand--influencer-marketing-fraud-rate-measurement',title:'Influencer Marketing Fraud Rate Measurement',vertical:'brand'},
+    {slug:'brand--loyalty-program-devaluation-consumer-impact',title:'Loyalty Program Devaluation: Consumer Impact',vertical:'brand'},
+    {slug:'brand--luxury-hospitality-bifurcation-market-analysis',title:'Luxury Hospitality Bifurcation: Market Analysis',vertical:'brand'},
+    {slug:'brand--overtourism-destination-management-economics',title:'Overtourism & Destination Management Economics',vertical:'brand'},
+    {slug:'brand--podcast-advertising-measurement-attribution',title:'Podcast Advertising Measurement & Attribution',vertical:'brand'},
+    {slug:'brand--rebranding-failure-rate-research-analysis',title:'Rebranding Failure Rate: Research Analysis',vertical:'brand'},
+    {slug:'brand--sports-sponsorship-roi-measurement-gap',title:'Sports Sponsorship ROI Measurement Gap',vertical:'brand'},
+    {slug:'brand--subscription-fatigue-consumer-spending-limits',title:'Subscription Fatigue & Consumer Spending Limits',vertical:'brand'},
+    {slug:'brand--travel-advisor-resurgence-complexity-premium',title:'Travel Advisor Resurgence & Complexity Premium',vertical:'brand'},
+    {slug:'brand--travel-industry-trust-gap-reviews-authenticity',title:'Travel Industry Trust Gap & Reviews Authenticity',vertical:'brand'},
+    // Retail (sample)
+    {slug:'retail--retail-media-60b-vendor-margin-risk',title:'$60B Retail Media: Vendor Margin Risk',vertical:'retail'},
+    {slug:'retail--private-label-growth-brand-margin-pressure',title:'Private Label Growth & Brand Margin Pressure',vertical:'retail'},
+    {slug:'retail--grocery-inflation-consumer-behavior-shift',title:'Grocery Inflation & Consumer Behavior Shift',vertical:'retail'},
+    {slug:'retail--self-checkout-retreat-retail-labor-calculus',title:'Self-Checkout Retreat: The Labor Calculus',vertical:'retail'},
+    {slug:'retail--costco-membership-model-retail-anomaly',title:'Costco Membership Model: Retail Anomaly',vertical:'retail'},
+    // Food & Ag (8)
+    {slug:'food-agriculture--farm-labor-shortage-mechanization-gap',title:'Farm Labor Shortage & Mechanization Gap',vertical:'food-agriculture'},
+    {slug:'food-agriculture--farmers-market-economics-premium-myth',title:'Farmers Market Economics: The Premium Myth',vertical:'food-agriculture'},
+    {slug:'food-agriculture--food-waste-supply-chain-130-billion',title:'Food Waste in the Supply Chain: $130B Problem',vertical:'food-agriculture'},
+    {slug:'food-agriculture--grocery-shrinkflation-consumer-price-perception',title:'Grocery Shrinkflation & Consumer Price Perception',vertical:'food-agriculture'},
+    {slug:'food-agriculture--grocery-store-profit-margin-1-2-percent',title:'Grocery Store Profit Margin: The 1-2% Reality',vertical:'food-agriculture'},
+    {slug:'food-agriculture--organic-label-premium-consumer-confusion',title:'Organic Label Premium & Consumer Confusion',vertical:'food-agriculture'},
+    {slug:'food-agriculture--restaurant-food-cost-margin-analysis',title:'Restaurant Food Cost & Margin Analysis',vertical:'food-agriculture'},
+    {slug:'food-agriculture--ultra-processed-food-80-percent-grocery',title:'Ultra-Processed Foods: 80% of the Grocery',vertical:'food-agriculture'},
+    // Family & Education (8)
+    {slug:'family-education--childcare-cost-crisis-economic-analysis',title:'Childcare Cost Crisis: Economic Analysis',vertical:'family-education'},
+    {slug:'family-education--college-degree-roi-varies-500-percent',title:'College Degree ROI Varies 500%',vertical:'family-education'},
+    {slug:'family-education--homeschool-growth-2-million-students',title:'Homeschool Growth: 2 Million Students',vertical:'family-education'},
+    {slug:'family-education--screen-time-parenting-industry-fear-economy',title:'Screen Time & the Parenting Fear Economy',vertical:'family-education'},
+    {slug:'family-education--student-loan-payment-consumer-spending-drag',title:'Student Loan Payments: Consumer Spending Drag',vertical:'family-education'},
+    {slug:'family-education--summer-learning-loss-achievement-gap-economics',title:'Summer Learning Loss & Achievement Gap Economics',vertical:'family-education'},
+    {slug:'family-education--tutoring-industry-learning-loss-economics',title:'Tutoring Industry & Learning Loss Economics',vertical:'family-education'},
+    {slug:'family-education--youth-sports-spending-30-billion-industry',title:'Youth Sports: The $30B Industry',vertical:'family-education'},
+  ];
+
+  const STATE_COLORS = {
+    UNREVIEWED: '#8A8578', VALIDATED: '#2D6BE4', PEER_REVIEWED: '#2E9B6F',
+    CONTESTED: '#E8602C', GOLD_STANDARD: '#C9A84C'
+  };
+  const STATE_LABELS = {
+    UNREVIEWED: 'Awaiting', VALIDATED: 'Validated', PEER_REVIEWED: 'Peer Reviewed',
+    CONTESTED: 'Under Review', GOLD_STANDARD: 'Gold Standard'
+  };
+
+  let prData = {};
+  let prFilter = 'all';
+  let prVertical = 'all';
+
+  async function loadPRData() {
+    // Load assessment states for a sample of articles in parallel
+    const promises = PR_ARTICLES.slice(0, 30).map(async (a) => {
+      try {
+        const res = await fetch(`/api/validations?slug=${a.slug}`);
+        const data = await res.json();
+        prData[a.slug] = data.assessmentState || 'UNREVIEWED';
+      } catch(e) { prData[a.slug] = 'UNREVIEWED'; }
+    });
+    await Promise.all(promises);
+    renderPRList();
+  }
+
+  function renderPRList() {
+    const list = document.getElementById('pr-article-list');
+    const loading = document.getElementById('pr-loading');
+    if (!list) return;
+    if (loading) loading.style.display = 'none';
+
+    let articles = PR_ARTICLES;
+    if (prVertical !== 'all') articles = articles.filter(a => a.vertical === prVertical);
+    if (prFilter !== 'all') articles = articles.filter(a => (prData[a.slug] || 'UNREVIEWED') === prFilter);
+
+    if (articles.length === 0) {
+      list.innerHTML = '<div style="text-align:center;padding:40px;color:#8A8578;font-size:13px;">No articles match this filter.</div>';
+      return;
+    }
+
+    list.innerHTML = articles.map(a => {
+      const state = prData[a.slug] || 'UNREVIEWED';
+      const color = STATE_COLORS[state] || '#8A8578';
+      const label = STATE_LABELS[state] || state;
+      const urlSlug = a.slug.replace('--', '/');
+      return `<div class="pr-article-row">
+        <div style="flex:1;min-width:0;">
+          <div class="pr-article-title">${a.title}</div>
+          <div class="pr-article-meta">${a.vertical.replace('-', ' & ').replace('-', ' ').toUpperCase()}</div>
+        </div>
+        <div class="pr-state-badge" style="color:${color};border-color:${color}44;">${label}</div>
+        <a href="/${urlSlug}/" class="pr-review-link">Review →</a>
+      </div>`;
+    }).join('');
+  }
+
+  // PR filter buttons
+  document.getElementById('pr-filters')?.addEventListener('click', e => {
+    const btn = e.target.closest('.pr-filter');
+    if (!btn) return;
+    document.querySelectorAll('.pr-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    prFilter = btn.dataset.filter;
+    renderPRList();
+  });
+
+  document.getElementById('pr-vertical-filters')?.addEventListener('click', e => {
+    const btn = e.target.closest('.pr-vfilter');
+    if (!btn) return;
+    document.querySelectorAll('.pr-vfilter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    prVertical = btn.dataset.vertical;
+    renderPRList();
+  });
+
+  // Load PR data when tab is clicked
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.tab === 'peer-review' && Object.keys(prData).length === 0) {
+        loadPRData();
+      }
+    });
   });
 
 })();

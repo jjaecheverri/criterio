@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Our Peer Review Works | GROUND by IN-KluSo</title>
+<meta name="description" content="GROUND's structured open peer review system — five-dimension assessment, typed annotations, and stacked intelligence synthesis.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF6EE;--black:#111111;--green:#2E9B6F;--orange:#E8602C;--gold:#C9A84C;--blue:#2D6BE4;--warm-gray:#8A8578;--light-gray:#E8E4DC;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--black);-webkit-font-smoothing:antialiased;}
+nav{background:#0a0a0a;border-bottom:1px solid #1a1a1a;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{color:#fff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:0.05em;display:flex;align-items:center;gap:8px;}
+.nav-links{display:flex;gap:20px;align-items:center;}
+.nav-links a{color:#888;text-decoration:none;font-size:13px;letter-spacing:0.06em;}
+.hero{background:#0a0a0a;color:#FAF6EE;padding:80px 40px 60px;text-align:center;}
+.hero-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#2E9B6F;font-weight:700;margin-bottom:16px;font-family:'JetBrains Mono',monospace;}
+.hero h1{font-family:'DM Serif Display',serif;font-size:48px;line-height:1.15;margin-bottom:20px;}
+.hero p{font-size:16px;color:rgba(250,246,238,0.6);max-width:560px;margin:0 auto;line-height:1.7;}
+.content{max-width:740px;margin:0 auto;padding:60px 40px;}
+.section-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--warm-gray);font-weight:600;margin-bottom:24px;font-family:'JetBrains Mono',monospace;}
+.intro-text{font-size:17px;line-height:1.8;color:#222;margin-bottom:48px;font-family:'Georgia',serif;}
+.dims-grid{display:grid;gap:12px;margin-bottom:48px;}
+.dim-row{display:grid;grid-template-columns:140px 1fr auto;gap:16px;align-items:start;padding:16px;background:#fff;border:1px solid var(--light-gray);}
+.dim-name{font-size:13px;font-weight:700;}
+.dim-desc{font-size:13px;color:var(--warm-gray);line-height:1.5;}
+.dim-weight{font-size:12px;font-family:'JetBrains Mono',monospace;color:#2E9B6F;font-weight:700;white-space:nowrap;}
+.sci-formula{background:#0a0a0a;color:#FAF6EE;padding:24px 28px;margin-bottom:48px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;}
+.sci-formula .label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#2E9B6F;margin-bottom:12px;display:block;}
+.states-grid{display:grid;gap:10px;margin-bottom:48px;}
+.state-row{display:flex;gap:16px;align-items:flex-start;padding:14px 16px;border-left:3px solid;}
+.state-badge{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;padding:3px 8px;}
+.state-cond{font-size:13px;color:var(--warm-gray);line-height:1.5;}
+.annotation-types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:48px;}
+.type-card{padding:16px;border-left:3px solid;}
+.type-name{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;}
+.type-desc{font-size:12px;color:var(--warm-gray);line-height:1.5;}
+.philosophy{background:var(--cream);border-top:2px solid var(--light-gray);border-bottom:2px solid var(--light-gray);padding:32px;margin-bottom:48px;}
+.philosophy p{font-size:15px;line-height:1.8;color:#333;}
+.philosophy p + p{margin-top:16px;}
+.cta-band{background:#0a0a0a;color:#FAF6EE;padding:60px 40px;text-align:center;}
+.cta-band h2{font-family:'DM Serif Display',serif;font-size:32px;margin-bottom:12px;}
+.cta-band p{font-size:14px;color:rgba(250,246,238,0.6);margin-bottom:28px;}
+.btn-primary{display:inline-block;padding:14px 32px;background:#2E9B6F;color:#fff;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;}
+footer{background:#0a0a0a;padding:32px 40px;text-align:center;}
+footer p{font-family:'JetBrains Mono',monospace;font-size:11px;color:#333;letter-spacing:0.08em;}
+@media(max-width:600px){.dim-row{grid-template-columns:1fr;}.annotation-types{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-brand">
+    <svg width="20" height="18" viewBox="0 0 179.4 164.7" xmlns="http://www.w3.org/2000/svg"><polygon fill="#fff" points="68.5 131.1 140.6 33.6 111.8 33.7 38.9 131.1"/><polygon fill="#fff" opacity=".3" points="40.3 101.5 160.1 83.5 139.8 63.2 19.3 80.5"/><polygon fill="#fff" opacity=".5" points="41 61.2 138.5 133.2 138.4 104.5 41 31.5"/><polygon fill="#fff" opacity=".2" points="70.6 32.9 88.6 152.8 108.9 132.4 91.6 11.9"/></svg>
+    GROUND
+  </a>
+  <div class="nav-links">
+    <a href="/real-estate/">REAL ESTATE</a><a href="/retail/">RETAIL</a><a href="/brand/">BRAND</a>
+    <a href="/credentials/" style="color:#2E9B6F;font-weight:700;">GET CREDENTIALED</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Methodology</div>
+  <h1>How our peer review works</h1>
+  <p>Inspired by academic peer review — structured, named, and permanently recorded. Industry intelligence held to practitioner standards.</p>
+</div>
+
+<div class="content">
+
+  <div class="intro-text">
+    GROUND produces AI-generated industry intelligence. Credentialed professionals assess it through structured peer review — not to gatekeep access, but to build a permanent record of practitioner judgment. Every assessment is named, scored, and archived.
+  </div>
+
+  <div class="section-label">Five-Dimension Assessment Framework</div>
+  <div class="dims-grid">
+    <div class="dim-row">
+      <div class="dim-name">Factual Accuracy</div>
+      <div class="dim-desc">Claims, statistics, and data points are verifiable and correct based on the reviewer's professional knowledge</div>
+      <div class="dim-weight">30%</div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Source Quality</div>
+      <div class="dim-desc">Underlying sources are credible, recent, and appropriate for the claims being made</div>
+      <div class="dim-weight">25%</div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Analytical Rigor</div>
+      <div class="dim-desc">Conclusions are supported by evidence presented; limitations and uncertainties are appropriately acknowledged</div>
+      <div class="dim-weight">20%</div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Industry Relevance</div>
+      <div class="dim-desc">The article addresses a real question that working practitioners in this space actually face</div>
+      <div class="dim-weight">15%</div>
+    </div>
+    <div class="dim-row">
+      <div class="dim-name">Practitioner Utility</div>
+      <div class="dim-desc">A working professional would find this analysis actionable or decision-relevant in their day-to-day work</div>
+      <div class="dim-weight">10%</div>
+    </div>
+  </div>
+
+  <div class="section-label">Signal Credibility Index (SCI)</div>
+  <div class="sci-formula">
+    <span class="label">Weighted Formula</span>
+    SCI = (Factual × 0.30) + (Source × 0.25) + (Rigor × 0.20) + (Relevance × 0.15) + (Utility × 0.10) ÷ 5
+    <br><br>
+    · Pre-validation: editorial estimate (labeled "Estimated")
+    <br>· Single validator: computed from scores (labeled "Validated")
+    <br>· 2+ validators: weighted average across all assessors (labeled "Peer Reviewed")
+  </div>
+
+  <div class="section-label">Assessment States</div>
+  <div class="states-grid">
+    <div class="state-row" style="border-color:#8A8578;">
+      <div class="state-badge" style="background:#8A857822;color:#8A8578;">Awaiting Validation</div>
+      <div class="state-cond">No structured assessments submitted yet. Editorial estimate shown.</div>
+    </div>
+    <div class="state-row" style="border-color:#2D6BE4;">
+      <div class="state-badge" style="background:#2D6BE422;color:#2D6BE4;">Validated</div>
+      <div class="state-cond">One credentialed professional has submitted a structured assessment.</div>
+    </div>
+    <div class="state-row" style="border-color:#2E9B6F;">
+      <div class="state-badge" style="background:#2E9B6F22;color:#2E9B6F;">Peer Reviewed</div>
+      <div class="state-cond">Two or more assessors, dimension scores in general agreement.</div>
+    </div>
+    <div class="state-row" style="border-color:#E8602C;">
+      <div class="state-badge" style="background:#E8602C22;color:#E8602C;">Under Review</div>
+      <div class="state-cond">Two or more assessors diverge by 2+ points on at least one dimension. Active discussion in progress.</div>
+    </div>
+    <div class="state-row" style="border-color:#C9A84C;">
+      <div class="state-badge" style="background:#C9A84C22;color:#C9A84C;">Gold Standard</div>
+      <div class="state-cond">Three or more assessors, all dimension averages ≥ 4.0, no contested dimensions. Highest credibility tier.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Annotation Types</div>
+  <div class="annotation-types">
+    <div class="type-card" style="border-color:#2E9B6F;background:#2E9B6F08;">
+      <div class="type-name" style="color:#2E9B6F;">Corroborate</div>
+      <div class="type-desc">I can confirm this claim from my own professional experience or data.</div>
+    </div>
+    <div class="type-card" style="border-color:#E8602C;background:#E8602C08;">
+      <div class="type-name" style="color:#E8602C;">Challenge</div>
+      <div class="type-desc">This claim needs qualification, correction, or important context that changes its meaning.</div>
+    </div>
+    <div class="type-card" style="border-color:#2D6BE4;background:#2D6BE408;">
+      <div class="type-name" style="color:#2D6BE4;">Extend</div>
+      <div class="type-desc">Here's additional context, a related data point, or an angle the article doesn't cover.</div>
+    </div>
+    <div class="type-card" style="border-color:#C9A84C;background:#C9A84C08;">
+      <div class="type-name" style="color:#C9A84C;">Clarify</div>
+      <div class="type-desc">This could be misread by practitioners. Here's what it actually means in practice.</div>
+    </div>
+  </div>
+
+  <div class="section-label">Our Philosophy</div>
+  <div class="philosophy">
+    <p>GROUND doesn't require reviewers to be right. We require them to be specific. A Challenge annotation that turns out to be incorrect is still valuable — it marks a point of contestation in the professional record. The reviewer owns their claim. The community evaluates it over time.</p>
+    <p>This is how peer review works in academic journals. The same logic applies to industry intelligence: structured, named, and permanently archived. Not crowdsourced opinion — professional judgment on record.</p>
+    <p>The quality gate for submissions is simple: at least one concrete local insight. A named market, a specific data point, a direct professional reference. Generic agreement doesn't advance the peer record.</p>
+  </div>
+
+  <div class="section-label">Level 2 Intelligence Synthesis</div>
+  <p style="font-size:14px;line-height:1.8;color:#333;margin-bottom:16px;">When an article receives its second structured assessment, GROUND automatically generates a <strong>Level 2 Synthesis</strong> — an AI-assisted document that compares the two assessments, identifies convergence and divergence, and surfaces what the stacked intelligence reveals that neither review alone could. This synthesis grows with each additional assessment.</p>
+
+</div>
+
+<div class="cta-band">
+  <h2>Join the peer record.</h2>
+  <p>Free for qualified industry professionals. Credential verification required.</p>
+  <a href="/credentials/" class="btn-primary">Get Credentialed →</a>
+</div>
+
+<footer>
+  <p>GROUND · Open Peer Review · INKLUSO, Inc. · © 2026</p>
+</footer>
+<script src="/auth-nav.js" defer></script>
+</body>
+</html>

@@ -1,273 +1,364 @@
-// Cloudflare Pages Function: /api/validate
-// Saves professional validations to KV and generates AI commentary.
-// Requires authentication. Accepts payloads from Review Mode, Quick Validate.
+// GROUND Signal — validate.js v5
+// POST /api/validate
+// Accepts structured five-dimension assessment + typed paragraph annotations
+// Runs quality gate via Claude, computes SCI, determines assessment state, triggers Level 2 synthesis
 
-import { getSession } from './auth/_helpers.js';
-
-export async function onRequestPost({ request, env, ctx }) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+export async function onRequestPost({ request, env }) {
+  const headers = {
     'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   };
 
   try {
-    // ── Auth ────────────────────────────────────────────────────────────────
-    const user = await getSession(request, env);
-    if (!user) {
-      return new Response(JSON.stringify({ error: 'Authentication required.' }), { status: 401, headers: corsHeaders });
+    // ── Auth ──────────────────────────────────────────────────────────────
+    const cookie = request.headers.get('Cookie') || '';
+    const tokenMatch = cookie.match(/ground_token=([^;]+)/);
+    if (!tokenMatch) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), { status: 401, headers });
     }
 
+    // Decode JWT (simple base64 decode — no external lib needed)
+    let userId, userName, userTitle, userOrg;
+    try {
+      const payload = JSON.parse(atob(tokenMatch[1].split('.')[1]));
+      userId = payload.userId || payload.id;
+      userName = payload.name || payload.email;
+      userTitle = payload.title || '';
+      userOrg = payload.organization || payload.org || '';
+    } catch(e) {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401, headers });
+    }
+
+    // Load user for full profile
+    if (userId) {
+      try {
+        const userData = await env.VALIDATIONS.get(`user:${userId}`);
+        if (userData) {
+          const user = JSON.parse(userData);
+          userName = user.name || userName;
+          userTitle = user.title || userTitle;
+          userOrg = user.organization || userOrg;
+        }
+      } catch(e) {}
+    }
+
+    // ── Parse body ────────────────────────────────────────────────────────
     const body = await request.json();
 
-    // Accept all field name variants from different submission paths:
-    // Review Mode:    { articleSlug, articleTitle, commentary, paragraphNotes }
-    // Quick Validate: { article, commentary, fromDashboard }
-    // Legacy forms:   { articleId, criterio }
-    const articleId      = body.articleSlug || body.articleId || body.article || '';
-    const articleTitle   = body.articleTitle || body.title || articleId;
-    const commentary     = body.commentary || body.criterio || '';
-    const paragraphNotes = body.paragraphNotes || [];
-    const articleBody    = body.articleBody || '';
+    // Accept multiple field name formats for compatibility
+    const articleSlug = body.articleSlug || body.articleId || body.article || '';
+    const commentary = body.commentary || body.criterio || body.comment || '';
+    const paragraphNotes = body.paragraphNotes || body.notes || [];
+    const scores = body.scores || {};
 
-    if (!articleId || !commentary) {
-      return new Response(JSON.stringify({ error: 'Missing required fields: article and commentary.' }), { status: 400, headers: corsHeaders });
+    if (!articleSlug || !commentary) {
+      return new Response(JSON.stringify({ error: 'Missing required fields: articleSlug and commentary' }), { status: 400, headers });
     }
 
-    // Use authenticated user profile (server-side, cannot be spoofed)
-    const validatorName  = user.name;
-    const validatorTitle = user.title;
-    const validatorOrg   = user.org;
-    const validatorYears = user.yearsExp;
-
-    // ── QUALITY GATE ────────────────────────────────────────────────────────
-    // Must contain at least one local/specific insight.
-    // Professional takes the hit if their claim turns out to be wrong —
-    // we only require specificity, not correctness.
-    try {
-      const allText = [commentary, ...paragraphNotes.map(n => n.note || '')].join(' ');
-      const qgRes = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': env.ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 100,
-          messages: [{
-            role: 'user',
-            content: `You are GROUND's validation quality gate. Review this professional commentary.
-
-REQUIREMENT: It must contain at least ONE LOCAL or SPECIFIC insight — a concrete observation, named example, real data point, market experience, or specific claim from the field. Generic agreement ("this is accurate", "I agree", "great analysis") or purely abstract commentary without any specifics does NOT qualify.
-
-COMMENTARY: "${allText}"
-
-Respond ONLY with valid JSON, no extra text: {"passes": true, "feedback": "..."} or {"passes": false, "feedback": "one sentence of constructive guidance"}`
-          }]
-        })
-      });
-      const qgData = await qgRes.json();
-      const qgText = qgData?.content?.[0]?.text || '{"passes":true}';
-      const jsonMatch = qgText.match(/\{[^}]+\}/s);
-      if (jsonMatch) {
-        try {
-          const qgResult = JSON.parse(jsonMatch[0]);
-          if (qgResult.passes === false) {
-            return new Response(JSON.stringify({
-              error: 'quality_gate',
-              message: qgResult.feedback || 'Your validation needs at least one specific local insight.',
-              hint: 'What concrete experience, data point, or market observation does your expertise bring to this article?'
-            }), { status: 400, headers: corsHeaders });
-          }
-        } catch (_) {}
-      }
-    } catch (_) {
-      // Quality gate failure is non-fatal — proceed with submission
+    // ── Compute SCI ───────────────────────────────────────────────────────
+    function computeSCI(s) {
+      if (!s || Object.values(s).every(v => !v || v === 0)) return null;
+      const f = parseFloat(s.factual) || 0;
+      const so = parseFloat(s.source) || 0;
+      const r = parseFloat(s.rigor) || 0;
+      const rel = parseFloat(s.relevance) || 0;
+      const u = parseFloat(s.utility) || 0;
+      const scored = [f, so, r, rel, u].filter(v => v > 0);
+      if (scored.length === 0) return null;
+      const raw = (f * 0.30) + (so * 0.25) + (r * 0.20) + (rel * 0.15) + (u * 0.10);
+      return parseFloat((raw / 5).toFixed(3));
     }
 
-    // ── Level calculation ───────────────────────────────────────────────────
-    const activityKey    = `activity:${user.email}`;
-    let existingActivity = await env.VALIDATIONS.get(activityKey, { type: 'json' }) || [];
-    const validationCount = existingActivity.length;
-    const level = validationCount >= 30 ? 5
-                : validationCount >= 15 ? 4
-                : validationCount >= 5  ? 3
-                : validationCount >= 1  ? 2
-                : 1;
+    const sciScore = computeSCI(scores);
 
-    // ── AI Commentary ───────────────────────────────────────────────────────
-    let fullInput = commentary;
-    if (paragraphNotes.length > 0) {
-      const notesText = paragraphNotes.map(n => `• Paragraph ${n.paragraph}: ${n.note}`).join('\n');
-      fullInput = `${commentary}\n\nParagraph annotations:\n${notesText}`;
-    }
-
+    // ── Quality Gate (Claude) ─────────────────────────────────────────────
     let aiCommentary = '';
-    try {
-      const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': env.ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
-          max_tokens: 280,
-          messages: [{
-            role: 'user',
-            content: `You are the GROUND validation engine for IN·KluSo. A professional has reviewed an article. Synthesize their input into 2-3 sentences of sharp, data-forward professional validation commentary.
+    let qualityPassed = true;
+    let qualityFeedback = '';
 
-RULES:
-- 2-3 sentences max, institutional tone
-- Reference what the professional confirms, adds, or reframes
-- Plain text only — no markdown, no HTML
-- Start directly, no preamble
+    if (env.ANTHROPIC_API_KEY) {
+      const notesText = paragraphNotes.length > 0
+        ? paragraphNotes.map((n, i) => `[¶${n.paragraph} | ${n.type || 'extend'}]: ${n.note}`).join('\n')
+        : '(no paragraph annotations)';
 
-ARTICLE: ${articleTitle || articleId}
-${articleBody ? `EXCERPT: ${articleBody.substring(0, 500)}` : ''}
-PROFESSIONAL: ${validatorName}, ${validatorTitle}${validatorOrg ? `, ${validatorOrg}` : ''}
-INPUT: ${fullInput}
+      const scoresText = scores && Object.keys(scores).length > 0
+        ? Object.entries(scores).map(([k, v]) => `${k}: ${v}/5`).join(', ')
+        : '(no dimension scores provided)';
 
-Write the validation commentary now.`
-          }]
-        })
-      });
-      const aiData = await aiRes.json();
-      aiCommentary = aiData?.content?.[0]?.text || '';
-    } catch (_) {}
+      const qualityPrompt = `You are reviewing a peer assessment submission for GROUND by IN-KluSo, an open peer review platform for industry intelligence articles.
 
-    // ── Build validation object ─────────────────────────────────────────────
-    // Field names match what review-mode.js reads (name/title/organization/ai_commentary)
+ARTICLE SLUG: ${articleSlug}
+DIMENSION SCORES: ${scoresText}
+OVERALL COMMENTARY: ${commentary}
+PARAGRAPH ANNOTATIONS:
+${notesText}
+
+QUALITY GATE RULES:
+1. The submission MUST include at least one specific local insight — a concrete data point, named market example, specific metric, named company/geography, or direct professional experience reference. Generic observations like "this is a good analysis" or "I agree with this" do NOT pass.
+2. If dimension scores are all 5/5 but commentary is minimal (<50 words), request more substantive reasoning.
+3. Score-commentary consistency: if a dimension scores 1–2, there must be an explanation in commentary or annotations.
+4. The professional takes ownership of their claims — correctness is NOT required, specificity IS required.
+
+RESPONSE FORMAT (JSON only, no other text):
+{
+  "passes": true/false,
+  "feedback": "if passes=false: 1-2 sentence constructive message explaining what specific insight is missing and how to strengthen the submission",
+  "aiCommentary": "if passes=true: 2-3 sentence professional synthesis commentary from GROUND's perspective on this assessment. Acknowledge the specific insight provided."
+}`;
+
+      try {
+        const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-sonnet-20241022',
+            max_tokens: 512,
+            messages: [{ role: 'user', content: qualityPrompt }]
+          })
+        });
+
+        if (anthropicRes.ok) {
+          const anthropicData = await anthropicRes.json();
+          const rawText = anthropicData.content?.[0]?.text || '{}';
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            qualityPassed = parsed.passes !== false;
+            qualityFeedback = parsed.feedback || '';
+            aiCommentary = parsed.aiCommentary || '';
+          }
+        }
+      } catch(e) {
+        // If Claude fails, allow submission through
+        qualityPassed = true;
+        aiCommentary = '';
+      }
+    }
+
+    if (!qualityPassed) {
+      return new Response(JSON.stringify({
+        error: 'quality_gate',
+        feedback: qualityFeedback || 'Your submission needs at least one specific local insight — a concrete data point, named market example, or direct professional experience reference.'
+      }), { status: 400, headers });
+    }
+
+    // ── Load existing validations ─────────────────────────────────────────
+    const kvKey = `validations:${articleSlug}`;
+    let kvData = { validations: [], assessmentState: 'UNREVIEWED', computedSCI: null, dimensionAverages: {}, synthesis: null };
+
+    const existing = await env.VALIDATIONS.get(kvKey);
+    if (existing) {
+      try { kvData = JSON.parse(existing); } catch(e) {}
+    }
+    if (!Array.isArray(kvData.validations)) kvData.validations = [];
+
+    // ── Build validation record ───────────────────────────────────────────
     const validation = {
-      id:           `val_${Date.now()}`,
-      articleId,
-      // Fields review-mode.js reads:
-      name:         validatorName,
-      title:        validatorTitle,
-      organization: validatorOrg,
-      ai_commentary: aiCommentary,
-      // Also store under legacy names for backward compat:
-      validatorName,
-      validatorTitle,
-      validatorOrg,
-      validatorYears,
-      aiCommentary,
+      contributorId: userId,
+      name: userName,
+      title: userTitle,
+      organization: userOrg,
+      timestamp: new Date().toISOString(),
+      scores,
       commentary,
       paragraphNotes,
-      timestamp: new Date().toISOString(),
-      level
+      ai_commentary: aiCommentary
     };
 
-    // ── Save to KV ──────────────────────────────────────────────────────────
-    let allValidations = [];
-    if (env.VALIDATIONS) {
-      const existing = await env.VALIDATIONS.get(`validations:${articleId}`);
-      allValidations = existing ? JSON.parse(existing) : [];
-      allValidations.push(validation);
-      await env.VALIDATIONS.put(`validations:${articleId}`, JSON.stringify(allValidations));
+    kvData.validations.push(validation);
+    const count = kvData.validations.length;
 
-      // Update contributor activity log
-      existingActivity.unshift({
-        slug:       articleId,
-        title:      articleTitle || articleId,
-        commentary,
-        timestamp:  new Date().toISOString(),
-        level
+    // ── Compute aggregate SCI ─────────────────────────────────────────────
+    const allScored = kvData.validations.filter(v => v.scores && Object.values(v.scores).some(s => s > 0));
+    if (allScored.length > 0) {
+      const dims = ['factual', 'source', 'rigor', 'relevance', 'utility'];
+      const dimAvgs = {};
+      dims.forEach(d => {
+        const vals = allScored.map(v => parseFloat(v.scores[d]) || 0).filter(v => v > 0);
+        dimAvgs[d] = vals.length > 0 ? parseFloat((vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2)) : 0;
       });
-      if (existingActivity.length > 50) existingActivity = existingActivity.slice(0, 50);
-      await env.VALIDATIONS.put(activityKey, JSON.stringify(existingActivity));
+      kvData.dimensionAverages = dimAvgs;
+      kvData.computedSCI = computeSCI(dimAvgs);
     }
 
-    // ── INTELLIGENCE STACKING: Level 2 Synthesis ────────────────────────────
-    // When 2+ professionals validate the same article, generate a synthesis document.
-    // Fire async via ctx.waitUntil so it doesn't delay the response.
-    if (allValidations.length >= 2 && env.ANTHROPIC_API_KEY && ctx) {
-      ctx.waitUntil(generateSynthesis(env, articleId, articleTitle, allValidations));
+    // ── Assessment state ──────────────────────────────────────────────────
+    function determineState(validations, dimAvgs) {
+      const n = validations.length;
+      if (n === 0) return 'UNREVIEWED';
+      if (n === 1) return 'VALIDATED';
+
+      // Check for Gold Standard: 3+ reviewers, all dimension averages >= 4.0
+      if (n >= 3 && dimAvgs && Object.values(dimAvgs).every(v => v >= 4.0)) {
+        // Check no contested dimensions
+        const dims = ['factual', 'source', 'rigor', 'relevance', 'utility'];
+        const contested = dims.some(d => {
+          const vals = validations.map(v => parseFloat(v.scores?.[d]) || 0).filter(v => v > 0);
+          if (vals.length < 2) return false;
+          const range = Math.max(...vals) - Math.min(...vals);
+          return range >= 2;
+        });
+        if (!contested) return 'GOLD_STANDARD';
+      }
+
+      // Check contested: any dimension where reviewers diverge by 2+ points
+      if (n >= 2) {
+        const dims = ['factual', 'source', 'rigor', 'relevance', 'utility'];
+        const isContested = dims.some(d => {
+          const vals = validations.map(v => parseFloat(v.scores?.[d]) || 0).filter(v => v > 0);
+          if (vals.length < 2) return false;
+          return Math.max(...vals) - Math.min(...vals) >= 2;
+        });
+        if (isContested) return 'CONTESTED';
+        return 'PEER_REVIEWED';
+      }
+
+      return 'PEER_REVIEWED';
+    }
+
+    kvData.assessmentState = determineState(kvData.validations, kvData.dimensionAverages);
+
+    // ── Level 2 Synthesis (on 2nd validation) ────────────────────────────
+    if (count === 2 && env.ANTHROPIC_API_KEY) {
+      try {
+        const v1 = kvData.validations[0];
+        const v2 = kvData.validations[1];
+        const dimAvgs = kvData.dimensionAverages;
+
+        const synthPrompt = `You are generating a GROUND SIGNAL LEVEL 2 synthesis document for the article: "${articleSlug.replace(/--/g, ' / ').replace(/-/g, ' ')}".
+
+Two credentialed industry professionals have now assessed this article.
+
+VALIDATOR 1: ${v1.name} (${[v1.title, v1.organization].filter(Boolean).join(', ')})
+Scores: ${JSON.stringify(v1.scores || {})}
+Commentary: ${v1.commentary}
+Paragraph annotations: ${(v1.paragraphNotes || []).map(n => `[¶${n.paragraph}|${n.type}]: ${n.note}`).join(' | ')}
+
+VALIDATOR 2: ${v2.name} (${[v2.title, v2.organization].filter(Boolean).join(', ')})
+Scores: ${JSON.stringify(v2.scores || {})}
+Commentary: ${v2.commentary}
+Paragraph annotations: ${(v2.paragraphNotes || []).map(n => `[¶${n.paragraph}|${n.type}]: ${n.note}`).join(' | ')}
+
+AGGREGATE DIMENSION AVERAGES: ${JSON.stringify(dimAvgs)}
+ASSESSMENT STATE: ${kvData.assessmentState}
+
+Write a 3-4 sentence Level 2 synthesis in first-person plural ("The peer record shows…", "Across both assessments…"). Focus on:
+1. Points of convergence between the two validators
+2. Any divergences or contested claims
+3. What the stacked intelligence reveals that neither assessment alone could
+
+Be specific, authoritative, and grounded in what the validators actually said. No fluff.`;
+
+        const synthRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-sonnet-20241022',
+            max_tokens: 400,
+            messages: [{ role: 'user', content: synthPrompt }]
+          })
+        });
+
+        if (synthRes.ok) {
+          const synthData = await synthRes.json();
+          kvData.synthesis = synthData.content?.[0]?.text || '';
+        }
+      } catch(e) {}
+    }
+
+    // Extend synthesis for 3+ validators
+    if (count > 2 && env.ANTHROPIC_API_KEY && count % 1 === 0) {
+      try {
+        const multiPrompt = `GROUND SIGNAL — Multi-Perspective Analysis for: "${articleSlug.replace(/--/g, ' / ').replace(/-/g, ' ')}"
+
+${count} credentialed professionals have now assessed this article.
+Assessment state: ${kvData.assessmentState}
+Dimension averages: ${JSON.stringify(kvData.dimensionAverages)}
+
+Latest validator: ${userName} (${[userTitle, userOrg].filter(Boolean).join(', ')})
+Added: ${commentary}
+
+Update the synthesis in 2-3 sentences to reflect what ${count} professional assessments now reveal collectively. Reference convergence patterns, contested dimensions if any, or emerging consensus.`;
+
+        const multiRes = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: 'claude-3-5-sonnet-20241022',
+            max_tokens: 300,
+            messages: [{ role: 'user', content: multiPrompt }]
+          })
+        });
+
+        if (multiRes.ok) {
+          const multiData = await multiRes.json();
+          const newSynthesis = multiData.content?.[0]?.text || '';
+          if (newSynthesis) kvData.synthesis = newSynthesis;
+        }
+      } catch(e) {}
+    }
+
+    // ── Save to KV ────────────────────────────────────────────────────────
+    await env.VALIDATIONS.put(kvKey, JSON.stringify(kvData));
+
+    // ── Update user record ────────────────────────────────────────────────
+    if (userId) {
+      try {
+        const userKey = `user:${userId}`;
+        const userData = await env.VALIDATIONS.get(userKey);
+        if (userData) {
+          const user = JSON.parse(userData);
+          if (!Array.isArray(user.validations)) user.validations = [];
+          user.validations.push({
+            articleSlug,
+            timestamp: validation.timestamp,
+            commentary: commentary.substring(0, 200)
+          });
+          user.validationCount = (user.validationCount || 0) + 1;
+
+          // Update level
+          const count_v = user.validationCount;
+          if (count_v >= 30) { user.level = 5; user.levelName = 'GROUND Expert'; }
+          else if (count_v >= 15) { user.level = 4; user.levelName = 'Principal'; }
+          else if (count_v >= 5) { user.level = 3; user.levelName = 'Senior Analyst'; }
+          else if (count_v >= 1) { user.level = 2; user.levelName = 'Field Analyst'; }
+          else { user.level = 1; user.levelName = 'Signal Watcher'; }
+
+          await env.VALIDATIONS.put(userKey, JSON.stringify(user));
+        }
+      } catch(e) {}
     }
 
     return new Response(JSON.stringify({
-      success:           true,
+      success: true,
       validation,
-      stackCount:        allValidations.length,
-      synthesisTriggered: allValidations.length >= 2
-    }), { headers: corsHeaders });
+      assessmentState: kvData.assessmentState,
+      computedSCI: kvData.computedSCI,
+      synthesis: kvData.synthesis || null
+    }), { status: 200, headers });
 
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
-  }
-}
-
-// ── Level 2 Synthesis Generator ────────────────────────────────────────────
-async function generateSynthesis(env, articleId, articleTitle, validations) {
-  try {
-    const profiles = validations.map((v, i) => {
-      const name = v.name || v.validatorName || 'Professional';
-      const title = v.title || v.validatorTitle || '';
-      const org = v.organization || v.validatorOrg || '';
-      return `VALIDATOR ${i + 1}: ${name}${title ? ', ' + title : ''}${org ? ', ' + org : ''}\n"${v.commentary}"`;
-    }).join('\n\n');
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 700,
-        messages: [{
-          role: 'user',
-          content: `You are the GROUND Intelligence Engine for IN·KluSo. ${validations.length} professionals have validated the same article. Generate a GROUND SIGNAL LEVEL 2 — a stacked intelligence synthesis.
-
-ARTICLE: ${articleTitle || articleId}
-
-${profiles}
-
-Write a 3-4 paragraph Level 2 synthesis that:
-1. Opens with the CONVERGENT SIGNAL — what do these professionals collectively confirm or reinforce?
-2. Surfaces the most specific local insights, data points, and concrete claims they provided
-3. Notes any productive tensions or divergent perspectives
-4. Closes with a stacked verdict — what does the combined professional intelligence tell us that the article alone could not?
-
-Rules: Plain text paragraphs only. No markdown headers, no bullet points. Institutional, data-forward tone. Start directly with the synthesis — no preamble.`
-        }]
-      })
-    });
-
-    const data = await res.json();
-    const synthesis = data?.content?.[0]?.text || '';
-    if (synthesis && env.VALIDATIONS) {
-      await env.VALIDATIONS.put(`synthesis:${articleId}`, JSON.stringify({
-        articleId,
-        articleTitle,
-        synthesis,
-        validatorCount: validations.length,
-        generatedAt:    new Date().toISOString(),
-        validators:     validations.map(v => ({
-          name:  v.name || v.validatorName,
-          title: v.title || v.validatorTitle,
-          org:   v.organization || v.validatorOrg
-        }))
-      }));
-    }
-  } catch (_) {
-    // Synthesis generation failure is non-fatal
+  } catch(err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers });
   }
 }
 
 export async function onRequestOptions() {
   return new Response(null, {
-    status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type'
     }
   });
 }
