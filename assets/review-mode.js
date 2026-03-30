@@ -414,9 +414,25 @@
   }
 
   // ─── Assess Tab ───────────────────────────────────────────────────────────
-  function renderAssessTab() {
+  async function renderAssessTab() {
     const el = document.getElementById('rm-tab-assess');
     if (!el) return;
+
+    // Always verify auth from server (never trust cached isLoggedIn alone)
+    el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#8A9BA8;font-size:13px;">Checking credentials…</div>`;
+    try {
+      const authRes = await fetch('/api/auth/me', { credentials: 'include' });
+      if (authRes.ok) {
+        const userData = await authRes.json();
+        currentUser = userData;
+        isLoggedIn = true;
+      } else {
+        isLoggedIn = false;
+        currentUser = null;
+      }
+    } catch(e) {
+      isLoggedIn = false;
+    }
 
     if (!isLoggedIn) {
       el.innerHTML = `<div class="rm-login-prompt">
