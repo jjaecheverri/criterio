@@ -42,7 +42,7 @@ export async function onRequestPost({ request, env }) {
     const articleSlug = rawSlug.replace(/\//g, '--');
     const commentary = body.commentary || body.criterio || body.comment || '';
     const paragraphNotes = body.paragraphNotes || body.notes || [];
-    const scores = body.scores || {};
+    const scores = body.scores || body.dimensions || {};
 
     if (!articleSlug || !commentary) {
       return new Response(JSON.stringify({ error: 'Missing required fields: articleSlug and commentary' }), { status: 400, headers });
