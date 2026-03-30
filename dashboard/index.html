@@ -284,6 +284,7 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           <div class="article-options" id="articleOptions"></div>
           <div class="selected-article" id="selectedArticleDisplay">
             <span id="selectedArticleTitle"></span>
+            <a id="viewArticleLink" href="#" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;white-space:nowrap;margin-left:8px;font-weight:600;" title="Open article in new tab">View →</a>
             <button class="clear-selection" id="clearSelection">×</button>
           </div>
           <input type="hidden" id="selectedArticleSlug">
@@ -418,6 +419,10 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           selectedDisplay.style.display = 'flex';
           searchInput.style.display = 'none';
           optionsEl.style.display = 'none';
+          // Set view link: convert double-dash slug to path
+          const articlePath = '/' + opt.dataset.slug.replace('--', '/') + '/';
+          const viewLink = document.getElementById('viewArticleLink');
+          if (viewLink) viewLink.href = articlePath;
         });
       });
     }

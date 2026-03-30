@@ -10,37 +10,28 @@ export async function onRequestPost({ request, env }) {
   };
 
   try {
-    // ── Auth ──────────────────────────────────────────────────────────────
-    const cookie = request.headers.get('Cookie') || '';
-    const tokenMatch = cookie.match(/ground_token=([^;]+)/);
-    if (!tokenMatch) {
+    // ── Auth (session-based) ───────────────────────────────────────────────
+    const cookieHeader = request.headers.get('Cookie') || '';
+    const sessionMatch = cookieHeader.match(/(?:^|;\s*)session=([^;]+)/);
+    if (!sessionMatch) {
       return new Response(JSON.stringify({ error: 'Authentication required' }), { status: 401, headers });
     }
-
-    // Decode JWT (simple base64 decode — no external lib needed)
-    let userId, userName, userTitle, userOrg;
-    try {
-      const payload = JSON.parse(atob(tokenMatch[1].split('.')[1]));
-      userId = payload.userId || payload.id;
-      userName = payload.name || payload.email;
-      userTitle = payload.title || '';
-      userOrg = payload.organization || payload.org || '';
-    } catch(e) {
-      return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401, headers });
+    const sessionToken = sessionMatch[1];
+    const sessionData = await env.VALIDATIONS.get(`session:${sessionToken}`, { type: 'json' });
+    if (!sessionData || new Date(sessionData.expires) < new Date()) {
+      return new Response(JSON.stringify({ error: 'Session expired. Please log in again.' }), { status: 401, headers });
     }
 
-    // Load user for full profile
-    if (userId) {
-      try {
-        const userData = await env.VALIDATIONS.get(`user:${userId}`);
-        if (userData) {
-          const user = JSON.parse(userData);
-          userName = user.name || userName;
-          userTitle = user.title || userTitle;
-          userOrg = user.organization || userOrg;
-        }
-      } catch(e) {}
+    // Load full user profile
+    const userRecord = await env.VALIDATIONS.get(`contrib:${sessionData.email}`, { type: 'json' });
+    if (!userRecord) {
+      return new Response(JSON.stringify({ error: 'User account not found.' }), { status: 401, headers });
     }
+
+    const userId = userRecord.email;
+    const userName = userRecord.name || sessionData.email;
+    const userTitle = userRecord.title || '';
+    const userOrg = userRecord.organization || userRecord.org || '';
 
     // ── Parse body ────────────────────────────────────────────────────────
     const body = await request.json();
@@ -315,7 +306,7 @@ Update the synthesis in 2-3 sentences to reflect what ${count} professional asse
     // ── Update user record ────────────────────────────────────────────────
     if (userId) {
       try {
-        const userKey = `user:${userId}`;
+        const userKey = `contrib:${userId}`;
         const userData = await env.VALIDATIONS.get(userKey);
         if (userData) {
           const user = JSON.parse(userData);

@@ -221,6 +221,11 @@
 
   // ─── Panel open/close ─────────────────────────────────────────────────────
   function openPanel() {
+    // Gate on auth — redirect to login immediately if not signed in
+    if (!isLoggedIn) {
+      window.location.href = '/login/?return=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
     panelOpen = true;
     document.getElementById('rm-panel').classList.add('open');
     switchTab('livefeed');
