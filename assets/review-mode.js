@@ -5,7 +5,7 @@
 (function() {
   // Hide legacy V4 inline validation form (superseded by V5 Review Mode panel)
   var hideOldForm = document.createElement('style');
-  hideOldForm.textContent = '#validations-section, .validation-stack { display: none !important; }';
+  hideOldForm.textContent = '#validations-section, .validation-stack, .vb-body:not([id]), .vb-scope:not([id]) { display: none !important; }';
   document.head.appendChild(hideOldForm);
   'use strict';
 
@@ -288,8 +288,9 @@
     const activityEl = document.getElementById('vb-activity');
     const countEl = document.getElementById('vb-count');
     if (activityEl && validations.length > 0) {
-      activityEl.style.display = 'flex';
-      if (countEl) countEl.textContent = validations.length;
+      const count = validations.length;
+      activityEl.style.display = 'block';
+      activityEl.innerHTML = `<span style="color:#2E9B6F;margin-right:4px;">●</span><strong>${count}</strong>&nbsp;industry professional${count !== 1 ? 's' : ''} have reviewed this article`;
     }
 
     let html = '';
@@ -769,8 +770,11 @@
         updateArticleBadge(validations, state, stateInfo, sci);
         const activityEl = document.getElementById('vb-activity');
         const countEl = document.getElementById('vb-count');
-        if (activityEl) activityEl.style.display = 'flex';
-        if (countEl) countEl.textContent = validations.length;
+        if (activityEl) {
+          const c = validations.length;
+          activityEl.style.display = 'block';
+          activityEl.innerHTML = `<span style="color:#2E9B6F;margin-right:4px;">●</span><strong>${c}</strong>&nbsp;industry professional${c !== 1 ? 's' : ''} have reviewed this article`;
+        }
       }
     } catch(e) {}
   }
