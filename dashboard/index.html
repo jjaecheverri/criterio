@@ -305,6 +305,16 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           <textarea class="form-textarea" id="quickCommentary" placeholder="Share your professional perspective on this topic. What does your experience tell you about this signal? What context or nuance would you add?" rows="5"></textarea>
           <div class="form-hint">Your expertise makes this signal stronger. Be specific — what have you seen in the field?</div>
         </div>
+        <div class="form-group">
+          <label class="form-label">Annotation Type</label>
+          <div id="quickAnnotTypes" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+            <button type="button" class="annot-pill active" data-type="Corroborate" style="padding:6px 14px;border-radius:20px;border:2px solid #22c55e;background:#22c55e;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">✓ Corroborate</button>
+            <button type="button" class="annot-pill" data-type="Challenge" style="padding:6px 14px;border-radius:20px;border:2px solid #f97316;background:transparent;color:#f97316;font-size:12px;font-weight:600;cursor:pointer;">⚡ Challenge</button>
+            <button type="button" class="annot-pill" data-type="Extend" style="padding:6px 14px;border-radius:20px;border:2px solid #3b82f6;background:transparent;color:#3b82f6;font-size:12px;font-weight:600;cursor:pointer;">+ Extend</button>
+            <button type="button" class="annot-pill" data-type="Clarify" style="padding:6px 14px;border-radius:20px;border:2px solid #eab308;background:transparent;color:#eab308;font-size:12px;font-weight:600;cursor:pointer;">◎ Clarify</button>
+          </div>
+          <div class="form-hint">How does your commentary relate to the article signal?</div>
+        </div>
         <button class="btn-primary" id="quickSubmitBtn">Submit Validation →</button>
         <div class="validate-success" id="validateSuccess">✓ Validation submitted! It's now live on the article page.</div>
         <div class="validate-error" id="validateError"></div>
@@ -455,6 +465,23 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
 
   // ── Quick Validate: dimension score state ────────────────────────────────
   let quickScores = { factual: 0, source: 0, rigor: 0, relevance: 0, utility: 0 };
+  let quickAnnotationType = 'Corroborate';
+
+  // Annotation pill toggle
+  document.getElementById('quickAnnotTypes').addEventListener('click', e => {
+    const pill = e.target.closest('.annot-pill');
+    if (!pill) return;
+    document.querySelectorAll('.annot-pill').forEach(p => {
+      const type = p.dataset.type;
+      const colors = { Corroborate: '#22c55e', Challenge: '#f97316', Extend: '#3b82f6', Clarify: '#eab308' };
+      p.style.background = 'transparent';
+      p.style.color = colors[type];
+    });
+    quickAnnotationType = pill.dataset.type;
+    const colors = { Corroborate: '#22c55e', Challenge: '#f97316', Extend: '#3b82f6', Clarify: '#eab308' };
+    pill.style.background = colors[quickAnnotationType];
+    pill.style.color = '#fff';
+  });
 
   // Wire dimension sliders once they're in the DOM (they're template-rendered)
   // Use event delegation since sliders are injected via innerHTML
@@ -498,6 +525,7 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
           yearsExp: user.yearsExp,
           commentary,
           scores: quickScores,
+          annotationType: quickAnnotationType,
           fromDashboard: true
         })
       });
@@ -511,6 +539,12 @@ const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "ti
         clearBtn.click();
         // Reset dimension scores
         quickScores = { factual: 0, source: 0, rigor: 0, relevance: 0, utility: 0 };
+        quickAnnotationType = 'Corroborate';
+        document.querySelectorAll('.annot-pill').forEach(p => {
+          const type = p.dataset.type; const colors = { Corroborate: '#22c55e', Challenge: '#f97316', Extend: '#3b82f6', Clarify: '#eab308' };
+          p.style.background = type === 'Corroborate' ? colors[type] : 'transparent';
+          p.style.color = type === 'Corroborate' ? '#fff' : colors[type];
+        });
         document.querySelectorAll('.quick-dim-slider').forEach(s => { s.value = 0; });
         document.querySelectorAll('.quick-dim-val').forEach(v => { v.textContent = '0'; });
         btn.disabled = false;
