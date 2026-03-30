@@ -131,21 +131,27 @@ RESPONSE FORMAT (JSON only, no other text):
         }
       } catch(e) {
         // ── Rule-based fallback gate (used when Claude is unavailable) ──────
-        // 1. Minimum 25 words of commentary
         const wordCount = commentary.trim().split(/\s+/).filter(Boolean).length;
-        // 2. Must not be pure generic praise (flag short + no specifics)
-        const genericPhrases = /^(good|great|agree|interesting|nice|solid|well written|i think|makes sense|very|totally)/i;
-        const hasSpecificContent = wordCount >= 25 ||
-          paragraphNotes.length >= 1 ||
-          /\d/.test(commentary) ||           // contains a number/stat
-          /[A-Z][a-z]+ (Inc|Corp|LLC|Ltd|Group|Co\b|University|Institute|Market|Report|Survey|Study)/.test(commentary); // named entity
+
+        // Specificity signals: numbers, named entities, annotations, or 50+ words with substance
+        const hasNumber = /\d/.test(commentary);
+        const hasNamedEntity = /[A-Z][a-z]{2,}/.test(commentary.replace(/^[A-Z]/, '')); // proper noun beyond first word
+        const hasAnnotation = paragraphNotes.length >= 1;
+        const isLong = wordCount >= 50;
+
+        // Generic openers/fillers that signal no real insight
+        const genericPattern = /\b(i agree|i think|great article|good article|solid article|well written|makes sense|very good|totally|interesting article|nice analysis)\b/i;
+        const isGeneric = genericPattern.test(commentary);
 
         if (wordCount < 15) {
           qualityPassed = false;
-          qualityFeedback = 'Your commentary is too brief. Please add at least 25 words explaining your assessment, ideally with a specific data point, named example, or professional observation.';
-        } else if (!hasSpecificContent && genericPhrases.test(commentary.trim())) {
+          qualityFeedback = 'Your commentary is too brief. Please add at least 25 words with a specific data point, named example, or professional observation.';
+        } else if (isGeneric && !hasNumber && !hasAnnotation && !isLong) {
           qualityPassed = false;
-          qualityFeedback = 'Your submission needs at least one specific insight — a data point, named company or market, metric, or direct professional experience. Generic observations alone do not meet the GROUND standard.';
+          qualityFeedback = 'Your submission reads as a general opinion. GROUND requires at least one specific insight — a data point, named company or market, metric, or direct professional experience. Add specifics to strengthen your assessment.';
+        } else if (wordCount < 25 && !hasNumber && !hasAnnotation) {
+          qualityPassed = false;
+          qualityFeedback = 'Please expand your assessment with a specific data point, named example, or professional observation from your field. Aim for at least 25 words with concrete detail.';
         } else {
           qualityPassed = true;
         }
