@@ -17,137 +17,434 @@
   --text-muted: #5a5850;
   --re: #2D6BE4;
   --green: #2E9B6F;
+  --orange: #E8602C;
+  --gold: #C9A84C;
 }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; min-height: 100vh; }
 a { color: inherit; text-decoration: none; }
 .nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); z-index: 100; }
-.nav-brand { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
-.nav-brand span { color: var(--text-dim); font-style: italic; }
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-brand-text { font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--text); }
+.nav-brand-text span { color: var(--text-dim); font-style: italic; }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a { font-size: 13px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
 .nav-links a:hover { color: var(--text); }
-.nav-validate { background: var(--text); color: var(--bg) !important; padding: 7px 16px; border-radius: 3px; font-weight: 600 !important; }
-.container { max-width: 800px; margin: 0 auto; padding: 60px 40px; }
+.container { max-width: 860px; margin: 0 auto; padding: 60px 40px; }
 @media (max-width: 640px) { .container { padding: 40px 20px; } .nav { padding: 16px 20px; } .nav-links { gap: 16px; } }
 .page-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-.page-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 44px); margin-bottom: 8px; }
-.profile-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; margin-bottom: 40px; }
+.page-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5vw, 44px); margin-bottom: 32px; }
+.profile-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; margin-bottom: 40px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.profile-left { flex: 1; }
 .profile-name { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 6px; }
 .profile-meta { color: var(--text-dim); font-size: 14px; line-height: 1.7; }
-.profile-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(45,107,228,0.12); border: 1px solid rgba(45,107,228,0.3); border-radius: 4px; padding: 4px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #7aaaf0; letter-spacing: 0.05em; margin-top: 12px; }
-.section-heading { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-.activity-list { list-style: none; }
-.activity-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 16px; }
-.activity-item:last-child { border-bottom: none; }
-.activity-slug { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--re); }
-.activity-slug a { color: var(--re); text-decoration: none; }
-.activity-slug a:hover { text-decoration: underline; }
-.activity-time { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
-.empty-state { text-align: center; padding: 40px; color: var(--text-dim); font-size: 14px; }
-.btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 4px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.profile-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(45,107,228,0.12); border: 1px solid rgba(45,107,228,0.3); border-radius: 4px; padding: 4px 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #7aaaf0; letter-spacing: 0.05em; margin-top: 12px; display: inline-block; }
+.btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
 .btn-logout:hover { border-color: rgba(220,50,50,0.4); color: #f08080; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+.tab-btn { background: none; border: none; padding: 10px 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+.tab-btn:hover { color: var(--text-dim); }
+.tab-btn.active { color: var(--text); border-bottom-color: var(--re); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Quick Validate */
+.section-heading { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.quick-validate-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.form-select { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; appearance: none; cursor: pointer; }
+.form-select:focus { outline: none; border-color: rgba(45,107,228,0.5); }
+.article-search { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; margin-bottom: 8px; }
+.article-search:focus { outline: none; border-color: rgba(45,107,228,0.5); }
+.article-search::placeholder { color: var(--text-muted); }
+.article-options { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; max-height: 200px; overflow-y: auto; display: none; }
+.article-option { padding: 10px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--border); line-height: 1.4; }
+.article-option:last-child { border-bottom: none; }
+.article-option:hover { background: rgba(45,107,228,0.1); }
+.article-option .opt-vertical { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 2px; }
+.selected-article { background: rgba(45,107,228,0.1); border: 1px solid rgba(45,107,228,0.3); border-radius: 4px; padding: 10px 14px; font-size: 13px; display: none; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.selected-article span { color: var(--text-dim); flex: 1; }
+.clear-selection { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 0; line-height: 1; }
+.clear-selection:hover { color: var(--text); }
+.form-textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 14px; font-size: 14px; font-family: 'Lora', serif; resize: vertical; min-height: 120px; line-height: 1.6; }
+.form-textarea:focus { outline: none; border-color: rgba(45,107,228,0.5); }
+.form-textarea::placeholder { color: var(--text-muted); }
+.form-hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.profile-preview { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; }
+.profile-preview-item { font-size: 13px; }
+.profile-preview-item .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 2px; }
+.btn-primary { background: var(--re); color: white; border: none; border-radius: 4px; padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s; letter-spacing: 0.02em; }
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.validate-success { display: none; background: rgba(46,155,111,0.1); border: 1px solid rgba(46,155,111,0.3); border-radius: 6px; padding: 16px 20px; color: #6fcfa0; font-size: 14px; margin-top: 16px; }
+.validate-error { display: none; background: rgba(220,50,50,0.1); border: 1px solid rgba(220,50,50,0.3); border-radius: 6px; padding: 16px 20px; color: #f08080; font-size: 14px; margin-top: 16px; }
+
+/* Activity */
+.activity-list { list-style: none; }
+.activity-item { padding: 18px 0; border-bottom: 1px solid var(--border); }
+.activity-item:last-child { border-bottom: none; }
+.activity-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.activity-title { font-size: 14px; font-weight: 500; flex: 1; }
+.activity-title a { color: var(--text); }
+.activity-title a:hover { color: var(--re); }
+.activity-time { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.activity-commentary { font-size: 13px; color: var(--text-dim); font-family: 'Lora', serif; font-style: italic; line-height: 1.6; margin-bottom: 10px; }
+.share-row { display: flex; gap: 8px; }
+.share-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text-dim); border-radius: 3px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.share-btn:hover { border-color: rgba(45,107,228,0.4); color: var(--text); }
+.share-btn.copied { color: var(--green); border-color: rgba(46,155,111,0.4); }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); font-size: 14px; }
+.empty-state a { color: var(--re); }
+
+/* Recommend */
+.recommend-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px; }
+.recommend-desc { color: var(--text-dim); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
+.form-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 4px; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; }
+.form-input:focus { outline: none; border-color: rgba(45,107,228,0.5); }
+.form-input::placeholder { color: var(--text-muted); }
+.recommend-success { display: none; background: rgba(46,155,111,0.1); border: 1px solid rgba(46,155,111,0.3); border-radius: 6px; padding: 16px 20px; color: #6fcfa0; font-size: 14px; margin-top: 16px; }
+
 .verified-banner { background: rgba(46,155,111,0.1); border: 1px solid rgba(46,155,111,0.3); border-radius: 6px; padding: 14px 20px; margin-bottom: 32px; color: #6fcfa0; font-size: 14px; display: none; }
 .loading { color: var(--text-muted); font-size: 14px; text-align: center; padding: 60px; }
-footer { padding: 40px; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 60px; }
 </style>
 </head>
 <body>
 <nav class="nav">
-  <a href="/" class="nav-brand">GROUND <span>by IN·KluSo</span></a>
-  <div class="nav-links"><a href="/real-estate/">Real Estate</a><a href="/retail/">Retail</a><a href="/brand/">Brand</a><a href="/about/">About</a><a href="/register/" class="nav-validate">Validate →</a></div>
+  <a href="/" class="nav-brand">
+    <svg width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2L23.5 13.5H35.5L26 20.5L29.5 32L20 25L10.5 32L14 20.5L4.5 13.5H16.5L20 2Z" fill="#E8E6DF"/></svg>
+    <span class="nav-brand-text">GROUND <span>by IN·KluSo</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/real-estate/">Real Estate</a>
+    <a href="/retail/">Retail</a>
+    <a href="/brand/">Brand</a>
+    <a href="/food-agriculture/">Food & Ag</a>
+    <a href="/family-education/">Family & Ed</a>
+    <a href="/dashboard/" style="color:var(--text);font-weight:600;">Dashboard</a>
+  </div>
 </nav>
 
-<div class="container" id="mainContent">
-  <div class="loading">Loading…</div>
+<div class="container">
+  <div id="verifiedBanner" class="verified-banner"></div>
+  <div id="mainContent" class="loading">Loading your dashboard...</div>
 </div>
 
-<footer>
-  <p>GROUND by IN·KluSo &middot; <a href="https://in-kluso.com" style="color:var(--text-dim);">IN·KluSo</a> · <a href="/" style="color:var(--text-dim);">Home</a></p>
-</footer>
-
 <script>
+const ARTICLES = [{"slug": "brand/ai-generated-content-brand-trust-erosion", "title": "AI-Generated Content Is Creating a Trust Deficit for Brands: The Authenticity...", "vertical": "brand"}, {"slug": "brand/brand-distinctiveness-erosion-market-analysis", "title": "Brand Distinctiveness Is Eroding Across Consumer Categories: A Market Analysi...", "vertical": "brand"}, {"slug": "brand/brand-identity-systems-scaling-consistency", "title": "The Economics of Brand Consistency at Scale: Why Identity Systems Are Infrast...", "vertical": "brand"}, {"slug": "brand/brand-voice-as-competitive-asset", "title": "Brand Voice as Competitive Asset: How Verbal Identity Creates Pricing Power a...", "vertical": "brand"}, {"slug": "brand/creative-brief-quality-campaign-performance", "title": "The Creative Brief Is the Highest-Leverage Document in Marketing: Why Brief Q...", "vertical": "brand"}, {"slug": "brand/creator-economy-middle-class-myth", "title": "The Creator Economy Middle Class Is a Myth: Platform Economics and the 1% Rev...", "vertical": "brand"}, {"slug": "brand/destination-branding-search-disintermediation", "title": "Destination Branding in the Age of Search Disintermediation: How DMOs Are Los...", "vertical": "brand"}, {"slug": "brand/employer-brand-talent-acquisition-cost", "title": "Employer Brand Is the Most Underinvested Asset in Talent Acquisition: A Cost ...", "vertical": "brand"}, {"slug": "brand/experiential-hospitality-hotel-differentiation", "title": "The Experiential Hospitality Shift: Why Hotels Are Becoming Destinations and ...", "vertical": "brand"}, {"slug": "brand/hotel-resort-fee-transparency-consumer-backlash", "title": "Hotel Resort Fees Generate $3 Billion Annually and the FTC Is Coming For Them...", "vertical": "brand"}, {"slug": "brand/influencer-marketing-fraud-rate-measurement", "title": "An Estimated 15-25% of Influencer Marketing Spend Is Wasted on Fake Followers...", "vertical": "brand"}, {"slug": "brand/loyalty-program-devaluation-consumer-impact", "title": "Loyalty Program Devaluation Is a Hidden Brand Tax: How Points Inflation Erode...", "vertical": "brand"}, {"slug": "brand/luxury-hospitality-bifurcation-market-analysis", "title": "Luxury Hospitality Is Bifurcating: The $1,000/Night Floor and the Experience ...", "vertical": "brand"}, {"slug": "brand/overtourism-destination-management-economics", "title": "Overtourism Is a Brand Management Problem: Why Destinations That Cannot Limit...", "vertical": "brand"}, {"slug": "brand/podcast-advertising-measurement-attribution", "title": "Podcast Advertising Reached $4 Billion But Attribution Remains the Growth Cei...", "vertical": "brand"}, {"slug": "brand/rebranding-failure-rate-research-analysis", "title": "Most Corporate Rebrands Fail to Deliver Measurable Business Impact: A Researc...", "vertical": "brand"}, {"slug": "brand/sports-sponsorship-roi-measurement-gap", "title": "Sports Sponsorship Is a $70 Billion Industry With a Measurement Problem: The ...", "vertical": "brand"}, {"slug": "brand/subscription-fatigue-consumer-spending-limits", "title": "The Average American Has 12 Subscriptions Costing $220/Month and Cancellation...", "vertical": "brand"}, {"slug": "brand/travel-advisor-resurgence-complexity-premium", "title": "The Travel Advisor Resurgence: How Post-Pandemic Complexity Is Rebuilding the...", "vertical": "brand"}, {"slug": "brand/travel-industry-trust-gap-reviews-authenticity", "title": "The Trust Gap in Travel: How Review Manipulation, Fake Listings, and Content ...", "vertical": "brand"}, {"slug": "family-education/childcare-cost-crisis-economic-analysis", "title": "Childcare Costs Exceed College Tuition in 28 States: The Economic Crisis Hidi...", "vertical": "family-education"}, {"slug": "family-education/college-degree-roi-varies-500-percent", "title": "The ROI of a College Degree Varies by 500% Depending on Institution and Major...", "vertical": "family-education"}, {"slug": "family-education/homeschool-growth-2-million-students", "title": "Homeschooling Has Doubled to 3.3 Million Students and the Growth Is Reshaping...", "vertical": "family-education"}, {"slug": "family-education/screen-time-parenting-industry-fear-economy", "title": "The Screen Time Panic Has Created a $5 Billion Parenting Industry: What the R...", "vertical": "family-education"}, {"slug": "family-education/student-loan-payment-consumer-spending-drag", "title": "$1.77 Trillion in Student Debt Is a $100 Billion Annual Drag on Consumer Spen...", "vertical": "family-education"}, {"slug": "family-education/summer-learning-loss-achievement-gap-economics", "title": "Summer Learning Loss Costs the US $22 Billion Annually and Widens the Achieve...", "vertical": "family-education"}, {"slug": "family-education/tutoring-industry-learning-loss-economics", "title": "The Tutoring Industry Doubled to $12 Billion on Pandemic Learning Loss and th...", "vertical": "family-education"}, {"slug": "family-education/youth-sports-spending-30-billion-industry", "title": "Youth Sports Is a $30 Billion Industry Built on Parental Anxiety: The Economi...", "vertical": "family-education"}, {"slug": "food-agriculture/farm-labor-shortage-mechanization-gap", "title": "US Farm Labor Costs Have Risen 40% Since 2019 and Mechanization Cannot Close ...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/farmers-market-economics-premium-myth", "title": "Farmers Markets Charge a 40-80% Premium Over Grocery and Most of It Is Not Go...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/food-waste-supply-chain-130-billion", "title": "$130 Billion in Food Is Wasted in the US Annually and the Supply Chain Incent...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/grocery-shrinkflation-consumer-price-perception", "title": "Shrinkflation Is a $20 Billion Hidden Price Increase: How CPG Companies Raise...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/grocery-store-profit-margin-1-2-percent", "title": "Grocery Stores Operate on 1-2% Net Margins and Everyone Thinks They Are Price...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/organic-label-premium-consumer-confusion", "title": "The Organic Premium Is 30-100% But Consumer Understanding of What \"Organic\" M...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/restaurant-food-cost-margin-analysis", "title": "Restaurant Margins Are 3-5% and Delivery Apps Take 15-30%: The Math That Is K...", "vertical": "food-agriculture"}, {"slug": "food-agriculture/ultra-processed-food-80-percent-grocery", "title": "Ultra-Processed Foods Are 73% of the US Food Supply and the Reformulation Opp...", "vertical": "food-agriculture"}, {"slug": "real-estate/airbnb-effect-housing-rental-markets", "title": "The Airbnb Effect on Housing Markets Is Measurable and Larger Than the Indust...", "vertical": "real-estate"}, {"slug": "real-estate/climate-migration-housing-demand-shift", "title": "Climate Migration Is Already Repricing US Housing Markets: 3.2 Million Americ...", "vertical": "real-estate"}, {"slug": "real-estate/housing-affordability-index-historical-context", "title": "The US Housing Affordability Crisis in Numbers: An Index Analysis from 2019 t...", "vertical": "real-estate"}, {"slug": "real-estate/housing-underbuilding-deficit-4-million-units", "title": "The US Has Underbuilt 3.8 Million Housing Units Since 2010: The Supply Defici...", "vertical": "real-estate"}, {"slug": "real-estate/institutional-single-family-rental-market-impact", "title": "Institutional Single-Family Rental Is Reshaping Starter Home Markets: Scale, ...", "vertical": "real-estate"}, {"slug": "real-estate/insurance-cost-escalation-sunbelt-real-estate", "title": "Insurance Cost Escalation Is Repricing Sunbelt Real Estate: A Signal Analysis...", "vertical": "real-estate"}, {"slug": "real-estate/mortgage-lock-in-effect-market-analysis", "title": "The Mortgage Lock-In Effect: How 3% Rates Created a Housing Market That Canno...", "vertical": "real-estate"}, {"slug": "real-estate/new-home-sales-builder-incentives-2026", "title": "New Home Sales Fell 17.6% in January: How Builder Incentives Are Masking Stru...", "vertical": "real-estate"}, {"slug": "real-estate/northeast-midwest-housing-market-shift", "title": "The Geographic Rotation in US Housing: Why Northeast and Midwest Markets Are ...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-commercial-vacancy-national-divergence", "title": "NWA Commercial Vacancy at 6.3% While National Office Rates Hit 20%: What's Dr...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-employer-concentration-real-estate-risk", "title": "The Walmart Variable: How Employer Concentration Shapes NWA Real Estate Risk ...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-home-price-divergence-county-analysis", "title": "Benton County vs. Washington County: A Divergence Analysis of NWA's Two Prima...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-infrastructure-caps-development-2026", "title": "NWA Infrastructure Constraints Are About to Cap Development: A Signal Analysi...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-multifamily-vacancy-supply-correction", "title": "NWA Multifamily Vacancy Rose 2.5 Points in Six Months: Anatomy of a Supply Co...", "vertical": "real-estate"}, {"slug": "real-estate/nwa-residential-pricing-precision-market", "title": "NWA Has Become a Pricing Precision Market: Why the 2026 Seller Needs Data, No...", "vertical": "real-estate"}, {"slug": "real-estate/proptech-valuation-correction-market-reality", "title": "PropTech Valuations Have Corrected 60-80% From Peak: What Survives the Reset", "vertical": "real-estate"}, {"slug": "real-estate/real-estate-agent-commission-settlement-impact", "title": "The NAR Settlement Will Save Homebuyers $30-$50 Billion Over 10 Years: How Co...", "vertical": "real-estate"}, {"slug": "real-estate/remote-work-office-conversion-feasibility", "title": "Office-to-Residential Conversion Is Structurally Constrained: Why the Math Ra...", "vertical": "real-estate"}, {"slug": "real-estate/zoning-reform-housing-supply-impact", "title": "Zoning Reform Is the Supply-Side Variable That Markets Are Underpricing: Minn...", "vertical": "real-estate"}, {"slug": "retail/amazon", "title": "Amazon Intelligence", "vertical": "retail"}, {"slug": "retail/amazon/amazon-advertising-tax-vendor-margin-analysis", "title": "Amazon Advertising Is a $50 Billion Tax on E-Commerce: How Sponsored Products...", "vertical": "retail"}, {"slug": "retail/amazon/amazon-basics-category-entry-brand-displacement", "title": "Amazon Basics and the Platform Paradox: How Amazon Uses Seller Data to Compet...", "vertical": "retail"}, {"slug": "retail/amazon/amazon-counterfeit-brand-protection-challenge", "title": "Amazon Blocked 700 Million Counterfeit Listings in 2023 and the Problem Is Ge...", "vertical": "retail"}, {"slug": "retail/amazon/amazon-fba-fee-escalation-seller-margin-squeeze", "title": "Amazon FBA Fees Have Risen 30% Since 2020 and Sellers Have Nowhere Else to Go...", "vertical": "retail"}, {"slug": "retail/amazon/amazon-review-manipulation-trust-erosion", "title": "An Estimated 30-40% of Amazon Reviews Are Fake or Incentivized: The Trust Cri...", "vertical": "retail"}, {"slug": "retail/category-management-drives-shelf-space", "title": "Category Management Is the Language Retailers Speak: How Shelf Space Is Won a...", "vertical": "retail"}, {"slug": "retail/costco-membership-model-retail-anomaly", "title": "Costco Makes Almost Zero Profit on Merchandise: The Membership Model That Def...", "vertical": "retail"}, {"slug": "retail/dollar-store-saturation-rural-retail", "title": "Dollar Store Saturation Is Reshaping Rural Retail: 38,000 Stores and the Groc...", "vertical": "retail"}, {"slug": "retail/ecommerce", "title": "E-Commerce Operations", "vertical": "retail"}, {"slug": "retail/ecommerce-fulfillment-economics-profitability", "title": "E-Commerce Fulfillment Economics Are Breaking the Grocery Model: A Profitabil...", "vertical": "retail"}, {"slug": "retail/ecommerce/bopis-curbside-pickup-retail-economics", "title": "Buy Online Pick Up In Store Is the Most Profitable E-Commerce Model and Retai...", "vertical": "retail"}, {"slug": "retail/ecommerce/buy-now-pay-later-consumer-debt-hidden-risk", "title": "Buy Now Pay Later Users Carry $1,000+ in Hidden Debt That Doesn't Appear on C...", "vertical": "retail"}, {"slug": "retail/ecommerce/dtc-customer-acquisition-cost-crisis", "title": "DTC Customer Acquisition Costs Have Tripled Since 2019: Why the Direct-to-Con...", "vertical": "retail"}, {"slug": "retail/ecommerce/ecommerce-return-rates-hidden-cost-crisis", "title": "E-Commerce Return Rates Average 17% and Cost Retailers $816 Billion Globally:...", "vertical": "retail"}, {"slug": "retail/ecommerce/social-commerce-tiktok-shop-conversion-reality", "title": "TikTok Shop Hit $20 Billion in US GMV But the Conversion Funnel Is Inverted: ...", "vertical": "retail"}, {"slug": "retail/grocery-delivery-profitability-unit-economics", "title": "Grocery Delivery Has a Permanent Profitability Problem: The Unit Economics Th...", "vertical": "retail"}, {"slug": "retail/grocery-inflation-consumer-behavior-shift", "title": "Post-Inflation Grocery Shopping: How Three Years of Price Increases Permanent...", "vertical": "retail"}, {"slug": "retail/otif-compliance-hidden-cost-vendor-economics", "title": "OTIF Compliance Is the Hidden P&L Line That Determines Vendor Survival: A Sup...", "vertical": "retail"}, {"slug": "retail/private-label-growth-brand-margin-pressure", "title": "Private Label Growth Is Structural, Not Cyclical: How Store Brands Are Perman...", "vertical": "retail"}, {"slug": "retail/quick-commerce-instant-delivery-economics", "title": "Quick Commerce and the 15-Minute Delivery Promise: An Economic Viability Anal...", "vertical": "retail"}, {"slug": "retail/retail-media-60b-vendor-margin-risk", "title": "Retail Media Is a $60 Billion Channel and It's Compressing Vendor Margins: A ...", "vertical": "retail"}, {"slug": "retail/retail-store-closures-square-footage-rationalization", "title": "US Retail Is Closing 7,000+ Stores Per Year and Opening 5,000+: Why the Net N...", "vertical": "retail"}, {"slug": "retail/retail-theft-shrinkage-data-reality", "title": "Retail Shrinkage Is Real But the Data Is Unreliable: Separating Signal From N...", "vertical": "retail"}, {"slug": "retail/self-checkout-retreat-retail-labor-calculus", "title": "The Self-Checkout Retreat: Why Retailers Are Reversing a $4 Billion Investment", "vertical": "retail"}, {"slug": "retail/shopper", "title": "Shopper Marketing Intelligence", "vertical": "retail"}, {"slug": "retail/shopper-marketing-physical-digital-gap", "title": "The Physical-Digital Attribution Gap in Shopper Marketing: Why the Most Effec...", "vertical": "retail"}, {"slug": "retail/shopper/endcap-display-economics-shelf-space-premium", "title": "Endcap Displays Generate 30-40% Sales Lift But the Premium Is Declining: How ...", "vertical": "retail"}, {"slug": "retail/shopper/in-store-sampling-roi-measurement-challenge", "title": "In-Store Product Sampling Is a $2 Billion Channel and Nobody Agrees on How to...", "vertical": "retail"}, {"slug": "retail/shopper/retail-media-network-fragmentation-vendor-burden", "title": "There Are Now 200+ Retail Media Networks and Vendors Cannot Manage Them All: ...", "vertical": "retail"}, {"slug": "retail/shopper/shopper-marketing-roi-measurement-evolution", "title": "Shopper Marketing Budgets Hit $100 Billion But 60% Is Spent Without Attributi...", "vertical": "retail"}, {"slug": "retail/supply-chain", "title": "Supply Chain Intelligence", "vertical": "retail"}, {"slug": "retail/supply-chain-nearshoring-retail-cost-impact", "title": "Nearshoring Is Not Reshoring: Why Retail Supply Chains Are Moving to Mexico, ...", "vertical": "retail"}, {"slug": "retail/supply-chain/inventory-bullwhip-effect-retail-overstocking", "title": "The Bullwhip Effect Cost US Retailers $80 Billion in Excess Inventory: How Po...", "vertical": "retail"}, {"slug": "retail/supply-chain/last-mile-delivery-cost-floor-analysis", "title": "Last-Mile Delivery Has a $5 Cost Floor That Technology Cannot Break: Why the ...", "vertical": "retail"}, {"slug": "retail/supply-chain/otif-penalty-structure-vendor-financial-impact", "title": "OTIF Penalties Cost Vendors Hundreds of Millions Annually: The Compliance Tax...", "vertical": "retail"}, {"slug": "retail/supply-chain/port-congestion-panama-suez-shipping-cost", "title": "The Panama Canal and Suez Canal Disruptions Added $25-$50 Billion in Global S...", "vertical": "retail"}, {"slug": "retail/supply-chain/retail-supply-chain-automation-warehouse-labor", "title": "Warehouse Automation Is Replacing 25% of Fulfillment Labor But Creating New B...", "vertical": "retail"}, {"slug": "retail/target", "title": "Target Intelligence", "vertical": "retail"}, {"slug": "retail/target/target-circle-loyalty-data-personalization", "title": "Target Circle Has 100 Million Members and It's Not Really a Loyalty Program: ...", "vertical": "retail"}, {"slug": "retail/target/target-drive-up-fulfillment-competitive-advantage", "title": "Target Drive Up Is the Best Fulfillment Experience in US Retail and It Genera...", "vertical": "retail"}, {"slug": "retail/target/target-owned-brands-differentiation-strategy", "title": "Target's Owned Brands Generate $30B+ and They Are Not Private Label: A Brand ...", "vertical": "retail"}, {"slug": "retail/target/target-roundel-retail-media-differentiation", "title": "Target's Roundel Is the Retail Media Network Vendors Actually Like: Why Curat...", "vertical": "retail"}, {"slug": "retail/tipping-culture-escalation-consumer-fatigue", "title": "Tip Fatigue Is Real and Measurable: How Digital Payment Systems Expanded Tipp...", "vertical": "retail"}, {"slug": "retail/trade-spend-transparency-cpg-vendor-challenge", "title": "Trade Spend Opacity Is Costing CPG Companies 2-4% of Revenue: The Measurement...", "vertical": "retail"}, {"slug": "retail/walmart", "title": "Walmart Intelligence", "vertical": "retail"}, {"slug": "retail/walmart-vendor-ecosystem-economic-analysis", "title": "The Walmart Vendor Ecosystem: An Economic Analysis of the World's Largest Buy...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-connect-retail-media-vendor-mandatory", "title": "Walmart Connect Is No Longer Optional: How Retail Media Became a Line Item in...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-great-value-private-label-strategy", "title": "Great Value Is a $30 Billion Brand and It Is Walmart's Most Powerful Negotiat...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-grocery-pickup-dominance-market-share", "title": "Walmart Controls 50%+ of US Online Grocery Pickup: The Fulfillment Advantage ...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-health-clinics-closure-retail-healthcare", "title": "Walmart Closed All 51 Health Clinics: Why the World's Largest Retailer Could ...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-luminate-data-vendor-intelligence", "title": "Walmart Luminate Is Changing the Data Power Dynamic: How First-Party Shopper ...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-marketplace-3p-seller-growth", "title": "Walmart Marketplace Has 150,000 Sellers and Is Growing 30% Annually: The Thir...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-plus-membership-loyalty-economics", "title": "Walmart+ Has Stalled at 25 Million Members and the Economics Explain Why: A M...", "vertical": "retail"}, {"slug": "retail/walmart/walmart-supplier-diversity-program-economics", "title": "Walmart's Open Call Is a $350 Billion Shelf Space Lottery: The Reality of Sup...", "vertical": "retail"}];
+
 (async function() {
   const container = document.getElementById('mainContent');
 
-  // Check auth
   let user = null;
   try {
     const res = await fetch('/api/auth/me');
-    if (!res.ok) {
-      window.location.href = '/login/?redirect=' + encodeURIComponent(window.location.pathname);
-      return;
-    }
+    if (!res.ok) { window.location.href = '/login/?redirect=/dashboard/'; return; }
     const data = await res.json();
-    if (!data.authenticated) {
-      window.location.href = '/login/';
-      return;
-    }
+    if (!data.authenticated) { window.location.href = '/login/'; return; }
     user = data.user;
-  } catch (e) {
-    window.location.href = '/login/';
-    return;
+  } catch(e) { window.location.href = '/login/'; return; }
+
+  const params = new URLSearchParams(window.location.search);
+  const verifiedBanner = document.getElementById('verifiedBanner');
+  if (params.get('verified') === '1') {
+    verifiedBanner.style.display = 'block';
+    verifiedBanner.textContent = '✓ Email verified! Welcome to GROUND. Your contributor account is now active.';
   }
 
-  // Format date
-  const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Unknown';
-  const params = new URLSearchParams(window.location.search);
+  const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
 
-  // Fetch activity
   let activity = [];
   try {
     const actRes = await fetch('/api/auth/activity');
-    if (actRes.ok) {
-      const actData = await actRes.json();
-      activity = actData.activity || [];
-    }
-  } catch (e) {}
+    if (actRes.ok) { const d = await actRes.json(); activity = d.activity || []; }
+  } catch(e) {}
 
-  // Build activity list
-  let activityHTML = '';
-  if (activity.length === 0) {
-    activityHTML = '<div class="empty-state">No validations submitted yet.<br><a href="/real-estate/" style="color:var(--re);">Browse articles to validate →</a></div>';
-  } else {
-    const items = activity.slice(0, 10).map(item => {
+  // Build activity HTML
+  function buildActivityHTML() {
+    if (activity.length === 0) {
+      return `<div class="empty-state">No validations yet.<br><a href="/real-estate/">Browse articles to validate →</a></div>`;
+    }
+    return `<ul class="activity-list">${activity.slice(0,20).map(item => {
       const date = new Date(item.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const slug = item.slug || '';
-      const title = item.title || slug;
+      const url = `https://ground.in-kluso.com/${item.slug}/`;
+      const linkedinText = encodeURIComponent(`I just validated "${item.title || item.slug}" on GROUND by IN·KluSo — practitioner intelligence for professionals. ${url}`);
+      const twitterText = encodeURIComponent(`Just validated an article on @INKluSo GROUND — professional intelligence platform. ${url}`);
       return `<li class="activity-item">
-        <span class="activity-slug"><a href="/${slug}/">${title}</a></span>
-        <span class="activity-time">${date}</span>
+        <div class="activity-header">
+          <div class="activity-title"><a href="/${item.slug}/">${item.title || item.slug}</a></div>
+          <div class="activity-time">${date}</div>
+        </div>
+        ${item.commentary ? `<div class="activity-commentary">"${item.commentary.slice(0,160)}${item.commentary.length > 160 ? '...' : ''}"</div>` : ''}
+        <div class="share-row">
+          <button class="share-btn" onclick="copyLink('${url}', this)">⎘ Copy Link</button>
+          <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}" target="_blank">in Share</a>
+          <a class="share-btn" href="https://twitter.com/intent/tweet?text=${twitterText}" target="_blank">𝕏 Post</a>
+        </div>
       </li>`;
-    }).join('');
-    activityHTML = `<ul class="activity-list">${items}</ul>`;
+    }).join('')}</ul>`;
   }
 
-  // Render dashboard
   container.innerHTML = `
-    ${params.get('verified') === '1' ? '<div class="verified-banner" style="display:block">✓ Email verified! Welcome to GROUND. Your contributor account is now active.</div>' : ''}
     <div class="page-label">Contributor Dashboard</div>
     <h1 class="page-title">Welcome back, ${user.name.split(' ')[0]}.</h1>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;gap:16px;flex-wrap:wrap;">
-      <div></div>
+
+    <div class="profile-card">
+      <div class="profile-left">
+        <div class="profile-name">${user.name}</div>
+        <div class="profile-meta">
+          ${user.title} · ${user.org}<br>
+          ${user.yearsExp} years of experience${memberSince ? ` · Member since ${memberSince}` : ''}
+        </div>
+        <span class="profile-badge">✓ VERIFIED PROFESSIONAL</span>
+      </div>
       <button class="btn-logout" id="logoutBtn">Logout</button>
     </div>
 
-    <div class="profile-card">
-      <div class="profile-name">${user.name}</div>
-      <div class="profile-meta">
-        ${user.title} · ${user.org}<br>
-        ${user.yearsExp} years of experience<br>
-        Member since ${memberSince}
-      </div>
-      <div class="profile-badge">✓ VERIFIED CONTRIBUTOR</div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="validate">Quick Validate</button>
+      <button class="tab-btn" data-tab="activity">My Validations (${activity.length})</button>
+      <button class="tab-btn" data-tab="recommend">Recommend a Pro</button>
     </div>
 
-    <div class="section-heading">Recent Validations</div>
-    ${activityHTML}
+    <!-- QUICK VALIDATE TAB -->
+    <div id="tab-validate" class="tab-panel active">
+      <div class="quick-validate-card">
+        <div class="section-heading">Validate an Article</div>
+        <div class="form-group">
+          <label class="form-label">Your Profile (auto-filled)</label>
+          <div class="profile-preview">
+            <div class="profile-preview-item"><span class="label">Name</span>${user.name}</div>
+            <div class="profile-preview-item"><span class="label">Title</span>${user.title}</div>
+            <div class="profile-preview-item"><span class="label">Organization</span>${user.org}</div>
+            <div class="profile-preview-item"><span class="label">Experience</span>${user.yearsExp} yrs</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select Article</label>
+          <input type="text" class="article-search" id="articleSearch" placeholder="Search by title or topic..." autocomplete="off">
+          <div class="article-options" id="articleOptions"></div>
+          <div class="selected-article" id="selectedArticleDisplay">
+            <span id="selectedArticleTitle"></span>
+            <button class="clear-selection" id="clearSelection">×</button>
+          </div>
+          <input type="hidden" id="selectedArticleSlug">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your Professional Commentary</label>
+          <textarea class="form-textarea" id="quickCommentary" placeholder="Share your professional perspective on this topic. What does your experience tell you about this signal? What context or nuance would you add?" rows="5"></textarea>
+          <div class="form-hint">Your expertise makes this signal stronger. Be specific — what have you seen in the field?</div>
+        </div>
+        <button class="btn-primary" id="quickSubmitBtn">Submit Validation →</button>
+        <div class="validate-success" id="validateSuccess">✓ Validation submitted! It's now live on the article page.</div>
+        <div class="validate-error" id="validateError"></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY TAB -->
+    <div id="tab-activity" class="tab-panel">
+      <div class="section-heading">My Validations</div>
+      ${buildActivityHTML()}
+    </div>
+
+    <!-- RECOMMEND TAB -->
+    <div id="tab-recommend" class="tab-panel">
+      <div class="recommend-card">
+        <div class="section-heading">Recommend a Professional</div>
+        <p class="recommend-desc">Know a colleague who should be validating on GROUND? Send them a personal invite. We'll reach out on your behalf.</p>
+        <form id="recommendForm">
+          <div class="form-row" style="margin-bottom:16px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Their Name</label>
+              <input type="text" class="form-input" id="recName" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Their Email</label>
+              <input type="email" class="form-input" id="recEmail" placeholder="jane@company.com" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Their Title / Organization (optional)</label>
+            <input type="text" class="form-input" id="recTitle" placeholder="e.g. VP of Marketing at Walmart">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Why should they validate on GROUND? (optional)</label>
+            <textarea class="form-textarea" id="recNote" placeholder="They have deep experience in retail media and supply chain..." rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Send Invite →</button>
+          <div class="recommend-success" id="recommendSuccess">✓ Invite sent! We'll reach out to them soon.</div>
+        </form>
+      </div>
+    </div>
   `;
 
+  // Logout
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     window.location.href = '/';
   });
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Article search
+  const searchInput = document.getElementById('articleSearch');
+  const optionsEl = document.getElementById('articleOptions');
+  const selectedDisplay = document.getElementById('selectedArticleDisplay');
+  const selectedTitle = document.getElementById('selectedArticleTitle');
+  const selectedSlug = document.getElementById('selectedArticleSlug');
+  const clearBtn = document.getElementById('clearSelection');
+
+  function renderOptions(query) {
+    const q = query.toLowerCase();
+    const matches = ARTICLES.filter(a =>
+      a.title.toLowerCase().includes(q) || a.slug.toLowerCase().includes(q) || a.vertical.toLowerCase().includes(q)
+    ).slice(0, 12);
+    if (matches.length === 0) {
+      optionsEl.innerHTML = '<div class="article-option" style="color:var(--text-muted)">No articles found</div>';
+    } else {
+      optionsEl.innerHTML = matches.map(a =>
+        `<div class="article-option" data-slug="${a.slug}" data-title="${a.title.replace(/"/g, '&quot;')}">
+          <span class="opt-vertical">${a.vertical.replace(/-/g,' ').toUpperCase()}</span>
+          ${a.title}
+        </div>`
+      ).join('');
+      optionsEl.querySelectorAll('.article-option[data-slug]').forEach(opt => {
+        opt.addEventListener('click', () => {
+          selectedSlug.value = opt.dataset.slug;
+          selectedTitle.textContent = opt.dataset.title;
+          selectedDisplay.style.display = 'flex';
+          searchInput.style.display = 'none';
+          optionsEl.style.display = 'none';
+        });
+      });
+    }
+    optionsEl.style.display = 'block';
+  }
+
+  searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) renderOptions(searchInput.value);
+    else optionsEl.style.display = 'none';
+  });
+
+  searchInput.addEventListener('focus', () => {
+    if (searchInput.value.length > 0) renderOptions(searchInput.value);
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#articleSearch') && !e.target.closest('#articleOptions')) {
+      optionsEl.style.display = 'none';
+    }
+  });
+
+  clearBtn.addEventListener('click', () => {
+    selectedSlug.value = '';
+    selectedTitle.textContent = '';
+    selectedDisplay.style.display = 'none';
+    searchInput.style.display = 'block';
+    searchInput.value = '';
+    searchInput.focus();
+  });
+
+  // Quick validate submit
+  document.getElementById('quickSubmitBtn').addEventListener('click', async () => {
+    const slug = selectedSlug.value;
+    const commentary = document.getElementById('quickCommentary').value.trim();
+    const successEl = document.getElementById('validateSuccess');
+    const errorEl = document.getElementById('validateError');
+    const btn = document.getElementById('quickSubmitBtn');
+    successEl.style.display = 'none';
+    errorEl.style.display = 'none';
+    if (!slug) { errorEl.textContent = 'Please select an article first.'; errorEl.style.display = 'block'; return; }
+    if (commentary.length < 20) { errorEl.textContent = 'Please share at least a sentence of commentary.'; errorEl.style.display = 'block'; return; }
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    try {
+      const res = await fetch('/api/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          article: slug,
+          name: user.name,
+          title: user.title,
+          org: user.org,
+          yearsExp: user.yearsExp,
+          commentary,
+          fromDashboard: true
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        successEl.innerHTML = `✓ Validation submitted! <a href="/${slug}/" style="color:var(--green);text-decoration:underline;">View it live →</a>`;
+        successEl.style.display = 'block';
+        document.getElementById('quickCommentary').value = '';
+        clearBtn.click();
+        btn.textContent = 'Submit Another →';
+      } else {
+        errorEl.textContent = data.error || 'Submission failed. Please try again.';
+        errorEl.style.display = 'block';
+        btn.textContent = 'Submit Validation →';
+      }
+    } catch(e) {
+      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.style.display = 'block';
+      btn.textContent = 'Submit Validation →';
+    }
+    btn.disabled = false;
+  });
+
+  // Recommend submit
+  document.getElementById('recommendForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const successEl = document.getElementById('recommendSuccess');
+    successEl.style.display = 'none';
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    try {
+      const res = await fetch('/api/auth/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('recName').value.trim(),
+          email: document.getElementById('recEmail').value.trim(),
+          titleOrg: document.getElementById('recTitle').value.trim(),
+          note: document.getElementById('recNote').value.trim(),
+          fromName: user.name
+        })
+      });
+      if (res.ok) {
+        successEl.style.display = 'block';
+        document.getElementById('recName').value = '';
+        document.getElementById('recEmail').value = '';
+        document.getElementById('recTitle').value = '';
+        document.getElementById('recNote').value = '';
+      }
+    } catch(e) {}
+    btn.disabled = false;
+    btn.textContent = 'Send Invite →';
+  });
+
 })();
+
+function copyLink(url, btn) {
+  navigator.clipboard.writeText(url).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
 </script>
 </body>
 </html>
