@@ -782,6 +782,143 @@
     } catch(e) {}
   }
 
+  // ─── Inline Validations Section ───────────────────────────────────────────
+  async function injectInlineValidations() {
+    // Only run on article pages (paths with 2+ segments, e.g. /real-estate/article-slug/)
+    const pathParts = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    if (pathParts.length < 2) return;
+
+    try {
+      const res = await fetch(`/api/validations?slug=${articleSlug}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const validations = data.validations || [];
+
+      if (validations.length === 0) return;
+
+      // Article-level SCI and state
+      const sci = data.computedSCI;
+      const stateKey = data.assessmentState || 'UNREVIEWED';
+
+      const stateMap = {
+        'PEER_REVIEWED': { label: 'Peer Reviewed',       color: '#7c3aed' },
+        'GOLD_STANDARD': { label: 'Gold Standard',        color: '#f59e0b' },
+        'CONTESTED':     { label: 'Contested',            color: '#ef4444' },
+        'VALIDATED':     { label: 'Validated',            color: '#059669' },
+        'UNREVIEWED':    { label: 'Awaiting Validation',  color: '#6b7280' }
+      };
+      const stateInfo = stateMap[stateKey] || { label: stateKey, color: '#6b7280' };
+
+      const annoColors = {
+        'Corroborate': { border: '#00c853', badgeBg: '#e8f5e9', badgeColor: '#00c853' },
+        'Challenge':   { border: '#ff6d00', badgeBg: '#fff3e0', badgeColor: '#ff6d00' },
+        'Extend':      { border: '#2979ff', badgeBg: '#e3f2fd', badgeColor: '#2979ff' },
+        'Clarify':     { border: '#ffd600', badgeBg: '#fffde7', badgeColor: '#b8a000' }
+      };
+
+      function fmtDate(ts) {
+        if (!ts) return '';
+        const d = new Date(ts);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function computeInlineSCI(dims) {
+        if (!dims) return null;
+        const fa = dims.factualAccuracy || dims.factual || 0;
+        const sq = dims.sourceQuality   || dims.source   || 0;
+        const ar = dims.analyticalRigor || dims.rigor    || 0;
+        const ir = dims.industryRelevance || dims.relevance || 0;
+        const pu = dims.practitionerUtility || dims.utility || 0;
+        if (!fa && !sq && !ar && !ir && !pu) return null;
+        return ((fa * 0.30 + sq * 0.25 + ar * 0.20 + ir * 0.15 + pu * 0.10) / 5).toFixed(2);
+      }
+
+      // Build validation cards
+      let cardsHtml = '';
+      validations.forEach(function(v) {
+        const name       = v.contributorName || v.name || 'Industry Professional';
+        const role       = v.contributorRole || [v.title, v.organization].filter(Boolean).join(' · ') || '';
+        const ts         = v.timestamp;
+        const commentary = v.commentary || '';
+        const annotType  = v.annotationType || '';
+        const dims       = v.dimensions || v.scores || {};
+
+        // Normalize annotation type to title-case
+        const annoType = annotType ? (annotType.charAt(0).toUpperCase() + annotType.slice(1).toLowerCase()) : '';
+        const anno = annoColors[annoType] || { border: '#ccc', badgeBg: '#f4f4f4', badgeColor: '#666' };
+
+        const fa = dims.factualAccuracy  || dims.factual    || 0;
+        const sq = dims.sourceQuality    || dims.source     || 0;
+        const ar = dims.analyticalRigor  || dims.rigor      || 0;
+        const ir = dims.industryRelevance || dims.relevance || 0;
+        const pu = dims.practitionerUtility || dims.utility || 0;
+        const hasDims = fa || sq || ar || ir || pu;
+
+        // Commentary truncation at 400 chars
+        const MAX_CHARS = 400;
+        let commentaryHtml = '';
+        if (commentary.length > MAX_CHARS) {
+          const uid = 'giv-' + Math.random().toString(36).substr(2, 8);
+          const short = commentary.substring(0, MAX_CHARS);
+          commentaryHtml = `
+            <p id="${uid}-s" style="font-size:0.88rem;line-height:1.65;color:#333;margin:0;white-space:pre-wrap;">${short}…<span onclick="document.getElementById('${uid}-s').style.display='none';document.getElementById('${uid}-f').style.display='block';" style="color:#1a1a2e;font-weight:600;cursor:pointer;text-decoration:underline;"> Show full review ↓</span></p>
+            <p id="${uid}-f" style="display:none;font-size:0.88rem;line-height:1.65;color:#333;margin:0;white-space:pre-wrap;">${commentary}<span onclick="document.getElementById('${uid}-f').style.display='none';document.getElementById('${uid}-s').style.display='block';" style="color:#1a1a2e;font-weight:600;cursor:pointer;text-decoration:underline;"> Show less ↑</span></p>`;
+        } else {
+          commentaryHtml = `<p style="font-size:0.88rem;line-height:1.65;color:#333;margin:0;white-space:pre-wrap;">${commentary}</p>`;
+        }
+
+        cardsHtml += `
+          <div style="border:1px solid #e8e8f0;border-left:4px solid ${anno.border};border-radius:8px;padding:20px;margin-bottom:16px;background:#fff;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+              <strong style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;color:#1a1a2e;">${name}</strong>
+              ${role ? `<span style="font-size:0.8rem;color:#888;">${role}</span>` : ''}
+              ${annoType ? `<span style="font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:12px;background:${anno.badgeBg};color:${anno.badgeColor};letter-spacing:0.05em;text-transform:uppercase;">${annoType}</span>` : ''}
+              <span style="font-size:0.75rem;color:#aaa;margin-left:auto;">${fmtDate(ts)}</span>
+            </div>
+            ${hasDims ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"><div style="font-size:0.72rem;font-family:'Space Mono',monospace;background:#f4f4f8;padding:3px 8px;border-radius:4px;color:#444;">FA ${fa}/5 · SQ ${sq}/5 · AR ${ar}/5 · IR ${ir}/5 · PU ${pu}/5</div></div>` : ''}
+            ${commentaryHtml}
+          </div>`;
+      });
+
+      // Determine article-level SCI to show (use computed or derive from first validation)
+      let sciDisplay = sci;
+      if (!sciDisplay && validations.length > 0) {
+        sciDisplay = computeInlineSCI(validations[0].dimensions || validations[0].scores || {});
+      }
+      const n = validations.length;
+
+      const sectionHtml = `
+        <section id="ground-inline-validations" style="max-width:780px;margin:48px auto 0;padding:32px 24px;border-top:2px solid #e8e8f0;font-family:'Space Grotesk',sans-serif;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1a1a2e;margin:0;">GROUND Signal Intelligence</h2>
+            ${sciDisplay ? `<span style="background:#1a1a2e;color:#00ff87;font-family:'Space Mono',monospace;font-size:0.72rem;padding:3px 10px;border-radius:20px;">SCI ${sciDisplay}</span>` : ''}
+            <span style="background:${stateInfo.color};color:#fff;font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;">${stateInfo.label}</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:0.82rem;color:#666;margin-left:auto;">${n} peer review${n !== 1 ? 's' : ''}</span>
+          </div>
+          ${cardsHtml}
+          <div style="text-align:center;margin-top:24px;">
+            <button onclick="var fab=document.querySelector('#rm-trigger');if(fab)fab.click();" style="background:#00ff87;color:#1a1a2e;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;border:none;padding:12px 28px;border-radius:6px;cursor:pointer;">⊕ Review &amp; Validate This Article</button>
+          </div>
+        </section>`;
+
+      // Inject before <footer> or at end of <main>
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = sectionHtml;
+      const newSection = sectionEl.firstElementChild;
+
+      const footer = document.querySelector('footer');
+      const main   = document.querySelector('main');
+      if (footer && footer.parentNode) {
+        footer.parentNode.insertBefore(newSection, footer);
+      } else if (main) {
+        main.appendChild(newSection);
+      } else {
+        document.body.appendChild(newSection);
+      }
+
+    } catch(e) {}
+  }
+
   // ─── Init ─────────────────────────────────────────────────────────────────
   async function init() {
     articleSlug = getSlug();
@@ -791,6 +928,7 @@
     buildTrigger();
     wrapParagraphs();
     await loadExistingValidations();
+    await injectInlineValidations();
   }
 
   if (document.readyState === 'loading') {
