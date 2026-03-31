@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GROUND Admin — IN-KluSo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0A;
+    --cream: #F5F2EC;
+    --orange: #E85D26;
+    --green: #2E9B6F;
+    --blue: #2D6BE4;
+    --light-gray: #E8E8E0;
+    --mid-gray: #8A9BA8;
+    --red: #D64444;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--black);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header-logo { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #fff; text-transform: uppercase; text-decoration: none; }
+  .header-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--orange); text-transform: uppercase; }
+  .header-user { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid-gray); letter-spacing: 1px; }
+
+  /* ── Auth gate ── */
+  #auth-gate {
+    max-width: 420px;
+    margin: 80px auto;
+    background: #fff;
+    border: 2px solid var(--light-gray);
+    padding: 40px;
+    text-align: center;
+  }
+  #auth-gate h2 { font-family: 'DM Serif Display', serif; font-size: 24px; margin-bottom: 12px; }
+  #auth-gate p { font-size: 14px; color: var(--mid-gray); margin-bottom: 24px; }
+  .btn-primary {
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--black);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--orange); }
+
+  /* ── Main layout ── */
+  #admin-app { display: none; }
+  .admin-layout { display: flex; min-height: calc(100vh - 56px); }
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--light-gray);
+    padding: 24px 0;
+  }
+  .sidebar-item {
+    display: block;
+    padding: 10px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-item:hover { color: var(--black); background: var(--cream); }
+  .sidebar-item.active { color: var(--orange); border-left-color: var(--orange); background: var(--cream); }
+
+  /* ── Content ── */
+  .content { flex: 1; padding: 32px; overflow-y: auto; }
+
+  /* ── Stats row ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-number { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--black); }
+  .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mid-gray); margin-top: 6px; }
+
+  /* ── Section title ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--black); }
+  .section-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid-gray); }
+
+  /* ── Search ── */
+  .search-bar {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    border: 1px solid var(--light-gray);
+    background: #fff;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .search-bar:focus { border-color: var(--black); }
+
+  /* ── Table ── */
+  .data-table { width: 100%; border-collapse: collapse; background: #fff; }
+  .data-table th {
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    text-align: left;
+    border-bottom: 2px solid var(--light-gray);
+    background: #fafafa;
+    position: sticky;
+    top: 0;
+  }
+  .data-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--light-gray);
+    vertical-align: top;
+  }
+  .data-table tr:hover td { background: var(--cream); }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .badge-verified { background: #E8F5EE; color: var(--green); }
+  .badge-unverified { background: #FFF3EF; color: var(--orange); }
+  .badge-validated { background: #E8F0FD; color: var(--blue); }
+  .badge-peer-reviewed { background: #E8F5EE; color: var(--green); }
+  .badge-unreviewed { background: var(--cream); color: var(--mid-gray); }
+  .badge-contested { background: #FFF3EF; color: var(--orange); }
+
+  /* ── Level chips ── */
+  .level-chip { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--mid-gray); }
+
+  /* ── Validation detail expand ── */
+  .expand-row td { background: #fafafa !important; padding: 0 !important; }
+  .expand-inner { padding: 16px 20px; border-top: 1px solid var(--light-gray); }
+  .validator-entry {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .validator-entry:last-child { border-bottom: none; }
+  .validator-meta { min-width: 200px; }
+  .validator-name { font-weight: 600; font-size: 13px; }
+  .validator-creds { font-size: 11px; color: var(--mid-gray); margin-top: 2px; }
+  .validator-time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid-gray); margin-top: 4px; }
+  .score-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .score-chip {
+    padding: 3px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--cream);
+    border: 1px solid var(--light-gray);
+  }
+  .score-chip.high { background: #E8F5EE; border-color: #B8DFD0; color: var(--green); }
+  .score-chip.mid { background: #EEF2FD; border-color: #C5D3F8; color: var(--blue); }
+
+  /* ── Panel sections ── */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Loading ── */
+  .loading { text-align: center; padding: 60px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--mid-gray); letter-spacing: 2px; }
+  .loading::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+  @keyframes dots { 0%, 100% { content: ''; } 33% { content: '.'; } 66% { content: '..'; } 100% { content: '...'; } }
+
+  /* ── Article path link ── */
+  .article-link { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--black); text-decoration: none; }
+  .article-link:hover { color: var(--orange); text-decoration: underline; }
+
+  /* ── Empty state ── */
+  .empty { text-align: center; padding: 48px; color: var(--mid-gray); font-size: 13px; }
+
+  /* ── Refresh btn ── */
+  .refresh-btn {
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--light-gray);
+    cursor: pointer;
+  }
+  .refresh-btn:hover { background: var(--cream); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a href="https://ground.in-kluso.com" class="header-logo">← GROUND</a>
+    <span style="color:#333;">|</span>
+    <span class="header-title">Admin Dashboard</span>
+  </div>
+  <span class="header-user" id="admin-email-display"></span>
+</header>
+
+<!-- Auth gate -->
+<div id="auth-gate">
+  <h2>Admin Access</h2>
+  <p>Sign in with your GROUND admin account (jjaecheverri@gmail.com) to access the dashboard.</p>
+  <a href="/login/?return=/admin/" class="btn-primary">Sign In →</a>
+</div>
+
+<!-- Admin app -->
+<div id="admin-app">
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <span class="sidebar-item active" data-tab="overview">Overview</span>
+      <span class="sidebar-item" data-tab="users">Users</span>
+      <span class="sidebar-item" data-tab="validations">Validations</span>
+    </nav>
+    <div class="content" id="main-content">
+      <div class="loading">Loading admin data</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(async function() {
+  // ── Auth check ──────────────────────────────────────────────────────────
+  let adminData = null;
+
+  async function checkAuth() {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      if (!res.ok) return false;
+      const user = await res.json();
+      return user.email === 'jjaecheverri@gmail.com' ? user : false;
+    } catch(e) { return false; }
+  }
+
+  async function loadAdminData() {
+    const res = await fetch('/api/admin', { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to load admin data: ' + res.status);
+    return await res.json();
+  }
+
+  // ── Level helper ────────────────────────────────────────────────────────
+  function getLevel(count) {
+    if (count >= 30) return 'GROUND Expert';
+    if (count >= 15) return 'Principal';
+    if (count >= 5) return 'Senior Analyst';
+    if (count >= 1) return 'Field Analyst';
+    return 'Signal Watcher';
+  }
+
+  // ── Format date ─────────────────────────────────────────────────────────
+  function fmt(ts) {
+    if (!ts) return '—';
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // ── Format time ago ─────────────────────────────────────────────────────
+  function timeAgo(ts) {
+    if (!ts) return '—';
+    const diff = Math.floor((Date.now() - new Date(ts)) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    return Math.floor(diff/86400) + 'd ago';
+  }
+
+  // ── Article URL from slug ────────────────────────────────────────────────
+  function slugToUrl(slug) {
+    return '/' + slug.replace('--', '/') + '/';
+  }
+
+  function slugToTitle(slug) {
+    return slug.replace(/^[^-]+--([\w-]+)$/, '$1').replace(/-/g, ' ');
+  }
+
+  // ── State badge ─────────────────────────────────────────────────────────
+  function stateBadge(state) {
+    const map = {
+      VALIDATED: 'badge-validated',
+      PEER_REVIEWED: 'badge-peer-reviewed',
+      UNREVIEWED: 'badge-unreviewed',
+      CONTESTED: 'badge-contested',
+      GOLD_STANDARD: 'badge-peer-reviewed'
+    };
+    const labels = {
+      VALIDATED: 'Validated',
+      PEER_REVIEWED: 'Peer Reviewed',
+      UNREVIEWED: 'Unreviewed',
+      CONTESTED: 'Contested',
+      GOLD_STANDARD: 'Gold Standard'
+    };
+    const cls = map[state] || 'badge-unreviewed';
+    return `<span class="badge ${cls}">${labels[state] || state}</span>`;
+  }
+
+  // ── Render Overview ──────────────────────────────────────────────────────
+  function renderOverview(data) {
+    const { summary, users, articles } = data;
+    const recentValidations = articles
+      .flatMap(a => (a.validations || []).map(v => ({ ...v, articleSlug: a.articleSlug, articleState: a.assessmentState })))
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      .slice(0, 10);
+
+    return `
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number">${summary.totalUsers}</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${summary.verifiedUsers}</div>
+          <div class="stat-label">Verified</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${summary.totalValidations}</div>
+          <div class="stat-label">Validations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${summary.articlesValidated}</div>
+          <div class="stat-label">Articles Reviewed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${summary.avgSCI || '—'}</div>
+          <div class="stat-label">Avg SCI</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <div>
+          <div class="section-header">
+            <span class="section-title">Recent Activity</span>
+          </div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Validator</th>
+              <th>Article</th>
+              <th>SCI</th>
+              <th>When</th>
+            </tr></thead>
+            <tbody>
+              ${recentValidations.length === 0 ? `<tr><td colspan="4" class="empty">No validations yet</td></tr>` :
+                recentValidations.map(v => `
+                  <tr>
+                    <td><strong>${v.name || '—'}</strong><br><span style="font-size:11px;color:var(--mid-gray);">${v.title || ''}</span></td>
+                    <td><a href="${slugToUrl(v.articleSlug)}" target="_blank" class="article-link">${slugToTitle(v.articleSlug)}</a></td>
+                    <td>${computeSCILocal(v.scores) || '—'}</td>
+                    <td style="white-space:nowrap;">${timeAgo(v.timestamp)}</td>
+                  </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="section-header">
+            <span class="section-title">Top Contributors</span>
+          </div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Level</th>
+              <th>Reviews</th>
+            </tr></thead>
+            <tbody>
+              ${users.filter(u => u.validationCount > 0).slice(0, 8).map(u => `
+                <tr>
+                  <td><strong>${u.name || '—'}</strong></td>
+                  <td style="font-size:11px;font-family:'JetBrains Mono',monospace;">${u.email}</td>
+                  <td><span class="level-chip">${getLevel(u.validationCount || 0)}</span></td>
+                  <td><strong>${u.validationCount || 0}</strong></td>
+                </tr>`).join('')}
+              ${users.filter(u => u.validationCount > 0).length === 0 ? `<tr><td colspan="4" class="empty">No validations yet</td></tr>` : ''}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  // ── Render Users ─────────────────────────────────────────────────────────
+  function renderUsers(data, filter = '') {
+    const users = data.users.filter(u =>
+      !filter || u.name?.toLowerCase().includes(filter) || u.email?.toLowerCase().includes(filter)
+    );
+
+    return `
+      <div class="section-header">
+        <span class="section-title">All Users</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="section-count">${users.length} of ${data.users.length}</span>
+          <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
+        </div>
+      </div>
+      <input type="text" class="search-bar" placeholder="Search by name or email…" id="user-search" oninput="filterUsers(this.value)" value="${filter}">
+      <table class="data-table" id="users-table">
+        <thead><tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role / Title</th>
+          <th>Level</th>
+          <th>Validations</th>
+          <th>Verified</th>
+          <th>Joined</th>
+        </tr></thead>
+        <tbody>
+          ${users.length === 0 ? `<tr><td colspan="7" class="empty">No users found</td></tr>` :
+            users.map(u => `
+              <tr>
+                <td><strong>${u.name || '—'}</strong></td>
+                <td style="font-family:'JetBrains Mono',monospace;font-size:11px;">${u.email}</td>
+                <td style="font-size:12px;color:var(--mid-gray);">${[u.title, u.organization].filter(Boolean).join(' · ') || '—'}</td>
+                <td><span class="level-chip">${getLevel(u.validationCount || 0)}</span></td>
+                <td><strong>${u.validationCount || 0}</strong></td>
+                <td>${u.verified ? '<span class="badge badge-verified">✓ Verified</span>' : '<span class="badge badge-unverified">Pending</span>'}</td>
+                <td style="font-size:12px;white-space:nowrap;">${fmt(u.createdAt)}</td>
+              </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  // ── Render Validations ────────────────────────────────────────────────────
+  function renderValidations(data, filter = '') {
+    const articles = data.articles.filter(a =>
+      !filter || a.articleSlug.toLowerCase().includes(filter)
+    );
+
+    return `
+      <div class="section-header">
+        <span class="section-title">Validated Articles</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="section-count">${articles.length} articles</span>
+          <button class="refresh-btn" onclick="refreshData()">↻ Refresh</button>
+        </div>
+      </div>
+      <input type="text" class="search-bar" placeholder="Search by article slug…" id="val-search" oninput="filterValidations(this.value)" value="${filter}">
+      <table class="data-table">
+        <thead><tr>
+          <th>Article</th>
+          <th>Vertical</th>
+          <th>Status</th>
+          <th>SCI</th>
+          <th>Reviews</th>
+          <th>Validators</th>
+          <th>Last Review</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="val-tbody">
+          ${articles.length === 0 ? `<tr><td colspan="8" class="empty">No validated articles</td></tr>` :
+            articles.map((a, i) => {
+              const vertical = a.articleSlug.split('--')[0];
+              const lastTs = a.validations.map(v => v.timestamp).sort().pop();
+              return `
+                <tr id="val-row-${i}">
+                  <td>
+                    <a href="${slugToUrl(a.articleSlug)}" target="_blank" class="article-link">${slugToTitle(a.articleSlug)}</a>
+                  </td>
+                  <td style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--mid-gray);">${vertical}</td>
+                  <td>${stateBadge(a.assessmentState)}</td>
+                  <td style="font-family:'JetBrains Mono',monospace;">${a.computedSCI || '—'}</td>
+                  <td><strong>${a.validationCount}</strong></td>
+                  <td style="font-size:12px;">${a.validations.map(v => v.name).join(', ') || '—'}</td>
+                  <td style="font-size:12px;white-space:nowrap;">${timeAgo(lastTs)}</td>
+                  <td><button onclick="toggleExpand(${i})" style="font-size:11px;cursor:pointer;background:none;border:none;color:var(--mid-gray);">▾ Details</button></td>
+                </tr>
+                <tr id="val-expand-${i}" style="display:none;" class="expand-row">
+                  <td colspan="8">
+                    <div class="expand-inner">
+                      ${a.validations.map(v => `
+                        <div class="validator-entry">
+                          <div class="validator-meta">
+                            <div class="validator-name">${v.name || '—'}</div>
+                            <div class="validator-creds">${[v.title, v.organization].filter(Boolean).join(' · ')}</div>
+                            <div class="validator-time">${timeAgo(v.timestamp)} · ${v.commentaryLength} chars · ${v.annotationCount} annotations</div>
+                          </div>
+                          <div class="score-chips">
+                            ${v.scores ? Object.entries({factual:'Factual',source:'Source',rigor:'Rigor',relevance:'Relevance',utility:'Utility'}).map(([k,l]) => {
+                              const s = v.scores[k] || 0;
+                              return s > 0 ? `<span class="score-chip ${s>=4?'high':s>=3?'mid':''}">${l}: ${s}/5</span>` : '';
+                            }).join('') : ''}
+                            ${computeSCILocal(v.scores) ? `<span class="score-chip high">SCI: ${computeSCILocal(v.scores)}</span>` : ''}
+                          </div>
+                        </div>`).join('')}
+                    </div>
+                  </td>
+                </tr>`;
+            }).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  // ── SCI calc (client-side) ─────────────────────────────────────────────
+  function computeSCILocal(s) {
+    if (!s) return null;
+    const f = s.factual||0, so = s.source||0, r = s.rigor||0, rel = s.relevance||0, u = s.utility||0;
+    if ([f,so,r,rel,u].every(v => v === 0)) return null;
+    return ((f*0.30 + so*0.25 + r*0.20 + rel*0.15 + u*0.10) / 5).toFixed(2);
+  }
+
+  // ── Tab switching ────────────────────────────────────────────────────────
+  let currentTab = 'overview';
+  window.switchTab = function(tab) {
+    document.querySelectorAll('.sidebar-item').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+    currentTab = tab;
+    renderTab(tab);
+  };
+
+  function renderTab(tab, filter = '') {
+    const content = document.getElementById('main-content');
+    if (!adminData) { content.innerHTML = '<div class="loading">Loading admin data</div>'; return; }
+    if (tab === 'overview') content.innerHTML = renderOverview(adminData);
+    else if (tab === 'users') content.innerHTML = renderUsers(adminData, filter);
+    else if (tab === 'validations') content.innerHTML = renderValidations(adminData, filter);
+  }
+
+  window.filterUsers = function(val) { renderTab('users', val.toLowerCase()); };
+  window.filterValidations = function(val) { renderTab('validations', val.toLowerCase()); };
+
+  window.toggleExpand = function(i) {
+    const row = document.getElementById('val-expand-' + i);
+    if (row) row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+  };
+
+  window.refreshData = async function() {
+    document.getElementById('main-content').innerHTML = '<div class="loading">Refreshing</div>';
+    try {
+      adminData = await loadAdminData();
+      renderTab(currentTab);
+    } catch(e) {
+      document.getElementById('main-content').innerHTML = '<div class="empty">Error loading data: ' + e.message + '</div>';
+    }
+  };
+
+  // ── Sidebar click ────────────────────────────────────────────────────────
+  document.querySelectorAll('.sidebar-item').forEach(el => {
+    el.addEventListener('click', () => switchTab(el.dataset.tab));
+  });
+
+  // ── Boot ─────────────────────────────────────────────────────────────────
+  const user = await checkAuth();
+  if (!user) {
+    document.getElementById('auth-gate').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'block';
+  document.getElementById('admin-email-display').textContent = user.email;
+
+  try {
+    adminData = await loadAdminData();
+    renderTab('overview');
+  } catch(e) {
+    document.getElementById('main-content').innerHTML = `<div class="empty">Error: ${e.message}<br><br>Make sure you're logged in as jjaecheverri@gmail.com</div>`;
+  }
+})();
+</script>
+</body>
+</html>
