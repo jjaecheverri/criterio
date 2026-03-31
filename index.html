@@ -4,12 +4,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GROUND by IN·KluSo | Professional Intelligence</title>
-<meta name="description" content="GROUND by IN·KluSo delivers professional-validated intelligence across Real Estate, Retail, and Brand verticals. 30 signals indexed, 12 awaiting validation.">
+<meta name="description" content="GROUND by IN·KluSo delivers professional-validated intelligence across Real Estate, Retail, Brand, Food & Agriculture, and Family & Education verticals. 89 signals indexed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+html{scroll-behavior:smooth;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100vh;}
+
+/* Card base styles */
+.signal-card{
+  border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;
+  transition:transform 200ms ease, border-left 200ms ease, box-shadow 200ms ease;
+  border-left:3px solid transparent;
+  opacity:0;transform:translateY(20px);
+}
+.signal-card.visible{
+  opacity:1;transform:translateY(0);
+  transition:opacity 400ms ease, transform 400ms ease, border-left 200ms ease, box-shadow 200ms ease;
+}
+.signal-card:hover{
+  transform:scale(1.02) !important;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.signal-card[data-vertical="real-estate"]:hover{border-left-color:#2D6BE4;}
+.signal-card[data-vertical="retail"]:hover{border-left-color:#C4317A;}
+.signal-card[data-vertical="brand"]:hover{border-left-color:#E8602C;}
+.signal-card[data-vertical="food-ag"]:hover{border-left-color:#2E9B6F;}
+.signal-card[data-vertical="family-ed"]:hover{border-left-color:#C9A84C;}
+
+/* Pending cards */
+.signal-card.pending{opacity:0.6;}
+.signal-card.pending.visible{opacity:0.6;}
+
+/* Filter transitions */
+.signal-card.filter-hidden{
+  display:none !important;
+}
+
+/* NEW badge */
+.new-badge{
+  display:inline-block;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  color:#fff;
+  background:#E8602C;
+  padding:2px 6px;
+  margin-left:8px;
+  animation:pulse-badge 2s ease-in-out infinite;
+  vertical-align:middle;
+}
+@keyframes pulse-badge{
+  0%,100%{opacity:1;}
+  50%{opacity:0.5;}
+}
+
+/* Filter pills */
+.filter-bar{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;align-items:center;
+}
+.filter-pill{
+  font-size:12px;font-weight:600;letter-spacing:0.08em;
+  padding:8px 16px;border:1px solid #333;background:transparent;
+  color:#888;cursor:pointer;transition:all 200ms ease;
+  text-transform:uppercase;font-family:"Inter",sans-serif;
+}
+.filter-pill:hover{border-color:#666;color:#fff;}
+.filter-pill.active{border-color:#fff;color:#fff;background:#1a1a1a;}
+
+/* Search bar */
+.search-bar{
+  background:#111;border:1px solid #2a2a2a;color:#fff;
+  font-family:"Inter",sans-serif;font-size:14px;
+  padding:10px 16px;width:100%;max-width:400px;
+  outline:none;transition:border-color 200ms ease;
+}
+.search-bar::placeholder{color:#555;}
+.search-bar:focus{border-color:#444;}
+
+/* Counter animation */
+.counter-value{
+  font-size:28px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Section grid */
+.signal-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;
+}
+
+/* Section header */
+.section-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:24px;
+  padding-bottom:16px;border-bottom:1px solid #1a1a1a;
+}
 </style>
 </head>
 <body>
@@ -31,22 +120,41 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;font-weight:700;letter-spacing:0.2em;color:#444;text-transform:uppercase;">Signal Intelligence</span>
   </div>
   <h1 style="font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:16px;">Professional-Validated Intelligence</h1>
-  <p style="font-size:15px;color:#888;max-width:600px;line-height:1.6;margin-bottom:32px;">GROUND indexes professional signals across real estate, retail, and brand intelligence. Each signal is validated by registered contributors before publication.</p>
-  <div style="display:flex;gap:32px;">
-    <div><span style="font-size:28px;font-weight:700;">30</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">TOTAL SIGNALS</span></div>
-    <div><span style="font-size:28px;font-weight:700;color:#4a9;">18</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">VALIDATED</span></div>
-    <div><span style="font-size:28px;font-weight:700;color:#888;">12</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">PENDING</span></div>
+  <p style="font-size:15px;color:#888;max-width:600px;line-height:1.6;margin-bottom:32px;">GROUND indexes professional signals across real estate, retail, brand, food &amp; agriculture, and family &amp; education intelligence. Each signal is validated by registered contributors before publication.</p>
+  <div id="hero-counters" style="display:flex;gap:32px;flex-wrap:wrap;">
+    <div><span class="counter-value" data-target="89">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">TOTAL SIGNALS</span></div>
+    <div><span class="counter-value" data-target="21" style="color:#2D6BE4;">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">REAL ESTATE</span></div>
+    <div><span class="counter-value" data-target="22" style="color:#C4317A;">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">RETAIL</span></div>
+    <div><span class="counter-value" data-target="22" style="color:#E8602C;">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">BRAND</span></div>
+    <div><span class="counter-value" data-target="3" style="color:#2E9B6F;">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">FOOD &amp; AG</span></div>
+    <div><span class="counter-value" data-target="3" style="color:#C9A84C;">0</span><span style="font-size:12px;color:#555;display:block;margin-top:2px;letter-spacing:0.08em;">FAMILY &amp; ED</span></div>
   </div>
 </header>
 
 <main style="max-width:1200px;margin:0 auto;padding:0 24px 80px;">
-  <div style="margin-bottom:48px;">
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #1a1a1a;">
-    <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#2D6BE4;">Real Estate</h2>
-    <a href="/real-estate/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 10 →</a>
+
+  <!-- Search + Filters -->
+  <div style="margin-bottom:40px;">
+    <input type="text" class="search-bar" id="search-input" placeholder="Search signals by title...">
+    <div class="filter-bar" style="margin-top:16px;">
+      <button class="filter-pill active" data-filter="all">ALL</button>
+      <button class="filter-pill" data-filter="real-estate" style="--c:#2D6BE4;">REAL ESTATE</button>
+      <button class="filter-pill" data-filter="retail" style="--c:#C4317A;">RETAIL</button>
+      <button class="filter-pill" data-filter="brand" style="--c:#E8602C;">BRAND</button>
+      <button class="filter-pill" data-filter="food-ag" style="--c:#2E9B6F;">FOOD &amp; AG</button>
+      <button class="filter-pill" data-filter="family-ed" style="--c:#C9A84C;">FAMILY &amp; ED</button>
+    </div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
-    <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+
+  <!-- ═══════════════ REAL ESTATE ═══════════════ -->
+  <div style="margin-bottom:48px;" data-section="real-estate">
+  <div class="section-header">
+    <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#2D6BE4;">Real Estate</h2>
+    <a href="/real-estate/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 21 &rarr;</a>
+  </div>
+  <div class="signal-grid">
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-001</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -56,10 +164,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Building permits in Benton and Washington Counties fell to $140.4 million in H2 2025 — the lowest since 2017. Sewer capacity concerns are em...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-infrastructure-caps-development-2026/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-infrastructure-caps-development-2026/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-002</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -69,10 +178,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">National office vacancy rates closed 2025 between 18.2% and 20.5%. NWA's overall commercial vacancy is 6.3%. The gap is not luck — it is a s...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-commercial-vacancy-national-divergence/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-commercial-vacancy-national-divergence/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-003</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -82,10 +192,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Multifamily vacancy in NWA climbed to 5.8% in H2 2025, a 2.5-percentage-point increase from the same period in 2024. New supply is entering ...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-multifamily-vacancy-supply-correction/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-multifamily-vacancy-supply-correction/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-004</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -95,10 +206,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Median prices rose 3-5% across NWA counties while days on market stretched 15%. Listings surged 68% in two years. The market rewards precisi...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-residential-pricing-precision-market/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-residential-pricing-precision-market/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-005</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -108,10 +220,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Three Fortune 500 headquarters plus a vendor ecosystem of hundreds of companies. NWA's economy is uniquely concentrated and uniquely resilie...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-employer-concentration-real-estate-risk/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-employer-concentration-real-estate-risk/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-006</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -121,10 +234,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Benton County's median home price is $386,565. Washington County's is $350,620. The $36,000 gap reflects different demand drivers, different...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/real-estate/nwa-home-price-divergence-county-analysis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/real-estate/nwa-home-price-divergence-county-analysis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card pending" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-007</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -136,8 +250,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-008</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -149,8 +265,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-009</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -162,8 +280,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="real-estate" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-010</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
@@ -175,16 +295,96 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
 </article>
+
+    <!-- NEW RE-017 -->
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-017</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#2D6BE4;">SCI 0.89</span>
   </div>
-</div><div style="margin-bottom:48px;">
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #1a1a1a;">
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/real-estate/insurance-premium-shock-migration-map/" style="color:#fff;text-decoration:none;">The Insurance Tax: How Premium Shock Is Redrawing America's Migration Map</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/real-estate/insurance-premium-shock-migration-map/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW RE-018 -->
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-018</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#2D6BE4;">SCI 0.91</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/real-estate/cmbs-office-maturity-wall-default-crisis/" style="color:#fff;text-decoration:none;">The $100 Billion Maturity Wall: Office Debt Default Is No Longer a Forecast</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/real-estate/cmbs-office-maturity-wall-default-crisis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW RE-019 -->
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-019</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#2D6BE4;">SCI 0.90</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/real-estate/institutional-sfr-retreat-build-to-rent-pivot/" style="color:#fff;text-decoration:none;">Wall Street Exits the Neighborhood: The Institutional SFR Retreat and Build-to-Rent</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/real-estate/institutional-sfr-retreat-build-to-rent-pivot/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW RE-020 -->
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-020</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#2D6BE4;">SCI 0.88</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/real-estate/industrial-warehouse-overbuilding-vacancy-correction/" style="color:#fff;text-decoration:none;">189 Million Square Feet of Empty Promise: The Industrial Overbuilding Correction</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/real-estate/industrial-warehouse-overbuilding-vacancy-correction/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW RE-021 -->
+    <article class="signal-card" data-vertical="real-estate" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2D6BE4;">RE-021</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Real Estate</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#2D6BE4;">SCI 0.89</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/real-estate/construction-labor-shortage-housing-price-floor/" style="color:#fff;text-decoration:none;">The $10.8 Billion Bottleneck: Construction Labor as Housing's Price Floor</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/real-estate/construction-labor-shortage-housing-price-floor/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2D6BE4;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+  </div>
+</div>
+
+  <!-- ═══════════════ RETAIL ═══════════════ -->
+  <div style="margin-bottom:48px;" data-section="retail">
+  <div class="section-header">
     <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#C4317A;">Retail</h2>
-    <a href="/retail/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 10 →</a>
+    <a href="/retail/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 22 &rarr;</a>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
-    <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div class="signal-grid">
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-001</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -194,23 +394,25 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Retail media spending is projected to exceed $60 billion in the US. For CPG vendors, this represents a new mandatory cost layer on top of ex...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/retail-media-60b-vendor-margin-risk/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/retail-media-60b-vendor-margin-risk/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-002</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
     <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.90</span>
   </div>
-  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="color:#fff;text-decoration:none;">OTIF Compliance Is the Hidden P&L Line That Determines Vendor Survival: A Supply</a></h3>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="color:#fff;text-decoration:none;">OTIF Compliance Is the Hidden P&amp;L Line That Determines Vendor Survival: A Supply</a></h3>
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Major retailers set on-time in-full targets at 97-98%. The gap between 96% and 98% is not two percentage points — it is the difference betwe...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/otif-compliance-hidden-cost-vendor-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-003</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -220,10 +422,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Every linear inch of shelf in a major retailer has a revenue target. Category management is the discipline of proving that your product meet...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/category-management-drives-shelf-space/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/category-management-drives-shelf-space/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-004</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -233,10 +436,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">In-store demonstrations convert at rates 5-10x higher than digital advertising. Endcap displays increase category sales by 30-50% during pro...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/shopper-marketing-physical-digital-gap/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/shopper-marketing-physical-digital-gap/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-005</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -246,10 +450,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Private label now commands 20-25% dollar share across US grocery categories, with unit share significantly higher. The growth is not a reces...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/private-label-growth-brand-margin-pressure/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/private-label-growth-brand-margin-pressure/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-006</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -259,10 +464,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Grocery e-commerce has reached 10-15% of total US grocery sales. The fulfillment costs — picking, packing, last-mile delivery, cold chain ma...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/retail/ecommerce-fulfillment-economics-profitability/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/retail/ecommerce-fulfillment-economics-profitability/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card pending" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-007</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -274,8 +480,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-008</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -287,21 +495,25 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-009</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
     <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.92</span>
   </div>
   <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><span style="color:#555;">The Walmart Vendor Ecosystem: An Economic Analysis of the World's Largest Buyer-</span></h3>
-  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Walmart's US revenue exceeds $440 billion. The vendor ecosystem that supplies it — from P&G to single-product startups — represents one of t...</p>
+  <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Walmart's US revenue exceeds $440 billion. The vendor ecosystem that supplies it — from P&amp;G to single-product startups — represents one of t...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="retail" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">EC-010</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
@@ -313,16 +525,96 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
 </article>
+
+    <!-- NEW WM-003 -->
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">WM-003</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.89</span>
   </div>
-</div><div style="margin-bottom:48px;">
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid #1a1a1a;">
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/walmart/walmart-ai-automated-vendor-negotiation-machine/" style="color:#fff;text-decoration:none;">The Sixty-Eight Percent Machine: How Walmart Automated the Vendor Handshake</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/retail/walmart/walmart-ai-automated-vendor-negotiation-machine/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW WM-004 -->
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">WM-004</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.91</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/walmart/walmart-connect-advertising-tollbooth-supplier-cost/" style="color:#fff;text-decoration:none;">The $6.4 Billion Tollbooth: Walmart Connect and the New Cost of Shelf Visibility</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/retail/walmart/walmart-connect-advertising-tollbooth-supplier-cost/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW WM-005 -->
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">WM-005</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.88</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/walmart/walmart-tariff-squeeze-supplier-cost-absorption/" style="color:#fff;text-decoration:none;">The Tariff Squeeze: Who Actually Absorbs the Cost When Walmart Says No</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/retail/walmart/walmart-tariff-squeeze-supplier-cost-absorption/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW WM-006 -->
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">WM-006</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.87</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/walmart/walmart-marketplace-200k-sellers-china-dependency/" style="color:#fff;text-decoration:none;">Two Hundred Thousand Sellers and a Chinese Question</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/retail/walmart/walmart-marketplace-200k-sellers-china-dependency/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW WM-007 -->
+    <article class="signal-card" data-vertical="retail" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C4317A;">WM-007</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Retail</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#C4317A;">SCI 0.90</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/retail/walmart/walmart-store-automation-capital-peak-economics/" style="color:#fff;text-decoration:none;">Sixty-Five Percent Automated: The Capital Peak That Reshapes Store Economics</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/retail/walmart/walmart-store-automation-capital-peak-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C4317A;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+  </div>
+</div>
+
+  <!-- ═══════════════ BRAND ═══════════════ -->
+  <div style="margin-bottom:48px;" data-section="brand">
+  <div class="section-header">
     <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#E8602C;">Brand</h2>
-    <a href="/brand/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 10 →</a>
+    <a href="/brand/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 22 &rarr;</a>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
-    <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+  <div class="signal-grid">
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-001</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -332,10 +624,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Across consumer categories, brand visual identities are converging toward shared aesthetic conventions. Geometric sans-serif wordmarks, grad...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/brand-distinctiveness-erosion-market-analysis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/brand-distinctiveness-erosion-market-analysis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-002</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -345,10 +638,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">AI-generated summaries now appear in approximately 60% of Google search results. For destination marketing organizations, the traveler's fir...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/destination-branding-search-disintermediation/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/destination-branding-search-disintermediation/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-003</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -358,10 +652,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Brand consistency increases revenue by 10-20% on average, according to multiple studies. Achieving consistency requires an identity system —...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/brand-identity-systems-scaling-consistency/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/brand-identity-systems-scaling-consistency/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-004</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -371,10 +666,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Travel scam losses reached an estimated $13 billion in 2025. Fake reviews, fabricated listings, and AI-generated guidebooks with invented at...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/travel-industry-trust-gap-reviews-authenticity/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/travel-industry-trust-gap-reviews-authenticity/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-005</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -384,10 +680,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">Visual identity gets the investment. Verbal identity gets the afterthought. But brand voice — the distinctive way a brand communicates acros...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/brand-voice-as-competitive-asset/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/brand-voice-as-competitive-asset/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-006</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -397,10 +694,11 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
   <p style="margin:0 0 16px;font-size:13px;color:#666;line-height:1.6;">The creative brief — a one-to-two-page strategic document that defines what a campaign must achieve — determines the quality of the creative...</p>
   <div style="display:flex;align-items:center;justify-content:space-between;">
     <span style="font-size:11px;color:#444;">2026-03-01</span>
-    <a href="/brand/creative-brief-quality-campaign-performance/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL →</a>
+    <a href="/brand/creative-brief-quality-campaign-performance/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
   </div>
-  
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+</article>
+
+    <article class="signal-card pending" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-007</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -412,8 +710,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-008</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -425,8 +725,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-009</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -438,8 +740,10 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
-</article><article style="border:1px solid #1a1a1a;padding:28px;opacity:0.6;background:#0d0d0d;">
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
+</article>
+
+    <article class="signal-card pending" data-vertical="brand" data-date="2026-03-01">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
     <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-010</span>
     <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
@@ -451,61 +755,130 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
     <span style="font-size:11px;color:#444;">2026-03-01</span>
     <span style="font-size:10px;font-weight:700;letter-spacing:0.12em;color:#666;border:1px solid #333;padding:2px 8px;text-transform:uppercase;">AWAITING VALIDATION</span>
   </div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE →</a></div>
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid #1a1a1a;"><a href="/register/" style="font-size:12px;color:#666;text-decoration:none;letter-spacing:0.06em;">CLAIM TO VALIDATE &rarr;</a></div>
 </article>
+
+    <!-- NEW BD-018 -->
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-018</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#E8602C;">SCI 0.87</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/brand/ai-content-authenticity-tax-brand-trust-erosion/" style="color:#fff;text-decoration:none;">The Authenticity Tax: AI Content Is Eroding Brand Trust at Scale</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/brand/ai-content-authenticity-tax-brand-trust-erosion/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW BD-019 -->
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-019</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#E8602C;">SCI 0.91</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/brand/programmatic-waste-26-billion-brand-safety-economics/" style="color:#fff;text-decoration:none;">Twenty-Six Billion Dollars of Nothing: Programmatic Brand Safety Failure</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/brand/programmatic-waste-26-billion-brand-safety-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW BD-020 -->
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-020</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#E8602C;">SCI 0.88</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/brand/dtc-reckoning-acquisition-cost-channel-economics/" style="color:#fff;text-decoration:none;">The DTC Reckoning: Customer Acquisition Economics Broke the Model</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/brand/dtc-reckoning-acquisition-cost-channel-economics/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW BD-021 -->
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-021</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#E8602C;">SCI 0.87</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/brand/sonic-branding-billion-dollar-audio-identity-gap/" style="color:#fff;text-decoration:none;">The Sound of Money: Sonic Branding's Billion-Dollar Identity Gap</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/brand/sonic-branding-billion-dollar-audio-identity-gap/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
+    <!-- NEW BD-022 -->
+    <article class="signal-card" data-vertical="brand" data-date="2026-03-30">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#E8602C;">BD-022</span>
+    <span style="font-size:10px;color:#444;letter-spacing:0.1em;text-transform:uppercase;">Brand</span>
+    <span class="new-badge">NEW</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;color:#E8602C;">SCI 0.90</span>
+  </div>
+  <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;letter-spacing:-0.01em;"><a href="/brand/greenwashing-penalty-regime-sustainability-branding-liability/" style="color:#fff;text-decoration:none;">The Greenwashing Penalty Regime: $25M Fines Rewriting Sustainability Branding</a></h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:11px;color:#444;">2026-03-30</span>
+    <a href="/brand/greenwashing-penalty-regime-sustainability-branding-liability/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#E8602C;text-decoration:none;">READ SIGNAL &rarr;</a>
+  </div>
+</article>
+
   </div>
 </div>
 
-  <!-- FOOD & AGRICULTURE VERTICAL -->
-  <section style="max-width:1200px;margin:0 auto;padding:60px 24px 0;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2E9B6F;margin-bottom:8px;">NEW VERTICAL</div>
-        <h2 style="font-size:28px;font-weight:700;letter-spacing:-0.02em;">Food &amp; <span style="color:#2E9B6F;">Agriculture</span></h2>
-        <p style="font-size:13px;color:#555;margin-top:8px;">Signal intelligence on food systems, agricultural economics, and supply chains.</p>
-      </div>
-      <a href="/food-agriculture/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2E9B6F;text-decoration:none;border:1px solid #2E9B6F;padding:8px 16px;">VIEW ALL &rarr;</a>
+  <!-- ═══════════════ FOOD & AGRICULTURE ═══════════════ -->
+  <section style="margin-bottom:48px;" data-section="food-ag">
+    <div class="section-header">
+      <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#2E9B6F;">Food &amp; Agriculture</h2>
+      <a href="/food-agriculture/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 3 &rarr;</a>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+    <div class="signal-grid">
+      <article class="signal-card" data-vertical="food-ag" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2E9B6F;">FA-001</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#2E9B6F;">SCI 0.88</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/food-agriculture/farmers-market-economics-premium-myth/" style="color:#fff;text-decoration:none;">Farmers Markets Charge 40-80% Premium and Most Isn't Going to Farmers</a></h3>
         <a href="/food-agriculture/farmers-market-economics-premium-myth/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2E9B6F;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
       </article>
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+      <article class="signal-card" data-vertical="food-ag" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2E9B6F;">FA-002</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#2E9B6F;">SCI 0.87</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/food-agriculture/organic-label-premium-consumer-confusion/" style="color:#fff;text-decoration:none;">Organic Premium Is 30-100% But Understanding Is Below 50%</a></h3>
         <a href="/food-agriculture/organic-label-premium-consumer-confusion/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2E9B6F;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
       </article>
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+      <article class="signal-card" data-vertical="food-ag" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#2E9B6F;">FA-003</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#2E9B6F;">SCI 0.90</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/food-agriculture/food-waste-supply-chain-130-billion/" style="color:#fff;text-decoration:none;">$130B in Food Wasted Annually — Supply Chain Incentives Encourage It</a></h3>
         <a href="/food-agriculture/food-waste-supply-chain-130-billion/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#2E9B6F;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
       </article>
     </div>
   </section>
-  <!-- FAMILY & EDUCATION VERTICAL -->
-  <section style="max-width:1200px;margin:0 auto;padding:60px 24px 0;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C9A84C;margin-bottom:8px;">NEW VERTICAL</div>
-        <h2 style="font-size:28px;font-weight:700;letter-spacing:-0.02em;">Family &amp; <span style="color:#C9A84C;">Education</span></h2>
-        <p style="font-size:13px;color:#555;margin-top:8px;">Signal intelligence on childcare, education economics, youth industries, and family financial decisions.</p>
-      </div>
-      <a href="/family-education/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C9A84C;text-decoration:none;border:1px solid #C9A84C;padding:8px 16px;">VIEW ALL &rarr;</a>
+
+  <!-- ═══════════════ FAMILY & EDUCATION ═══════════════ -->
+  <section style="margin-bottom:48px;" data-section="family-ed">
+    <div class="section-header">
+      <h2 style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#C9A84C;">Family &amp; Education</h2>
+      <a href="/family-education/" style="font-size:11px;color:#555;text-decoration:none;letter-spacing:0.08em;">VIEW ALL 3 &rarr;</a>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+    <div class="signal-grid">
+      <article class="signal-card" data-vertical="family-ed" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C9A84C;">FE-001</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#C9A84C;">SCI 0.91</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/family-education/childcare-cost-crisis-economic-analysis/" style="color:#fff;text-decoration:none;">Childcare Costs Exceed College Tuition in 28 States</a></h3>
         <a href="/family-education/childcare-cost-crisis-economic-analysis/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C9A84C;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
       </article>
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+      <article class="signal-card" data-vertical="family-ed" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C9A84C;">FE-002</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#C9A84C;">SCI 0.88</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/family-education/youth-sports-spending-30-billion-industry/" style="color:#fff;text-decoration:none;">Youth Sports Is a $30B Industry Built on Parental Anxiety</a></h3>
         <a href="/family-education/youth-sports-spending-30-billion-industry/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C9A84C;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
       </article>
-      <article style="border:1px solid #1a1a1a;padding:28px;background:#0d0d0d;">
+      <article class="signal-card" data-vertical="family-ed" data-date="2026-03-01">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C9A84C;">FE-003</span><span style="margin-left:auto;font-size:11px;font-weight:700;color:#C9A84C;">SCI 0.90</span></div>
         <h3 style="margin:0 0 10px;font-size:16px;font-weight:700;line-height:1.35;"><a href="/family-education/college-degree-roi-varies-500-percent/" style="color:#fff;text-decoration:none;">College Degree ROI Varies by 500% by Institution and Major</a></h3>
         <a href="/family-education/college-degree-roi-varies-500-percent/" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#C9A84C;text-decoration:none;display:block;margin-top:16px;">READ SIGNAL &rarr;</a>
@@ -516,8 +889,106 @@ body{background:#080808;color:#fff;font-family:"Inter",sans-serif;min-height:100
 </main>
 
 <footer style="border-top:1px solid #111;padding:32px 24px;text-align:center;">
-  <p style="font-size:12px;color:#444;letter-spacing:0.06em;">GROUND SIGNAL INTELLIGENCE · <a href="/about/" style="color:#555;text-decoration:none;">ABOUT</a> · <a href="/register/" style="color:#555;text-decoration:none;">VALIDATE</a></p>
+  <p style="font-size:12px;color:#444;letter-spacing:0.06em;">GROUND SIGNAL INTELLIGENCE &middot; <a href="/about/" style="color:#555;text-decoration:none;">ABOUT</a> &middot; <a href="/register/" style="color:#555;text-decoration:none;">VALIDATE</a></p>
 </footer>
 <script src="/auth-nav.js" defer></script>
+<script>
+(function(){
+  // ── Animated counters with IntersectionObserver ──
+  var counterObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var counters = entry.target.querySelectorAll('.counter-value');
+        counters.forEach(function(el){
+          var target = parseInt(el.getAttribute('data-target'),10);
+          var duration = 1200;
+          var start = 0;
+          var startTime = null;
+          function animate(ts){
+            if(!startTime) startTime = ts;
+            var progress = Math.min((ts - startTime) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target);
+            if(progress < 1) requestAnimationFrame(animate);
+          }
+          requestAnimationFrame(animate);
+        });
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.3});
+  var heroCounters = document.getElementById('hero-counters');
+  if(heroCounters) counterObserver.observe(heroCounters);
+
+  // ── Scroll-triggered card fade-in ──
+  var cardObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var card = entry.target;
+        var section = card.closest('[data-section]');
+        var cards = section ? Array.from(section.querySelectorAll('.signal-card')) : [card];
+        var idx = cards.indexOf(card);
+        var delay = idx * 50;
+        setTimeout(function(){
+          card.classList.add('visible');
+        }, delay);
+        cardObserver.unobserve(card);
+      }
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.signal-card').forEach(function(card){
+    cardObserver.observe(card);
+  });
+
+  // ── Filter pills ──
+  var pills = document.querySelectorAll('.filter-pill');
+  var sections = document.querySelectorAll('[data-section]');
+  pills.forEach(function(pill){
+    pill.addEventListener('click', function(){
+      pills.forEach(function(p){ p.classList.remove('active'); });
+      pill.classList.add('active');
+      var filter = pill.getAttribute('data-filter');
+
+      if(filter === 'all'){
+        sections.forEach(function(s){ s.style.display = ''; });
+        document.querySelectorAll('.signal-card').forEach(function(c){
+          c.classList.remove('filter-hidden');
+        });
+      } else {
+        sections.forEach(function(s){
+          if(s.getAttribute('data-section') === filter){
+            s.style.display = '';
+          } else {
+            s.style.display = 'none';
+          }
+        });
+      }
+      // Also apply search filter
+      applySearch();
+    });
+  });
+
+  // ── Search ──
+  var searchInput = document.getElementById('search-input');
+  function applySearch(){
+    var query = searchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.signal-card').forEach(function(card){
+      var section = card.closest('[data-section]');
+      if(section && section.style.display === 'none') return;
+      var title = card.querySelector('h3');
+      var text = title ? title.textContent.toLowerCase() : '';
+      if(!query || text.indexOf(query) !== -1){
+        card.classList.remove('filter-hidden');
+        if(!card.classList.contains('visible')){
+          card.classList.add('visible');
+        }
+      } else {
+        card.classList.add('filter-hidden');
+      }
+    });
+  }
+  searchInput.addEventListener('input', applySearch);
+})();
+</script>
 </body>
 </html>

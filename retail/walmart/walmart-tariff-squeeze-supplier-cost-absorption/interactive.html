@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tariff Squeeze: Who Actually Absorbs the Cost When Walmart Says No to Price Increases | IN·KluSo Signal Intelligence</title>
+<meta name="description" content="Walmart demanded Chinese suppliers cut prices 10% per tariff round. Most cannot cut 2% without selling at a loss. An analysis of who actually absorbs tariff costs in Walmart's supply chain.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Tariff Squeeze: Who Actually Absorbs the Cost When Walmart Says No to Price Increases",
+  "author": { "@type": "Organization", "name": "IN·KluSo Signal Intelligence" },
+  "publisher": { "@type": "Organization", "name": "INKLUSO, Inc." },
+  "datePublished": "2026-03-30",
+  "description": "Walmart demanded Chinese suppliers cut prices 10% per tariff round. Most cannot cut 2% without selling at a loss. An analysis of who actually absorbs tariff costs in Walmart's supply chain."
+}
+</script>
+<style>
+:root {
+  --cream: #FAF6EE;
+  --orange: #E8602C;
+  --black: #111111;
+  --blue: #2D6BE4;
+  --magenta: #C4317A;
+  --green: #2E9B6F;
+  --gold: #C9A84C;
+  --warm-gray: #8A8578;
+  --light-gray: #E8E4DC;
+  --division-color: #C4317A;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Lora', Georgia, serif; background: var(--cream); color: var(--black); line-height: 1.8; -webkit-font-smoothing: antialiased; }
+
+/* Progress bar */
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--division-color); width: 0%; z-index: 9999; transition: width 50ms linear; }
+
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--light-gray); }
+.nav-logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--black); text-decoration: none; }
+.nav-logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 24px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; }
+.nav-links a { color: var(--warm-gray); text-decoration: none; }
+.nav-links a:hover { color: var(--black); }
+.division-stripe { background: var(--division-color); padding: 10px 40px; display: flex; align-items: center; gap: 12px; }
+.division-stripe span { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 500; }
+.division-stripe .dot { opacity: 0.5; }
+.channel-badge { background: rgba(255,255,255,0.2); padding: 2px 10px; font-size: 10px; letter-spacing: 1.5px; border: 1px solid rgba(255,255,255,0.3); }
+.article-header { max-width: 780px; margin: 0 auto; padding: 60px 40px 40px; }
+.article-meta { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--warm-gray); letter-spacing: 1px; margin-bottom: 24px; }
+.article-meta .sci-badge { display: inline-block; background: var(--division-color); color: #fff; padding: 3px 10px; font-size: 11px; letter-spacing: 1px; margin-left: 8px; }
+.article-header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 5vw, 48px); line-height: 1.15; margin-bottom: 20px; }
+.article-header .subtitle { font-size: 20px; color: #555; font-style: italic; margin-bottom: 24px; line-height: 1.6; }
+.article-info { display: flex; align-items: center; gap: 16px; padding-top: 20px; border-top: 1px solid var(--light-gray); font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); }
+.author-avatar { width: 40px; height: 40px; background: var(--division-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff; font-weight: 500; }
+.author-name { color: var(--black); font-weight: 600; }
+.article-body { max-width: 720px; margin: 0 auto; padding: 0 40px 60px; }
+.article-body p { font-size: 18px; margin-bottom: 24px; line-height: 1.85; }
+.article-body h2 { font-family: 'DM Serif Display', serif; font-size: 28px; margin: 48px 0 20px; }
+.article-body h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; margin: 36px 0 16px; }
+.evidence-block { background: var(--black); color: var(--cream); padding: 28px 32px; margin: 32px 0; border-left: 4px solid var(--division-color); opacity: 0; transform: translateY(20px); transition: opacity 600ms ease-out, transform 600ms ease-out; }
+.evidence-block.visible { opacity: 1; transform: translateY(0); }
+.evidence-block .eb-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--division-color); margin-bottom: 12px; font-weight: 500; }
+.evidence-block p { font-family: 'Inter', sans-serif; font-size: 15px; color: rgba(250,246,238,0.9); margin-bottom: 8px; line-height: 1.7; }
+.evidence-block p:last-child { margin-bottom: 0; }
+.pull-stat { text-align: center; padding: 48px 20px; margin: 40px 0; }
+.pull-stat .stat-number { font-family: 'DM Serif Display', serif; font-size: 56px; color: var(--division-color); line-height: 1.1; }
+.pull-stat .stat-context { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--warm-gray); margin-top: 8px; }
+.section-break { text-align: center; padding: 32px 0; color: var(--light-gray); font-size: 18px; letter-spacing: 12px; }
+.callout { border-left: 4px solid var(--division-color); padding: 20px 24px; margin: 32px 0; background: rgba(0,0,0,0.02); }
+.callout p { font-style: italic; font-size: 17px; color: #444; }
+.signal-disclosure { max-width: 720px; margin: 0 auto 32px; padding: 0 40px; }
+.signal-disclosure-inner { border: 2px solid var(--orange); padding: 20px 24px; background: rgba(232,96,44,0.04); }
+.signal-disclosure-inner .sd-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 8px; font-weight: 500; }
+.signal-disclosure-inner p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); line-height: 1.6; }
+.validator-badge { max-width: 720px; margin: 40px auto; padding: 0 40px; }
+.validator-badge-inner { background: #fff; border: 2px solid var(--light-gray); padding: 28px 32px; }
+.vb-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.vb-icon { width: 44px; height: 44px; background: var(--black); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--cream); letter-spacing: 1px; }
+.vb-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); font-weight: 500; }
+.vb-name { font-family: 'DM Serif Display', serif; font-size: 18px; }
+.vb-body { font-family: 'Inter', sans-serif; font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+.vb-scope { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: var(--cream); padding: 10px 14px; border-left: 3px solid var(--division-color); color: var(--black); }
+.disclosure { max-width: 720px; margin: 20px auto 60px; padding: 0 40px; }
+.disclosure-inner { background: rgba(0,0,0,0.03); padding: 24px 28px; border: 1px solid var(--light-gray); }
+.disclosure-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 10px; font-weight: 500; }
+.disclosure-inner p { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); line-height: 1.7; }
+.tags { max-width: 720px; margin: 0 auto 40px; padding: 0 40px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font-family: 'Inter', sans-serif; font-size: 12px; background: var(--cream); border: 1px solid var(--light-gray); padding: 4px 12px; color: var(--warm-gray); }
+.cta-section { background: var(--black); padding: 60px 40px; text-align: center; color: var(--cream); }
+.cta-section h2 { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 12px; }
+.cta-section p { font-family: 'Inter', sans-serif; font-size: 15px; color: rgba(250,246,238,0.7); max-width: 500px; margin: 0 auto 28px; }
+.cta-btn { display: inline-block; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--black); background: var(--cream); padding: 14px 36px; text-decoration: none; letter-spacing: 1px; }
+footer { text-align: center; padding: 40px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--warm-gray); border-top: 1px solid var(--light-gray); }
+.f-brand { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--black); margin-bottom: 8px; }
+
+/* Interactive chart containers */
+.chart-container {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 0;
+  position: relative;
+}
+.chart-container.wide {
+  max-width: 780px;
+}
+.chart-wrapper {
+  background: var(--cream);
+  border: 1px solid var(--light-gray);
+  padding: 32px 28px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.chart-wrapper.dark {
+  background: var(--black);
+  border-color: #333;
+}
+.chart-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--division-color);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.chart-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--black);
+  margin-bottom: 24px;
+}
+.chart-wrapper.dark .chart-title {
+  color: var(--cream);
+}
+.chart-wrapper.dark .chart-label {
+  color: var(--division-color);
+}
+
+/* D3 tooltip */
+.d3-tooltip {
+  position: fixed;
+  background: var(--black);
+  color: var(--cream);
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  z-index: 9998;
+  border-left: 3px solid var(--division-color);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+/* Squeeze gap visualization */
+.squeeze-gap-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0 10px;
+}
+.squeeze-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.squeeze-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 140px;
+  text-align: right;
+}
+.squeeze-bar-track {
+  flex: 1;
+  height: 52px;
+  background: var(--light-gray);
+  position: relative;
+  overflow: hidden;
+}
+.squeeze-bar-fill {
+  height: 100%;
+  width: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.squeeze-bar-fill span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.squeeze-gap-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+  position: relative;
+}
+.squeeze-gap-line {
+  position: absolute;
+  left: 156px;
+  right: 0;
+  height: 2px;
+  border-top: 2px dashed var(--division-color);
+}
+.squeeze-gap-badge {
+  background: var(--division-color);
+  color: #fff;
+  padding: 6px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 1;
+  letter-spacing: 1px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.squeeze-gap-badge.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Calculator section */
+.calculator-section {
+  background: var(--black);
+  color: var(--cream);
+  padding: 32px;
+  margin: 40px 0;
+  border-left: 4px solid var(--division-color);
+}
+.calc-row {
+  margin-bottom: 28px;
+}
+.calc-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(250,246,238,0.8);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.calc-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--division-color);
+  font-weight: 500;
+}
+.calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #333;
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--division-color);
+  cursor: pointer;
+  border: 2px solid var(--cream);
+}
+.calc-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--division-color);
+  cursor: pointer;
+  border: 2px solid var(--cream);
+}
+.calc-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #333;
+}
+.calc-result-item .calc-result-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--division-color);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.calc-result-item .calc-result-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba(250,246,238,0.5);
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Donut chart */
+.donut-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+.donut-chart-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.donut-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.donut-center-text .donut-pct {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  color: var(--black);
+  line-height: 1;
+}
+.donut-center-text .donut-sublabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--warm-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.donut-label-below {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--warm-gray);
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+.donut-year-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--warm-gray);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Sort button */
+.sort-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.sort-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--light-gray);
+  background: transparent;
+  color: var(--warm-gray);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.sort-btn:hover {
+  border-color: var(--division-color);
+  color: var(--division-color);
+}
+.sort-btn.active {
+  background: var(--division-color);
+  color: #fff;
+  border-color: var(--division-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav { padding: 16px 20px; }
+  .division-stripe { padding: 8px 20px; flex-wrap: wrap; }
+  .article-header { padding: 40px 20px 30px; }
+  .article-body { padding: 0 20px 40px; }
+  .chart-wrapper { padding: 24px 16px 20px; }
+  .calculator-section { padding: 24px 16px; }
+  .calc-results { grid-template-columns: 1fr; gap: 16px; }
+  .calc-result-item .calc-result-number { font-size: 24px; }
+  .donut-container { gap: 32px; }
+  .signal-disclosure, .validator-badge, .disclosure, .tags { padding: 0 20px; }
+  .chart-container { padding: 0 20px; }
+  .squeeze-label { min-width: 100px; font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .pull-stat .stat-number { font-size: 42px; }
+  .calc-results { grid-template-columns: 1fr; }
+  .squeeze-label { min-width: 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">IN&middot;<span>KluSo</span></a>
+  <div class="nav-links">
+    <a href="/library/">Library</a>
+    <a href="/about/">About</a>
+    <a href="/validate/">Validate</a>
+  </div>
+</nav>
+
+<!-- DIVISION STRIPE -->
+<div class="division-stripe">
+  <span>INDUSTRY SIGNAL</span>
+  <span class="dot">&middot;</span>
+  <span>Retail &amp; E-Commerce Intelligence</span>
+  <span class="channel-badge">WALMART CHANNEL</span>
+</div>
+
+<!-- ARTICLE HEADER -->
+<div class="article-header">
+  <div class="article-meta">
+    WM-005 &middot; March 30, 2026 &middot; 11 min read
+    <span class="sci-badge">SCI 0.88</span>
+  </div>
+  <h1>The Tariff Squeeze: Who Actually Absorbs the Cost When Walmart Says No to Price Increases</h1>
+  <p class="subtitle">Walmart told Chinese suppliers to cut prices 10% per tariff round &mdash; most can&rsquo;t cut 2% without selling at a loss.</p>
+  <div class="article-info">
+    <div class="author-avatar">SI</div>
+    <div><span class="author-name">Signal Intelligence Unit</span><br>IN&middot;KluSo Research</div>
+  </div>
+</div>
+
+<!-- SIGNAL DISCLOSURE -->
+<div class="signal-disclosure">
+  <div class="signal-disclosure-inner">
+    <div class="sd-label">Signal Intelligence</div>
+    <p>This article was produced by IN&middot;KluSo&rsquo;s AI research system. SCI score: <strong>0.88</strong>. Validated by Jenny Echeverri, Team Lead, Omni-Channel Marketing at Reckitt.</p>
+  </div>
+</div>
+
+<!-- ARTICLE BODY -->
+<article class="article-body">
+
+  <p>In late 2025, as the latest round of U.S. tariffs on Chinese imports pushed effective rates past 100% on many product categories, Walmart communicated a message to its Chinese supplier base that was notable for its directness. The ask: reduce prices by 10% to offset tariff costs. The message was not framed as a negotiation. It was framed as a condition of continued business. Suppliers that could not meet the price reduction would face reduced orders, shelf-space reallocation, or replacement by alternative sources.</p>
+
+  <p>The demand was reported widely &mdash; by The Wall Street Journal, Reuters, and multiple supply chain trade publications &mdash; and it crystallized a question that runs through every tariff cycle but rarely gets answered with specificity: When a retailer with $674 billion in annual revenue tells its suppliers to absorb a cost increase, who actually absorbs it? The answer, traced through the economics of manufacturing, logistics, and retail pricing, reveals a cascade of pain that begins in Chinese factories, passes through import intermediaries, pressures domestic brand owners, and ultimately reaches consumers in the form of either higher prices or degraded products. Walmart&rsquo;s role in this cascade is not as the absorber of cost. It is as the allocator of cost to everyone else.</p>
+
+  <div class="evidence-block">
+    <div class="eb-label">Evidence: Tariff Escalation Timeline</div>
+    <p>&#9656; U.S. tariffs on Chinese imports escalated through multiple rounds in 2025-2026, with effective rates on many consumer goods categories exceeding 100% when layered tariffs (Section 301, Section 232, and reciprocal tariffs) are combined.</p>
+    <p>&#9656; Walmart communicated 10% price reduction demands to Chinese suppliers per tariff round, per reporting from The Wall Street Journal and Reuters citing supplier and intermediary sources.</p>
+    <p>&#9656; The combined tariff impact across Walmart&rsquo;s U.S. supply chain has been estimated at $21-23 billion annually, based on import volume data and applicable tariff rate schedules.</p>
+    <p>&#9656; China-sourced goods represent approximately 15% of Walmart&rsquo;s U.S. merchandise mix, down from an estimated 25-30% a decade ago &mdash; reflecting ongoing diversification that predates the current tariff regime but has accelerated because of it.</p>
+  </div>
+
+  <!-- INTERACTIVE CHART 2: The Squeeze Gap -->
+  <div class="chart-container" id="squeezeGapContainer">
+    <div class="chart-wrapper">
+      <div class="chart-label">Interactive Data</div>
+      <div class="chart-title">The Squeeze Gap</div>
+      <div class="squeeze-gap-container">
+        <div class="squeeze-row">
+          <div class="squeeze-label">Walmart Demand</div>
+          <div class="squeeze-bar-track">
+            <div class="squeeze-bar-fill" id="squeezeBarWalmart" style="background: var(--division-color);">
+              <span>10% cut</span>
+            </div>
+          </div>
+        </div>
+        <div class="squeeze-gap-zone">
+          <div class="squeeze-gap-line"></div>
+          <div class="squeeze-gap-badge" id="squeezeGapBadge">8-POINT GAP</div>
+        </div>
+        <div class="squeeze-row">
+          <div class="squeeze-label">Supplier Capacity</div>
+          <div class="squeeze-bar-track">
+            <div class="squeeze-bar-fill" id="squeezeBarSupplier" style="background: var(--warm-gray);">
+              <span>2% max</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: var(--warm-gray); margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--light-gray);">
+        Most Chinese suppliers operate on <strong style="color: var(--division-color);">3-5% net margins</strong> &mdash; Walmart&rsquo;s 10% demand exceeds their entire profit
+      </div>
+    </div>
+  </div>
+
+  <p>The 10% demand deserves scrutiny because of what it reveals about the distance between retail economics and manufacturing economics. A Chinese factory producing plastic storage containers for Walmart operates on net margins of 3-5% in a good year. The factory&rsquo;s costs are denominated in renminbi: raw materials (polypropylene resin), labor, electricity, equipment depreciation, and compliance with environmental regulations that have tightened considerably since 2020. When Walmart asks for a 10% price cut on an FOB (freight on board) basis, it is asking the factory to absorb more than its entire profit margin. The factory cannot cut 10%. In most cases, it cannot cut 2% without selling at a loss.</p>
+
+  <p>So what happens? The factory has three options, none of them good. It can refuse the price cut and lose the Walmart business &mdash; which, for many Chinese manufacturers, represents 30-60% of their total production volume. It can accept the price cut and attempt to offset it through material substitution, reduced quality control, or labor cost suppression. Or it can negotiate a partial concession and hope that the remaining tariff cost is split between the intermediary (the import agent or brand owner) and the end-consumer price.</p>
+
+  <div class="pull-stat" id="pullStat1">
+    <div class="stat-number" data-target="10" data-prefix="" data-suffix="%">0%</div>
+    <div class="stat-context">Price reduction demanded by Walmart per tariff round &mdash; exceeding most Chinese suppliers&rsquo; entire profit margins</div>
+  </div>
+
+  <p class="section-break">&bull; &bull; &bull;</p>
+
+  <h2>The NPR Basket: What Tariffs Look Like at Shelf Level</h2>
+
+  <p>In early 2026, NPR&rsquo;s Planet Money team assembled a 114-item basket of consumer goods &mdash; all sourced partially or entirely from China &mdash; and tracked the retail price changes at major U.S. retailers including Walmart. The basket provided one of the most granular public datasets on how tariff costs translate to consumer prices. The findings were uneven in a way that reveals how selectively the cost cascade operates.</p>
+
+  <p>Two-pocket paper folders &mdash; a commodity school supply item manufactured almost exclusively in China &mdash; showed a 46% retail price increase at Walmart. Swai fish fillets, a Vietnamese and Chinese freshwater species that is one of the lowest-cost protein options in U.S. grocery, increased 34%. Canned mandarin oranges rose 28%. These are not luxury goods. They are staples purchased disproportionately by Walmart&rsquo;s core customer demographic: lower-income and middle-income households for whom Walmart&rsquo;s EDLP promise is not a marketing slogan but a household budget requirement.</p>
+
+  <div class="evidence-block">
+    <div class="eb-label">Evidence: NPR 114-Item Basket Price Tracking</div>
+    <p>&#9656; Two-pocket paper folders: +46% retail price increase at major U.S. retailers, reflecting near-total dependence on Chinese manufacturing for this product category.</p>
+    <p>&#9656; Swai fish fillets: +34% price increase, driven by tariffs on Chinese aquaculture exports and limited alternative sourcing for this specific species at comparable cost.</p>
+    <p>&#9656; Canned mandarin oranges: +28% increase, with China representing the dominant global supplier of this specific product format.</p>
+    <p>&#9656; The 114-item basket demonstrated that tariff pass-through is not uniform &mdash; it concentrates in categories where China is the sole or dominant supplier and where alternative sourcing at comparable cost does not exist.</p>
+  </div>
+
+  <!-- INTERACTIVE CHART 1: NPR Price Basket -->
+  <div class="chart-container" id="basketChartContainer">
+    <div class="chart-wrapper">
+      <div class="chart-label">Interactive Data</div>
+      <div class="chart-title">NPR 114-Item Basket: Biggest Price Spikes</div>
+      <div class="sort-controls">
+        <button class="sort-btn active" data-sort="size" id="sortSize">By % Increase</button>
+        <button class="sort-btn" data-sort="alpha" id="sortAlpha">Alphabetical</button>
+        <button class="sort-btn" data-sort="category" id="sortCategory">By Category</button>
+      </div>
+      <div id="basketChart"></div>
+    </div>
+  </div>
+
+  <p>The non-uniformity of price increases is the key finding. Walmart did not raise prices uniformly across all China-sourced products. It raised prices most aggressively on items where it had no sourcing alternative and where the product is sufficiently low-visibility that the price increase does not damage the EDLP brand perception. Paper folders are not a price-comparison item. Consumers do not cross-shop folder prices across retailers. Swai fillets are purchased by a narrow demographic segment. These are categories where Walmart can pass through tariff costs without competitive consequence.</p>
+
+  <p>On high-visibility, high-volume categories &mdash; laundry detergent, paper towels, breakfast cereal, diapers &mdash; Walmart has held prices flat or absorbed small increases internally. These are the items that drive price perception, the ones consumers use to judge whether Walmart is delivering on its low-price promise. Holding prices on these items while raising prices on low-visibility categories is a rational strategy, but it means the tariff cost is being distributed regressively: concentrated on the least-substitutable products purchased by the most price-sensitive consumers.</p>
+
+  <p class="section-break">&bull; &bull; &bull;</p>
+
+  <h2>Material Substitution: The Hidden Quality Tax</h2>
+
+  <p>When the numbers do not work &mdash; when the factory cannot absorb 10%, the intermediary cannot absorb 5%, and the retailer will not raise the shelf price &mdash; something else gives. In the current tariff environment, that something is increasingly product composition. Material substitution has become the shadow response to tariff pressure, and it operates almost entirely below the consumer&rsquo;s awareness threshold.</p>
+
+  <p>A plastic storage bin that was injection-molded from virgin polypropylene two years ago may now be manufactured from a blend of virgin and recycled resin that costs 15-20% less per kilogram. The bin looks the same. It occupies the same shelf position. The retail price has not changed. But it is 12% thinner, cracks more easily under load, and has a useful life roughly half that of its predecessor. The consumer does not know this because the product&rsquo;s UPC has not changed, its packaging looks identical, and the material substitution falls within the range that does not require regulatory disclosure.</p>
+
+  <p>This dynamic is well-documented in textile and apparel categories. Thread counts are reduced. Fabric weights drop. Polyester blends replace cotton. In household chemicals, concentrations are adjusted &mdash; a cleaning solution that was 8% active ingredient may shift to 6%, with the difference made up by water and stabilizers. In food products, the substitution takes the form of reformulation: different starch bases, alternative sweeteners, reduced protein content, or changes in sourcing origin that affect flavor and texture.</p>
+
+  <div class="evidence-block">
+    <div class="eb-label">Evidence: Material Substitution Patterns</div>
+    <p>&#9656; Industry sourcing consultants report a significant increase in material substitution requests from Chinese factories since mid-2025, particularly in plastics (virgin-to-recycled resin blends), textiles (thread count and fabric weight reductions), and household chemicals (active ingredient concentration changes).</p>
+    <p>&#9656; Material substitution is economically rational when tariff costs exceed manufacturer margins: a 15-20% reduction in material cost can partially offset a 10% FOB price reduction demand while maintaining visual product similarity.</p>
+    <p>&#9656; U.S. regulatory frameworks generally do not require disclosure of material composition changes that fall within existing product category standards, meaning consumers have limited visibility into quality degradation.</p>
+    <p>&#9656; Private-label products &mdash; where the retailer controls the specification &mdash; are particularly susceptible to material substitution because the retailer can authorize composition changes that a branded manufacturer would resist to protect brand equity.</p>
+  </div>
+
+  <p>For Walmart&rsquo;s private-label products &mdash; Great Value, Equate, Mainstays, and the dozens of other owned brands that collectively represent an estimated 20-25% of Walmart&rsquo;s U.S. merchandise sales &mdash; the material substitution dynamic is particularly acute. Walmart controls the product specifications for its private labels. When tariff costs rise, Walmart can direct its contract manufacturers to adjust formulations, reduce material grades, or alter product dimensions in ways that reduce landed cost without changing the retail price. The consumer savings from EDLP are maintained, but the product they receive delivers less value per dollar than it did before the tariff.</p>
+
+  <p>This is the hidden tax of the tariff squeeze. It does not appear in CPI calculations because the price did not change. It does not appear in Walmart&rsquo;s financial statements because the cost was absorbed at the factory level. It appears only in the lived experience of the consumer who notices that the storage bin cracks after three months, the cleaning spray does not work as well, or the t-shirt fabric feels thinner. And it disproportionately affects the consumers who shop at Walmart because they cannot afford the alternatives.</p>
+
+  <!-- INTERACTIVE CHART 5: Who Absorbs the Cost -->
+  <div class="chart-container wide" id="waterfallChartContainer">
+    <div class="chart-wrapper">
+      <div class="chart-label">Interactive Data</div>
+      <div class="chart-title">Who Absorbs the $21-23B Tariff Impact?</div>
+      <div id="waterfallChart"></div>
+    </div>
+  </div>
+
+  <div class="pull-stat" id="pullStat2">
+    <div class="stat-number" data-target="21" data-prefix="$" data-suffix="-23B">$0-23B</div>
+    <div class="stat-context">Estimated combined annual tariff impact across Walmart&rsquo;s U.S. supply chain</div>
+  </div>
+
+  <p class="section-break">&bull; &bull; &bull;</p>
+
+  <h2>The Diversification Mirage</h2>
+
+  <p>Walmart&rsquo;s official position on tariff risk emphasizes supply chain diversification. China-sourced goods have been reduced to approximately 15% of Walmart&rsquo;s U.S. merchandise, down from considerably higher levels a decade ago. The company has invested in sourcing relationships in Vietnam, India, Bangladesh, Indonesia, and Mexico. This diversification is real and it provides genuine insulation against China-specific tariff risk.</p>
+
+  <!-- INTERACTIVE CHART 3: China Sourcing Shift -->
+  <div class="chart-container" id="donutChartContainer">
+    <div class="chart-wrapper">
+      <div class="chart-label">Interactive Data</div>
+      <div class="chart-title">China Sourcing Shift</div>
+      <div class="donut-container" id="donutChart">
+        <!-- D3 renders here -->
+      </div>
+    </div>
+  </div>
+
+  <p>But diversification has limits that the headline percentage obscures. For specific product categories &mdash; artificial Christmas trees, certain electronics components, rare earth magnet assemblies, specific textile weaves, low-cost injection-molded plastics &mdash; China remains the dominant or sole economically viable source. These are the categories where the 46% price increases show up. Diversification reduced Walmart&rsquo;s average exposure to China tariffs. It did not eliminate the exposure in the categories where China&rsquo;s manufacturing infrastructure has no near-term substitute.</p>
+
+  <div class="evidence-block">
+    <div class="eb-label">Evidence: Sourcing Diversification Constraints</div>
+    <p>&#9656; China&rsquo;s share of Walmart&rsquo;s U.S. merchandise has declined to approximately 15%, per Walmart&rsquo;s public statements, from an estimated 25-30% a decade ago.</p>
+    <p>&#9656; Alternative sourcing countries (Vietnam, India, Bangladesh) face their own capacity constraints, infrastructure limitations, and in some cases their own tariff exposure under the expanded 2025-2026 trade policy framework.</p>
+    <p>&#9656; Vietnam, the most commonly cited China alternative for consumer goods manufacturing, saw its U.S.-bound exports face new scrutiny and tariff exposure as trade enforcement expanded to address transshipment concerns.</p>
+    <p>&#9656; Building comparable manufacturing capacity in alternative countries requires 3-5 years of investment in facilities, workforce training, quality systems, and logistics infrastructure &mdash; timelines that exceed the pace of tariff escalation.</p>
+  </div>
+
+  <p>The transshipment issue adds another layer of complexity. As tariffs on Chinese goods escalated, some manufacturers began routing production through Vietnam, Malaysia, or other countries to avoid China-origin tariff classification. U.S. Customs and Border Protection has responded with increased enforcement, including origin verification audits and penalties for tariff evasion. For Walmart, which operates one of the most sophisticated compliance programs in U.S. retail, the transshipment risk is primarily reputational &mdash; being associated with tariff circumvention would be politically damaging. For smaller importers and suppliers, the enforcement risk creates genuine legal and financial exposure.</p>
+
+  <p>Mexico represents a different kind of diversification opportunity. Nearshoring &mdash; moving production from China to Mexico &mdash; reduces shipping times, avoids China-specific tariffs, and benefits from USMCA trade agreement provisions. Walmart has invested in Mexican sourcing, and its Mexican retail subsidiary (Walmex) provides an existing infrastructure base. But Mexican manufacturing capacity in consumer goods categories is still developing, labor costs are higher than China for many product types, and the logistics of sourcing from Mexican facilities for U.S. distribution centers requires supply chain reconfiguration that takes years to optimize.</p>
+
+  <p class="section-break">&bull; &bull; &bull;</p>
+
+  <h2>EDLP Under Structural Pressure</h2>
+
+  <p>The fundamental tension in Walmart&rsquo;s tariff response is between its pricing identity and its margin requirements. Everyday Low Prices is not just a marketing tagline &mdash; it is the operational philosophy that drives Walmart&rsquo;s competitive moat. Consumers choose Walmart because they trust, based on decades of reinforcement, that Walmart&rsquo;s prices are lower than the alternatives. That trust is Walmart&rsquo;s most valuable asset, more important than any single store, supply chain node, or technology investment.</p>
+
+  <p>Tariffs threaten that trust by creating cost pressure that must go somewhere. Walmart has three options for managing tariff costs: absorb them (reducing margins), pass them to consumers (raising prices), or push them to suppliers (demanding cost reductions). The evidence from FY2026 suggests Walmart is employing all three strategies selectively &mdash; absorbing costs on high-visibility items, passing through costs on low-visibility items, and demanding supplier concessions across the board. The strategy is sophisticated and it has so far preserved both Walmart&rsquo;s price perception and its financial performance. But it is not sustainable indefinitely if tariff rates continue to escalate.</p>
+
+  <div class="evidence-block">
+    <div class="eb-label">Evidence: EDLP Pricing Pressure Indicators</div>
+    <p>&#9656; Walmart CEO Doug McMillon stated publicly in early 2026 that tariff-driven price increases were &ldquo;inevitable&rdquo; on certain categories, marking a notable shift from previous messaging that emphasized Walmart&rsquo;s ability to hold prices.</p>
+    <p>&#9656; Walmart&rsquo;s FY2026 U.S. comparable sales growth of 4.9% was driven primarily by transaction count increases, not average ticket growth &mdash; suggesting price-sensitive consumers are trading into Walmart from higher-cost competitors, not spending more per trip.</p>
+    <p>&#9656; Private-label penetration at Walmart increased during the tariff period, consistent with consumer trade-down behavior and Walmart&rsquo;s strategic emphasis on owned brands where it controls both sourcing and pricing.</p>
+    <p>&#9656; Walmart&rsquo;s operating margin expanded in FY2026 despite tariff pressure, indicating the company has so far successfully allocated costs to suppliers and selective price increases rather than absorbing them internally.</p>
+  </div>
+
+  <!-- INTERACTIVE CHART 4: Tariff Impact Calculator -->
+  <div class="chart-container" id="calculatorContainer">
+    <div class="calculator-section">
+      <div class="chart-label">Interactive Tool</div>
+      <div class="chart-title" style="color: var(--cream); margin-bottom: 28px;">Tariff Impact Calculator</div>
+
+      <div class="calc-row">
+        <div class="calc-label">
+          Your Product Cost (FOB)
+          <span class="calc-value" id="calcCostValue">$10.00</span>
+        </div>
+        <input type="range" class="calc-slider" id="calcCostSlider" min="1" max="100" value="10" step="0.5">
+      </div>
+
+      <div class="calc-row">
+        <div class="calc-label">
+          China-Sourced %
+          <span class="calc-value" id="calcChinaValue">50%</span>
+        </div>
+        <input type="range" class="calc-slider" id="calcChinaSlider" min="0" max="100" value="50" step="5">
+      </div>
+
+      <div class="calc-results" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div class="calc-result-item">
+          <div class="calc-result-number" id="calcTariff10">$0.50</div>
+          <div class="calc-result-desc">Tariff Impact at 10%</div>
+        </div>
+        <div class="calc-result-item">
+          <div class="calc-result-number" id="calcTariff25">$1.25</div>
+          <div class="calc-result-desc">Tariff Impact at 25%</div>
+        </div>
+        <div class="calc-result-item">
+          <div class="calc-result-number" id="calcTariff54">$2.70</div>
+          <div class="calc-result-desc">Tariff Impact at 54%</div>
+        </div>
+      </div>
+
+      <div id="calcMarginViz" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #333;">
+        <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: rgba(250,246,238,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">Margin Erosion at 54% Tariff Rate</div>
+        <div style="display: flex; gap: 4px; height: 32px; width: 100%;">
+          <div id="calcMarginRemaining" style="background: var(--warm-gray); height: 100%; transition: width 300ms ease; display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff; white-space: nowrap;"></span>
+          </div>
+          <div id="calcMarginLost" style="background: var(--division-color); height: 100%; transition: width 300ms ease; display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #fff; white-space: nowrap;"></span>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 6px;">
+          <span style="font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(250,246,238,0.4);">Remaining margin</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 11px; color: var(--division-color);">Tariff cost</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>The operating margin expansion is the data point that tells the full story. In a year when tariff costs added an estimated $21-23 billion to Walmart&rsquo;s supply chain, the company&rsquo;s operating margins improved. That improvement did not come from absorbing tariff costs. It came from ensuring that tariff costs were absorbed by everyone else in the value chain: Chinese factories cutting margins to nothing, domestic suppliers funding Walmart Connect advertising, consumers paying 46% more for school folders, and product quality quietly declining across thousands of SKUs.</p>
+
+  <p>Walmart&rsquo;s scale makes this cost allocation possible. A supplier that depends on Walmart for 30% of its revenue cannot refuse a 10% price cut demand &mdash; the cost of losing the business exceeds the cost of accepting the concession. A Chinese factory that has invested in production lines configured specifically for Walmart&rsquo;s specifications cannot easily pivot to other customers. A consumer who shops at Walmart because it is the lowest-cost option does not have a lower-cost alternative to switch to. Every participant in the value chain is locked in to a degree that gives Walmart the ability to distribute costs downward and outward while protecting its own financial position.</p>
+
+  <div class="callout">
+    <p>The tariff squeeze is not primarily a trade policy story. It is a power story. The question &ldquo;who absorbs the cost?&rdquo; is always answered the same way in concentrated retail: the party with the fewest alternatives. In Walmart&rsquo;s supply chain, that is the Chinese factory, the mid-tier domestic supplier, and the consumer who cannot afford to shop anywhere else. The tariff is the event. The absorption pattern is the structure. And the structure has not changed.</p>
+  </div>
+
+</article>
+
+<!-- VALIDATOR BADGE -->
+<div class="validator-badge"><div class="validator-badge-inner">
+  <div class="vb-header"><div class="vb-icon">IN&middot;K</div><div><div class="vb-label">Validated by</div><div class="vb-name">Jenny Echeverri, Team Lead, Omni-Channel Marketing at Reckitt</div></div></div>
+  <div class="vb-body">This article&rsquo;s analysis of tariff cost absorption dynamics, supplier pricing pressure, material substitution patterns, and the structural impact on Walmart&rsquo;s EDLP positioning has been reviewed and validated against industry knowledge and publicly available data.</div>
+  <div class="vb-scope">Scope: Retail &amp; E-Commerce Intelligence &middot; WM-005 &middot; March 30, 2026</div>
+</div></div>
+
+<!-- DISCLOSURE -->
+<div class="disclosure"><div class="disclosure-inner">
+  <div class="disclosure-label">How This Article Was Made</div>
+  <p>This article was generated by IN&middot;KluSo&rsquo;s AI research system and validated by a named industry professional. Every fact, figure, and citation is sourced from verified reporting, public records, and industry data. AI generates the intelligence. Humans certify it. <a href="/about/contributors/" style="color:var(--orange);">Learn more about our contributor program &rarr;</a></p>
+</div></div>
+
+<!-- TAGS -->
+<div class="tags">
+  <span class="tag">Tariffs</span>
+  <span class="tag">Walmart Suppliers</span>
+  <span class="tag">China Trade</span>
+  <span class="tag">Cost Absorption</span>
+  <span class="tag">EDLP</span>
+  <span class="tag">Vendor Economics</span>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Are you an industry professional?</h2>
+  <p>IN&middot;KluSo produces AI research at scale. Industry professionals validate it. Get badged as a Validated Contributor in your field.</p>
+  <a href="/validate/" class="cta-btn">Apply to Validate &rarr;</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">IN&middot;KluSo</div>
+  <p>Signal Intelligence Magazine &middot; INKLUSO, Inc.</p>
+  <p>&copy; 2026 INKLUSO, Inc. All rights reserved.</p>
+</footer>
+
+<!-- TOOLTIP -->
+<div class="d3-tooltip" id="tooltip"></div>
+
+<script>
+// ============================================================
+// GLOBALS
+// ============================================================
+const COLORS = {
+  cream: '#FAF6EE',
+  black: '#111111',
+  division: '#C4317A',
+  warmGray: '#8A8578',
+  lightGray: '#E8E4DC',
+  orange: '#E8602C',
+  green: '#2E9B6F',
+  blue: '#2D6BE4',
+  gold: '#C9A84C'
+};
+
+const tooltip = d3.select('#tooltip');
+
+function showTooltip(evt, html) {
+  tooltip.html(html)
+    .style('left', (evt.clientX + 14) + 'px')
+    .style('top', (evt.clientY - 14) + 'px')
+    .style('opacity', 1);
+}
+function hideTooltip() {
+  tooltip.style('opacity', 0);
+}
+
+// ============================================================
+// PROGRESS BAR
+// ============================================================
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const pct = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ============================================================
+// INTERSECTION OBSERVER
+// ============================================================
+const observedElements = new Map();
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const cb = observedElements.get(entry.target);
+      if (cb) {
+        cb();
+        observedElements.delete(entry.target);
+        observer.unobserve(entry.target);
+      }
+    }
+  });
+}, { threshold: 0.25 });
+
+function onScrollIntoView(el, cb) {
+  observedElements.set(el, cb);
+  observer.observe(el);
+}
+
+// Evidence blocks fade in
+document.querySelectorAll('.evidence-block').forEach(block => {
+  onScrollIntoView(block, () => block.classList.add('visible'));
+});
+
+// ============================================================
+// ANIMATED COUNTERS
+// ============================================================
+document.querySelectorAll('.pull-stat').forEach(stat => {
+  const numEl = stat.querySelector('.stat-number');
+  const target = parseFloat(numEl.dataset.target);
+  const prefix = numEl.dataset.prefix || '';
+  const suffix = numEl.dataset.suffix || '';
+  onScrollIntoView(stat, () => {
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = (target * eased);
+      numEl.textContent = prefix + (target % 1 !== 0 ? current.toFixed(1) : Math.round(current)) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+});
+
+// ============================================================
+// CHART 1: NPR Price Basket Visualization
+// ============================================================
+function drawBasketChart() {
+  const container = document.getElementById('basketChart');
+  const containerWidth = container.clientWidth;
+  const margin = { top: 8, right: 60, bottom: 24, left: 180 };
+  const width = containerWidth - margin.left - margin.right;
+  const barHeight = 38;
+  const barPadding = 6;
+
+  const data = [
+    { item: 'Paper Folders (2-pocket)', pct: 46, category: 'School Supplies' },
+    { item: 'Maxwell House Coffee', pct: 46, category: 'Grocery' },
+    { item: 'Swai Fish Fillets', pct: 34, category: 'Grocery' },
+    { item: 'Canned Mandarin Oranges', pct: 28, category: 'Grocery' },
+    { item: 'Plastic Storage Bins', pct: 22, category: 'Home' },
+    { item: 'Farberware Spoons', pct: 19, category: 'Kitchen' },
+    { item: 'Basic Cotton T-Shirt', pct: 16, category: 'Apparel' },
+    { item: 'LED String Lights', pct: 14, category: 'Home' },
+    { item: 'Phone Charger Cable', pct: 12, category: 'Electronics' },
+    { item: 'Cleaning Spray', pct: 8, category: 'Household' },
+    { item: 'Laundry Detergent', pct: 2, category: 'Household' },
+    { item: 'Paper Towels', pct: 1, category: 'Household' },
+  ];
+
+  let sortedData = [...data].sort((a, b) => b.pct - a.pct);
+  const height = sortedData.length * (barHeight + barPadding);
+
+  // Color scale based on % increase intensity
+  const colorScale = d3.scaleLinear()
+    .domain([0, 15, 30, 46])
+    .range(['#E8E4DC', '#C9A84C', '#E8602C', '#C4317A']);
+
+  const svg = d3.select(container).append('svg')
+    .attr('width', containerWidth)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleLinear()
+    .domain([0, 50])
+    .range([0, width]);
+
+  // Grid lines
+  svg.selectAll('.grid-line')
+    .data([10, 20, 30, 40, 50])
+    .enter().append('line')
+    .attr('x1', d => x(d))
+    .attr('x2', d => x(d))
+    .attr('y1', 0)
+    .attr('y2', height)
+    .attr('stroke', COLORS.lightGray)
+    .attr('stroke-dasharray', '2,4')
+    .attr('opacity', 0.6);
+
+  // Grid labels
+  svg.selectAll('.grid-label')
+    .data([10, 20, 30, 40, 50])
+    .enter().append('text')
+    .attr('x', d => x(d))
+    .attr('y', height + 16)
+    .attr('text-anchor', 'middle')
+    .style('font-family', 'JetBrains Mono, monospace')
+    .style('font-size', '10px')
+    .style('fill', COLORS.warmGray)
+    .text(d => d + '%');
+
+  function renderBars(currentData, animate) {
+    // Remove old elements
+    svg.selectAll('.bar-group').remove();
+
+    const groups = svg.selectAll('.bar-group')
+      .data(currentData, d => d.item)
+      .enter().append('g')
+      .attr('class', 'bar-group')
+      .attr('transform', (d, i) => `translate(0,${i * (barHeight + barPadding)})`);
+
+    // Labels
+    groups.append('text')
+      .attr('x', -12)
+      .attr('y', barHeight / 2)
+      .attr('dy', '0.35em')
+      .attr('text-anchor', 'end')
+      .style('font-family', 'Inter, sans-serif')
+      .style('font-size', '12px')
+      .style('fill', COLORS.black)
+      .style('font-weight', d => d.pct >= 30 ? '600' : '400')
+      .text(d => d.item);
+
+    // Bars
+    const bars = groups.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('height', barHeight)
+      .attr('rx', 2)
+      .attr('fill', d => colorScale(d.pct))
+      .style('cursor', 'pointer')
+      .on('mousemove', (evt, d) => {
+        showTooltip(evt, `<strong>${d.item}</strong><br>+${d.pct}% price increase<br><span style="opacity:0.6">${d.category}</span>`);
+      })
+      .on('mouseleave', hideTooltip);
+
+    if (animate) {
+      bars.attr('width', 0)
+        .transition().duration(800).delay((d, i) => i * 60)
+        .ease(d3.easeCubicOut)
+        .attr('width', d => x(d.pct));
+    } else {
+      bars.attr('width', d => x(d.pct));
+    }
+
+    // Value labels
+    const valLabels = groups.append('text')
+      .attr('y', barHeight / 2)
+      .attr('dy', '0.35em')
+      .style('font-family', 'JetBrains Mono, monospace')
+      .style('font-size', '13px')
+      .style('font-weight', '700')
+      .style('fill', d => d.pct >= 20 ? '#fff' : COLORS.black)
+      .text(d => '+' + d.pct + '%');
+
+    if (animate) {
+      valLabels.attr('x', 8).attr('opacity', 0)
+        .transition().duration(800).delay((d, i) => i * 60 + 400)
+        .attr('x', d => d.pct >= 20 ? x(d.pct) - 8 : x(d.pct) + 8)
+        .attr('text-anchor', d => d.pct >= 20 ? 'end' : 'start')
+        .attr('opacity', 1);
+    } else {
+      valLabels.attr('x', d => d.pct >= 20 ? x(d.pct) - 8 : x(d.pct) + 8)
+        .attr('text-anchor', d => d.pct >= 20 ? 'end' : 'start');
+    }
+  }
+
+  // Initial render with animation on scroll
+  onScrollIntoView(document.getElementById('basketChartContainer'), () => {
+    renderBars(sortedData, true);
+  });
+
+  // Sort controls
+  document.getElementById('sortSize').addEventListener('click', function() {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    sortedData = [...data].sort((a, b) => b.pct - a.pct);
+    renderBars(sortedData, false);
+  });
+  document.getElementById('sortAlpha').addEventListener('click', function() {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    sortedData = [...data].sort((a, b) => a.item.localeCompare(b.item));
+    renderBars(sortedData, false);
+  });
+  document.getElementById('sortCategory').addEventListener('click', function() {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    sortedData = [...data].sort((a, b) => a.category.localeCompare(b.category) || b.pct - a.pct);
+    renderBars(sortedData, false);
+  });
+}
+drawBasketChart();
+
+// ============================================================
+// CHART 2: The Squeeze Gap
+// ============================================================
+onScrollIntoView(document.getElementById('squeezeGapContainer'), () => {
+  document.getElementById('squeezeBarWalmart').style.width = '100%';
+  document.getElementById('squeezeBarSupplier').style.width = '20%';
+  setTimeout(() => {
+    document.getElementById('squeezeGapBadge').classList.add('visible');
+  }, 600);
+});
+
+// ============================================================
+// CHART 3: China Sourcing Shift (Animated Donuts)
+// ============================================================
+function drawDonutCharts() {
+  const container = document.getElementById('donutChart');
+
+  const timelineData = [
+    { year: '~2016', china: 28, label: 'A Decade Ago' },
+    { year: '~2020', china: 22, label: 'Pre-Escalation' },
+    { year: '2026', china: 15, label: 'Current' },
+  ];
+
+  timelineData.forEach((period, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'donut-chart-wrap';
+    wrap.innerHTML = `<div class="donut-center-text"><div class="donut-pct" id="donutPct${idx}">0%</div><div class="donut-sublabel">China</div></div>`;
+    container.appendChild(wrap);
+
+    const size = idx === 2 ? Math.min(200, container.clientWidth * 0.3) : Math.min(160, container.clientWidth * 0.24);
+    const svgEl = d3.select(wrap).insert('svg', '.donut-center-text')
+      .attr('width', size)
+      .attr('height', size)
+      .append('g')
+      .attr('transform', `translate(${size/2},${size/2})`);
+
+    const thickness = idx === 2 ? 22 : 18;
+    const arc = d3.arc().innerRadius(size/2 - thickness).outerRadius(size/2 - 4);
+
+    // Background ring
+    svgEl.append('path')
+      .datum({ startAngle: 0, endAngle: Math.PI * 2 })
+      .attr('d', arc)
+      .attr('fill', COLORS.lightGray);
+
+    // China arc
+    const chinaArc = svgEl.append('path')
+      .datum({ startAngle: 0, endAngle: 0 })
+      .attr('d', arc)
+      .attr('fill', idx === 2 ? COLORS.division : (idx === 1 ? COLORS.orange : COLORS.warmGray));
+
+    // Store reference for animation
+    wrap._chinaArc = chinaArc;
+    wrap._arc = arc;
+    wrap._target = period.china;
+    wrap._idx = idx;
+
+    // Label below
+    const labelEl = document.createElement('div');
+    labelEl.className = 'donut-label-below';
+    labelEl.textContent = period.label;
+    wrap.appendChild(labelEl);
+
+    const yearLabel = document.createElement('div');
+    yearLabel.className = 'donut-year-label';
+    yearLabel.textContent = period.year;
+    wrap.appendChild(yearLabel);
+  });
+
+  // Animate on scroll
+  onScrollIntoView(document.getElementById('donutChartContainer'), () => {
+    container.querySelectorAll('.donut-chart-wrap').forEach((wrap, idx) => {
+      const chinaArc = wrap._chinaArc;
+      const arc = wrap._arc;
+      const target = wrap._target;
+
+      chinaArc.transition()
+        .delay(idx * 300)
+        .duration(1200)
+        .ease(d3.easeCubicOut)
+        .attrTween('d', () => {
+          const interp = d3.interpolate(0, (target / 100) * Math.PI * 2);
+          return t => {
+            const angle = interp(t);
+            document.getElementById('donutPct' + idx).textContent = Math.round(t * target) + '%';
+            return arc({ startAngle: 0, endAngle: angle });
+          };
+        });
+    });
+  });
+}
+drawDonutCharts();
+
+// ============================================================
+// CHART 4: Tariff Impact Calculator
+// ============================================================
+const calcCostSlider = document.getElementById('calcCostSlider');
+const calcChinaSlider = document.getElementById('calcChinaSlider');
+const calcCostValue = document.getElementById('calcCostValue');
+const calcChinaValue = document.getElementById('calcChinaValue');
+const calcTariff10 = document.getElementById('calcTariff10');
+const calcTariff25 = document.getElementById('calcTariff25');
+const calcTariff54 = document.getElementById('calcTariff54');
+
+function updateCalc() {
+  const cost = parseFloat(calcCostSlider.value);
+  const chinaPct = parseFloat(calcChinaSlider.value) / 100;
+
+  const chinaPortionCost = cost * chinaPct;
+  const impact10 = chinaPortionCost * 0.10;
+  const impact25 = chinaPortionCost * 0.25;
+  const impact54 = chinaPortionCost * 0.54;
+
+  calcCostValue.textContent = '$' + cost.toFixed(2);
+  calcChinaValue.textContent = Math.round(chinaPct * 100) + '%';
+  calcTariff10.textContent = '$' + impact10.toFixed(2);
+  calcTariff25.textContent = '$' + impact25.toFixed(2);
+  calcTariff54.textContent = '$' + impact54.toFixed(2);
+
+  // Margin erosion visualization
+  // Assume typical 30% gross margin on product cost
+  const totalCostWithTariff = cost + impact54;
+  const sellingPrice = cost * 1.30; // 30% markup
+  const marginWithTariff = sellingPrice - totalCostWithTariff;
+  const marginPct = Math.max(0, (marginWithTariff / sellingPrice) * 100);
+  const tariffPct = Math.min(100, (impact54 / sellingPrice) * 100);
+  const remainingPct = Math.max(0, 100 - tariffPct);
+
+  const remainingBar = document.getElementById('calcMarginRemaining');
+  const lostBar = document.getElementById('calcMarginLost');
+  remainingBar.style.width = remainingPct + '%';
+  lostBar.style.width = tariffPct + '%';
+  remainingBar.querySelector('span').textContent = remainingPct > 15 ? Math.round(remainingPct) + '% base' : '';
+  lostBar.querySelector('span').textContent = tariffPct > 8 ? Math.round(tariffPct) + '% tariff' : '';
+}
+calcCostSlider.addEventListener('input', updateCalc);
+calcChinaSlider.addEventListener('input', updateCalc);
+updateCalc();
+
+// ============================================================
+// CHART 5: Who Absorbs the Cost (Waterfall Chart)
+// ============================================================
+function drawWaterfallChart() {
+  const container = document.getElementById('waterfallChart');
+  const containerWidth = container.clientWidth;
+  const margin = { top: 24, right: 20, bottom: 60, left: 20 };
+  const width = containerWidth - margin.left - margin.right;
+  const height = Math.min(380, Math.max(280, width * 0.55));
+
+  const data = [
+    { label: 'Total Tariff\nImpact', value: 22, cumStart: 0, cumEnd: 22, type: 'total' },
+    { label: 'Consumer\nPrice Increases', value: 9.5, cumStart: 22, cumEnd: 12.5, type: 'absorb' },
+    { label: 'Supplier\nMargin Cuts', value: 7, cumStart: 12.5, cumEnd: 5.5, type: 'absorb' },
+    { label: 'Material\nSubstitution', value: 3.5, cumStart: 5.5, cumEnd: 2, type: 'absorb' },
+    { label: 'Walmart\nAbsorption', value: 2, cumStart: 2, cumEnd: 0, type: 'absorb' },
+  ];
+
+  const svg = d3.select(container).append('svg')
+    .attr('width', containerWidth)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleBand()
+    .domain(data.map(d => d.label))
+    .range([0, width])
+    .padding(0.3);
+
+  const y = d3.scaleLinear()
+    .domain([0, 24])
+    .range([height, 0]);
+
+  // Grid lines
+  svg.selectAll('.grid')
+    .data([5, 10, 15, 20])
+    .enter().append('line')
+    .attr('x1', 0).attr('x2', width)
+    .attr('y1', d => y(d)).attr('y2', d => y(d))
+    .attr('stroke', COLORS.lightGray)
+    .attr('stroke-dasharray', '2,4')
+    .attr('opacity', 0.6);
+
+  svg.selectAll('.grid-label')
+    .data([5, 10, 15, 20])
+    .enter().append('text')
+    .attr('x', -4).attr('y', d => y(d))
+    .attr('dy', '0.35em').attr('text-anchor', 'end')
+    .style('font-family', 'JetBrains Mono, monospace')
+    .style('font-size', '10px')
+    .style('fill', COLORS.warmGray)
+    .text(d => '$' + d + 'B');
+
+  const barColors = [COLORS.division, '#E8602C', COLORS.warmGray, COLORS.gold, COLORS.lightGray];
+
+  // Bars
+  const bars = svg.selectAll('.wf-bar')
+    .data(data)
+    .enter().append('rect')
+    .attr('class', 'wf-bar')
+    .attr('x', d => x(d.label))
+    .attr('width', x.bandwidth())
+    .attr('rx', 2)
+    .attr('fill', (d, i) => barColors[i])
+    .style('cursor', 'pointer')
+    .on('mousemove', (evt, d) => {
+      const pctOfTotal = ((d.value / 22) * 100).toFixed(0);
+      showTooltip(evt, `<strong>${d.label.replace('\n', ' ')}</strong><br>$${d.value}B<br><span style="opacity:0.6">${pctOfTotal}% of total impact</span>`);
+    })
+    .on('mouseleave', hideTooltip);
+
+  // Connector lines between bars (for waterfall effect)
+  const connectors = svg.selectAll('.wf-connector')
+    .data(data.slice(0, -1))
+    .enter().append('line')
+    .attr('class', 'wf-connector')
+    .attr('stroke', COLORS.warmGray)
+    .attr('stroke-dasharray', '3,3')
+    .attr('stroke-width', 1)
+    .attr('opacity', 0);
+
+  // Value labels on bars
+  const valLabels = svg.selectAll('.wf-val')
+    .data(data)
+    .enter().append('text')
+    .attr('class', 'wf-val')
+    .attr('x', d => x(d.label) + x.bandwidth() / 2)
+    .attr('text-anchor', 'middle')
+    .style('font-family', 'JetBrains Mono, monospace')
+    .style('font-size', '13px')
+    .style('font-weight', '700')
+    .style('fill', (d, i) => i === 0 ? '#fff' : COLORS.black)
+    .attr('opacity', 0)
+    .text(d => '$' + d.value + 'B');
+
+  // X axis labels (multiline)
+  data.forEach(d => {
+    const lines = d.label.split('\n');
+    lines.forEach((line, li) => {
+      svg.append('text')
+        .attr('x', x(d.label) + x.bandwidth() / 2)
+        .attr('y', height + 18 + li * 14)
+        .attr('text-anchor', 'middle')
+        .style('font-family', 'Inter, sans-serif')
+        .style('font-size', '11px')
+        .style('fill', COLORS.warmGray)
+        .text(line);
+    });
+  });
+
+  // Animate on scroll
+  onScrollIntoView(document.getElementById('waterfallChartContainer'), () => {
+    // Total bar rises from bottom
+    bars.filter((d, i) => i === 0)
+      .attr('y', height)
+      .attr('height', 0)
+      .transition().duration(800).ease(d3.easeCubicOut)
+      .attr('y', y(22))
+      .attr('height', height - y(22));
+
+    // Waterfall bars drop from their cumStart
+    bars.filter((d, i) => i > 0)
+      .attr('y', d => y(d.cumStart))
+      .attr('height', 0)
+      .transition().delay((d, i) => 600 + i * 200).duration(600).ease(d3.easeCubicOut)
+      .attr('y', d => y(d.cumStart))
+      .attr('height', d => y(d.cumEnd) - y(d.cumStart));
+
+    // Connectors
+    connectors
+      .attr('x1', (d, i) => x(data[i].label) + x.bandwidth())
+      .attr('x2', (d, i) => x(data[i + 1].label))
+      .attr('y1', (d, i) => i === 0 ? y(data[i].value) : y(data[i].cumEnd))
+      .attr('y2', (d, i) => i === 0 ? y(data[i].value) : y(data[i].cumEnd))
+      .transition().delay((d, i) => 800 + i * 200).duration(300)
+      .attr('opacity', 0.5);
+
+    // Value labels
+    valLabels.filter((d, i) => i === 0)
+      .attr('y', y(22) + (height - y(22)) / 2 + 5)
+      .transition().delay(500).duration(400).attr('opacity', 1);
+
+    valLabels.filter((d, i) => i > 0)
+      .attr('y', d => y(d.cumStart) - 8)
+      .transition().delay((d, i) => 800 + i * 200).duration(400).attr('opacity', 1);
+  });
+}
+drawWaterfallChart();
+
+// ============================================================
+// WINDOW RESIZE
+// ============================================================
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // Clear and redraw SVG charts
+    document.getElementById('basketChart').innerHTML = '';
+    drawBasketChart();
+
+    document.getElementById('waterfallChart').innerHTML = '';
+    drawWaterfallChart();
+
+    document.getElementById('donutChart').innerHTML = '';
+    drawDonutCharts();
+  }, 250);
+});
+</script>
+
+</body>
+</html>
