@@ -1,3 +1,10 @@
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': 'https://in-kluso.com',
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
 import { getSession } from './_helpers.js';
 
 // Determine credential tier based on profile
@@ -15,7 +22,7 @@ function getCredentialTier(user) {
 export async function onRequest({ request, env }) {
   const user = await getSession(request, env);
   if (!user) {
-    return Response.json({ authenticated: false }, { status: 401 });
+    return Response.json({ authenticated: false }, { status: 401, headers: CORS_HEADERS });
   }
 
   // Strip sensitive fields
@@ -44,5 +51,13 @@ export async function onRequest({ request, env }) {
       validationCount,
       credentialTier
     }
+  });
+}
+
+
+export async function onRequestOptions() {
+  return new Response(null, {
+    status: 204,
+    headers: CORS_HEADERS,
   });
 }
