@@ -11,6 +11,7 @@
   var orphanedEls = document.querySelectorAll('.vb-body:not([id]), .vb-scope:not([id])');
   for (var _i = 0; _i < orphanedEls.length; _i++) { orphanedEls[_i].style.display = 'none'; }
   'use strict';
+  const API_BASE = window.GROUND_API_BASE || '';
 
   // ─── Config ──────────────────────────────────────────────────────────────
   const ANNOTATION_TYPES = {
@@ -57,7 +58,7 @@
   // ─── Auth check ──────────────────────────────────────────────────────────
   async function checkAuth() {
     try {
-      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      const res = await fetch(API_BASE + '/api/auth/me', { credentials: 'include' });
       if (res.ok) {
         currentUser = await res.json();
         isLoggedIn = true;
@@ -425,7 +426,7 @@
     // Always verify auth from server (never trust cached isLoggedIn alone)
     el.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#8A9BA8;font-size:13px;">Checking credentials…</div>`;
     try {
-      const authRes = await fetch('/api/auth/me', { credentials: 'include' });
+      const authRes = await fetch(API_BASE + '/api/auth/me', { credentials: 'include' });
       if (authRes.ok) {
         const userData = await authRes.json();
         currentUser = userData;
@@ -665,7 +666,7 @@
     if (feedbackEl) feedbackEl.style.display = 'none';
 
     try {
-      const res = await fetch('/api/validate', {
+      const res = await fetch(API_BASE + '/api/validate', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -938,3 +939,4 @@
   }
 
 })();
+
