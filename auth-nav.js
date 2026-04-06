@@ -20,11 +20,12 @@ style.textContent = `
 document.head.appendChild(style);
 
 (async function () {
+  const API_BASE = window.GROUND_API_BASE || '';
   let currentUser = null;
 
   // Check auth
   try {
-    const res = await fetch('/api/auth/me');
+    const res = await fetch(API_BASE + '/api/auth/me');
     if (res.ok) {
       const data = await res.json();
       if (data.authenticated) currentUser = data.user;
@@ -37,9 +38,9 @@ document.head.appendChild(style);
     const authEl = document.createElement('div');
     authEl.className = 'nav-auth';
     if (currentUser) {
-      authEl.innerHTML = `<a href="/dashboard/" class="nav-auth-btn nav-dashboard">Dashboard</a>`;
+      authEl.innerHTML = `<a href="${API_BASE}/dashboard/" class="nav-auth-btn nav-dashboard">Dashboard</a>`;
     } else {
-      authEl.innerHTML = `<a href="/login/" class="nav-auth-btn nav-login">Login</a>`;
+      authEl.innerHTML = `<a href="${API_BASE}/login/" class="nav-auth-btn nav-login">Login</a>`;
     }
     navLinks.parentNode.insertBefore(authEl, navLinks.nextSibling);
   }
@@ -49,18 +50,16 @@ document.head.appendChild(style);
   if (!formContainer) return;
 
   if (!currentUser) {
-    // Replace form with login prompt
     formContainer.innerHTML = `
       <div class="auth-gate">
         <div class="auth-gate-icon">🔒</div>
         <h4 class="auth-gate-title">Contributors Only</h4>
         <p class="auth-gate-text">You must be a registered contributor to submit a validation.</p>
-        <a href="/login/" class="auth-gate-btn">Login to Validate</a>
-        <p class="auth-gate-signup">Not registered? <a href="/signup/">Apply to become a contributor →</a></p>
+        <a href="${API_BASE}/login/" class="auth-gate-btn">Login to Validate</a>
+        <p class="auth-gate-signup">Not registered? <a href="${API_BASE}/signup/">Apply to become a contributor →</a></p>
       </div>
     `;
   } else {
-    // Pre-fill fields
     const nameField = document.querySelector('#validationForm [name="name"]');
     const titleField = document.querySelector('#validationForm [name="title"]');
     const orgField = document.querySelector('#validationForm [name="org"]');
@@ -70,7 +69,6 @@ document.head.appendChild(style);
     if (orgField) { orgField.value = currentUser.org; orgField.readOnly = true; }
     if (yearsField) { yearsField.value = currentUser.yearsExp; yearsField.readOnly = true; }
 
-    // Add welcome banner
     const banner = document.createElement('div');
     banner.className = 'contributor-banner';
     banner.innerHTML = `<span class="contributor-banner-text">Validating as <strong>${currentUser.name}</strong> · ${currentUser.title}, ${currentUser.org}</span>`;
