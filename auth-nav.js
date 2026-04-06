@@ -74,4 +74,4 @@ document.head.appendChild(style);
     banner.innerHTML = `<span class="contributor-banner-text">Validating as <strong>${currentUser.name}</strong> · ${currentUser.title}, ${currentUser.org}</span>`;
     formContainer.insertBefore(banner, formContainer.firstChild);
   }
-})();
+})();/* cache-bust 1775478190 */
